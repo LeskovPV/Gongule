@@ -51,8 +51,8 @@
                                                     <td>
                                                         <input type='text' name='event_time' size='5' placeholder='hh:mm'/>
                                                     </td>
-                                                    <td width='25%'>
-                                                        <select name='selected_gong' >
+                                                    <td width='50%'>
+                                                        <select name='selected_gong'>
                                                             ${gong_options}
                                                         </select>
                                                     </td>
@@ -60,10 +60,8 @@
                                                         <input type='text' name='event_name' placeholder='Event name...'/>
                                                     </td>
                                                     <td>
-                                                        <button name='create_event' title='Create event' onclick='setAction(this.name)'>
-                                                            <nobr>
+                                                        <button name='add_event' title='Add event' onclick='setAction(this.name)'>
                                                                 <img src='resource?png/create.png' valign='top'/>
-                                                            </nobr>
                                                         </button>
                                                     </td>
                                                 </tr>

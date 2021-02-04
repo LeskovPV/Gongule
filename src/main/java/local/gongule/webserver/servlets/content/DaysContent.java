@@ -13,22 +13,13 @@ public class DaysContent extends Content {
         actions.put("create_day", (HttpServletRequest request) -> createDay(request));
         actions.put("change_day", (HttpServletRequest request) -> changeDay(request));
         actions.put("delete_day", (HttpServletRequest request) -> deleteDay(request));
-        actions.put("create_event", (HttpServletRequest request) -> createEvent(request));
-        actions.put("delete_event", (HttpServletRequest request) -> deleteEvent(request));
+        actions.put("add_event", (HttpServletRequest request) -> addEvent(request));
+        actions.put("remove_event", (HttpServletRequest request) -> removeEvent(request));
     }
 
     public String get(HttpServletRequest request) {
         Map<String, Object> contentVariables = new HashMap();
-        String options = "";
         int selectedDay = Integer.valueOf(getAttribute(request, "selected_day", "0"));
-        for (int i = 0; i < Gongule.getData().getDaysAmount(); i++) {
-            Map<String, Object> piecesVariables = new HashMap();
-            piecesVariables.put("value", i);
-            piecesVariables.put("selected", (i == selectedDay) ? "selected" : "");
-            piecesVariables.put("caption", Gongule.getData().getDay(i).name);
-            options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
-        }
-        contentVariables.put("day_options", options);
         String rows = "";
         for (int i = 0; i < Gongule.getData().getDayEventsAmount(selectedDay); i++) {
             Map<String, Object> piecesVariables = new HashMap();
@@ -40,17 +31,37 @@ public class DaysContent extends Content {
             rows += fillTemplate("html/pieces/event.html", piecesVariables) + "\n";
         }
         contentVariables.put("day_events", rows);
+        String options = "";
+        for (int i = 0; i < Gongule.getData().getDaysAmount(); i++) {
+            Map<String, Object> piecesVariables = new HashMap();
+            piecesVariables.put("value", i);
+            piecesVariables.put("selected", (i == selectedDay) ? "selected" : "");
+            piecesVariables.put("caption", Gongule.getData().getDay(i).name);
+            options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
+        }
+        contentVariables.put("day_options", options);
         options = "";
+        int gongIndex = Integer.valueOf(getAttribute(request, "selected_gong", "0"));
         for (int i = 0; i < Gongule.getData().getGongsAmount(); i++) {
             Map<String, Object> piecesVariables = new HashMap();
             piecesVariables.put("value", i);
-            piecesVariables.put("selected", (i == 0) ? "selected" : "");
+            piecesVariables.put("selected", (i == gongIndex) ? "selected" : "");
             piecesVariables.put("caption", Gongule.getData().getGong(i).name);
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
         contentVariables.put("gong_options", options);
         contentVariables.put("day_display", Gongule.getData().getDaysAmount() > 0 ? "table-row" : "none");
         return super.get(contentVariables);
+    }
+
+    private boolean createDay(HttpServletRequest request) {
+        try {
+            Gongule.getData().dayCreate(request.getParameter("day_name"));
+            setAttribute(request, "selected_day", String.valueOf(Gongule.getData().getDaysAmount()-1));
+            return true;
+        } catch (Exception exception) {
+            return false;
+        }
     }
 
     private boolean changeDay(HttpServletRequest request) {
@@ -73,34 +84,25 @@ public class DaysContent extends Content {
         }
     }
 
-    private boolean createDay(HttpServletRequest request) {
+    private boolean addEvent(HttpServletRequest request) {
         try {
-            Gongule.getData().dayCreate(request.getParameter("day_name"));
-            setAttribute(request, "selected_day", String.valueOf(Gongule.getData().getDaysAmount()-1));
-            return true;
-        } catch (Exception exception) {
-            return false;
-        }
-    }
-
-    private boolean createEvent(HttpServletRequest request) {
-        try {
-            int dayIndex = Integer.valueOf(getAttribute(request, "selected_day"));
+            int dayIndex = Integer.valueOf(request.getParameter("selected_day"));
             LocalTime eventTime = LocalTime.parse(request.getParameter("event_time"));
             String eventName = request.getParameter("event_name");
             int gongIndex = Integer.valueOf(request.getParameter( "selected_gong"));
-            Gongule.getData().createDayEvent(dayIndex, eventTime, eventName, gongIndex);
+            setAttribute(request, "selected_gong", String.valueOf(gongIndex));
+            Gongule.getData().addDayEvent(dayIndex, eventTime, eventName, gongIndex);
             return true;
         } catch (Exception exception) {
             return false;
         }
     }
 
-    private boolean deleteEvent(HttpServletRequest request) {
+    private boolean removeEvent(HttpServletRequest request) {
         try {
-            int dayIndex = Integer.valueOf(getAttribute(request, "selected_day"));
-            int eventIndex = Integer.valueOf(request.getParameter("delete_event"));
-            Gongule.getData().deleteDayEvent(dayIndex, eventIndex);
+            int dayIndex = Integer.valueOf(request.getParameter("selected_day"));
+            int eventIndex = Integer.valueOf(request.getParameter("remove_event"));
+            Gongule.getData().removeDayEvent(dayIndex, eventIndex);
             return true;
         } catch (Exception exception) {
             return false;

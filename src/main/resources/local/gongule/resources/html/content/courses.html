@@ -4,23 +4,21 @@
             <tr>
                 <td>
                     <table class='table data'>
-                        <tr>
+                        <tr style='display:${course_display}'>
                             <td width='35%'>
-                                <select onchange="this.nextElementSibling.value=this.value" width='100%'>
-                                    <option value="115x175 mm">10-days course</option>
-                                    <option value="120x160 mm">1-day course</option>
-                                    <option value="120x287 mm">20-days course</option>
+                                <select name='selected_course' width='100%' title='Choose course' onchange='setAction("change_course");this.form.submit()'>
+                                    ${course_options}
                                 </select>
                             </td>
                             <td>
-                                <button name='delete_button' value='delete_value' title='Delete configuration'>
+                                <button name='delete_course' title='Delete course' onclick='setAction(this.name)'>
                                     <img src='resource?png/delete.png' valign='top'/>
                                 </button>
                             </td>
                             <td width='100%'>
                             </td>
                         </tr>
-                        <tr>
+                        <tr style='display:${course_display}'>
                             <td colspan='3'>
                                 <table class='table border named'> <!--Schedule-->
                                     <tr>
@@ -38,58 +36,25 @@
                                                     <th>
                                                         №
                                                     </th>
-                                                    <th>
+                                                    <th  width='70%'>
                                                         Day
                                                     </th>
                                                     <th>
 
                                                     </th>
                                                 </tr>
-                                                <tr>
-                                                    <td>
-                                                        0
-                                                    </td>
-                                                    <td>
-                                                        First day
-                                                    </td>
-                                                    <td>
-                                                        <button name='delete_button' value='delete_value' title='Delete configuration'>
-                                                            <nobr>
-                                                                <img src='resource?png/delete.png' valign='top'/>
-                                                            </nobr>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        1
-                                                    </td>
-                                                    <td>
-                                                        Ordinary day
-                                                    </td>
-                                                    <td>
-                                                        <button name='delete_button' value='delete_value' title='Delete configuration'>
-                                                            <nobr>
-                                                                <img src='resource?png/delete.png' valign='top'/>
-                                                            </nobr>
-                                                        </button>
-                                                    </td>
-                                                </tr>
+                                                ${course_days}
                                                 <tr>
                                                     <td>
                                                     </td>
-                                                    <td >
-                                                        <select>
-                                                            <option value="115x175 mm">First day</option>
-                                                            <option value="120x160 mm">Ordinary day</option>
-                                                            <option value="120x160 mm">Last day</option>
+                                                    <td width='70%'>
+                                                        <select name='selected_day'>
+                                                            ${day_options}
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <button name='save_button' value='save_value' title='Save configuration'>
-                                                            <nobr>
-                                                                <img src='resource?png/create.png' valign='top'/>
-                                                            </nobr>
+                                                        <button name='add_day' title='Add day' onclick='setAction(this.name)'>
+                                                            <img src='resource?png/create.png' valign='top'/>
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -101,10 +66,10 @@
                         </tr>
                         <tr>
                             <td>
-                                <input type="text" name="format" value="" width='100%'/>
+                                <input type='text' name='course_name' width='100%' placeholder='Course name...'/>
                             </td>
                             <td>
-                                <button name='save_button' value='save_value' title='Save configuration'>
+                                <button name='create_course' title='Create course' onclick='setAction(this.name)'>
                                     <img src='resource?png/create.png' valign='top'/>
                                 </button>
                             </td>

@@ -16,18 +16,84 @@ public class Data implements Serializable {
 
     //private static final long serialVersionUID = -519958441268523608L;
     public class Event implements Serializable {
-        public LocalDate date = LocalDate.now();
-        public Course course = new Course();
+        public LocalDate date;
+        public int courseIndex;
+        public Event(int courseIndex, LocalDate date) {
+            this.courseIndex = courseIndex;
+            this.date = date;
+        }
     }
 
     private List<Gong> gongs = new ArrayList(0);
-    public List<Day> days = new ArrayList(0);
-    public List<Course> courses = new ArrayList(0);
+    private List<Day> days = new ArrayList(0);
+    private List<Course> courses = new ArrayList(0);
     public List<Event> calendar = new ArrayList(0);
 
     public Map<Date, Gong> getTodayEvent() {
         Map<Date, Gong> result = new HashMap(0);
         return result;
+    }
+
+    ////////////////////////////////////////////////////////////////
+    // Course
+    ////////////////////////////////////////////////////////////////
+
+    public int getCoursesAmount() {
+        return courses.size();
+    }
+
+    public Course getCourse(int index) {
+        try {
+            return courses.get(index);
+        } catch (Exception exception) {
+            return null;
+        }
+    }
+
+    public boolean courseCreate(String name) {
+        if (name == null) return false;
+        if (name.trim().equals("")) return false;
+        for (Course course: courses)
+            if (course.name.equalsIgnoreCase(name.trim()))
+                return false;
+        courses.add(new Course(name.trim()));
+        save();
+        return true;
+    }
+
+    public boolean courseDelete(int dayIndex) {
+        courses.remove(dayIndex);
+        save();
+        return true;
+    }
+
+
+    ////////////////////////////////////////////////////////////////
+    // Schedule (CourseDays)
+    ////////////////////////////////////////////////////////////////
+
+    public int getCourseDaysAmount(int courseIndex) {
+        return (courses.size() == courseIndex) ? 0 : courses.get(courseIndex).dayIndexes.size();
+    }
+
+    public Day getCourseDay(int courseIndex, int dayIndex) {
+        try {
+            return days.get(courses.get(courseIndex).dayIndexes.get(dayIndex));
+        } catch (Exception exception) {
+            return null;
+        }
+    }
+
+    public boolean createCourseDay(int courseIndex, int dayIndex) {
+        courses.get(courseIndex).dayIndexes.add(dayIndex);
+        save();
+        return true;
+    }
+
+    public boolean removeCourseDay(int courseIndex, int dayIndex) {
+        courses.get(courseIndex).dayIndexes.remove(dayIndex);
+        save();
+        return true;
     }
 
     ////////////////////////////////////////////////////////////////
@@ -46,14 +112,22 @@ public class Data implements Serializable {
         }
     }
 
-    public boolean dayDelete(int index) {
-        for (Course course: courses)
-            for (Day day: course.schedule)
-                if (day == days.get(index))
-                    course.schedule.remove(index);
-        days.remove(index);
+    public boolean dayDelete(int dayIndex) {
+        for (Course course: courses) {
+            List<Integer> indexes = new ArrayList();
+            for (int index: course.dayIndexes)
+                if (index == dayIndex)
+                    indexes.add(0, course.dayIndexes.indexOf(index));
+            for (int index: indexes)
+                course.dayIndexes.remove(index);
+            for (int index = 0; index < course.dayIndexes.size(); index++)
+                if (course.dayIndexes.get(index) > dayIndex)
+                    course.dayIndexes.set(index, course.dayIndexes.get(index) - 1);
+        }
+        days.remove(dayIndex);
         save();
         return true;
+
     }
 
     public boolean dayCreate(String name) {
@@ -68,7 +142,7 @@ public class Data implements Serializable {
     }
 
     ////////////////////////////////////////////////////////////////
-    // Events
+    // Timetable (DayEvents)
     ////////////////////////////////////////////////////////////////
 
     public int getDayEventsAmount(int dayIndex) {
@@ -83,7 +157,7 @@ public class Data implements Serializable {
         }
     }
 
-    public boolean createDayEvent(int dayIndex, LocalTime time, String name, int gongIndex) {
+    public boolean addDayEvent(int dayIndex, LocalTime time, String name, int gongIndex) {
         //int gongIndex = getGongIndex(gongName);
         if (gongIndex < 0)
             return false;
@@ -93,7 +167,7 @@ public class Data implements Serializable {
         return true;
     }
 
-    public boolean deleteDayEvent(int dayIndex, int eventIndex) {
+    public boolean removeDayEvent(int dayIndex, int eventIndex) {
         days.get(dayIndex).events.remove(eventIndex);
         save();
         return true;

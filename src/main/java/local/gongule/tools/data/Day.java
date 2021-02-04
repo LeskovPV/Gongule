@@ -21,12 +21,8 @@ public class Day implements Serializable {
     public String name = "";
     public List<Event> events = new ArrayList(0);
 
-    public Day() {
-    }
-
     public Day(String name) {
         this.name = name;
     }
-
 
 }

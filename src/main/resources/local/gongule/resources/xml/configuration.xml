@@ -84,6 +84,23 @@
       <events/>
     </local.gongule.tools.data.Day>
   </days>
-  <courses/>
+  <courses>
+    <local.gongule.tools.data.Course>
+      <name>10-days course</name>
+      <dayIndexes>
+        <int>0</int>
+        <int>1</int>
+        <int>1</int>
+        <int>1</int>
+        <int>1</int>
+        <int>1</int>
+        <int>1</int>
+        <int>1</int>
+        <int>1</int>
+        <int>1</int>
+        <int>2</int>
+      </dayIndexes>
+    </local.gongule.tools.data.Course>
+  </courses>
   <calendar/>
 </local.gongule.tools.data.Data>

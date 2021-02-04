@@ -7,6 +7,10 @@ import java.util.List;
 public class Course implements Serializable {
 
     public String name = "";
-    public List<Day> schedule = new ArrayList(0);
+    public List<Integer> dayIndexes = new ArrayList(0);
+
+    public Course(String name) {
+        this.name = name;
+    }
 
 }
