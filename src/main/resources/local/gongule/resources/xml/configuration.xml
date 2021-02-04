@@ -1,0 +1,89 @@
+<local.gongule.tools.data.Data>
+  <gongs>
+    <local.gongule.tools.data.Gong>
+      <name>Short</name>
+      <amount>1</amount>
+    </local.gongule.tools.data.Gong>
+    <local.gongule.tools.data.Gong>
+      <name>Long</name>
+      <amount>7</amount>
+    </local.gongule.tools.data.Gong>
+  </gongs>
+  <days>
+    <local.gongule.tools.data.Day>
+      <name>First day</name>
+      <events/>
+    </local.gongule.tools.data.Day>
+    <local.gongule.tools.data.Day>
+      <name>Regular day</name>
+      <events>
+        <local.gongule.tools.data.Day_-Event>
+          <time>04:00:00</time>
+          <name>Morning wake-up bell</name>
+          <gongIndex>1</gongIndex>
+        </local.gongule.tools.data.Day_-Event>
+        <local.gongule.tools.data.Day_-Event>
+          <time>04:20:00</time>
+          <name>Meditate in the hall or in your room</name>
+          <gongIndex>1</gongIndex>
+        </local.gongule.tools.data.Day_-Event>
+        <local.gongule.tools.data.Day_-Event>
+          <time>06:30:00</time>
+          <name>Breakfast break</name>
+          <gongIndex>0</gongIndex>
+        </local.gongule.tools.data.Day_-Event>
+        <local.gongule.tools.data.Day_-Event>
+          <time>07:50:00</time>
+          <name>Group meditation in the hall</name>
+          <gongIndex>1</gongIndex>
+        </local.gongule.tools.data.Day_-Event>
+        <local.gongule.tools.data.Day_-Event>
+          <time>09:00:00</time>
+          <name>Meditate in the hall or in your room</name>
+          <gongIndex>0</gongIndex>
+        </local.gongule.tools.data.Day_-Event>
+        <local.gongule.tools.data.Day_-Event>
+          <time>11:00:00</time>
+          <name>Lunch break</name>
+          <gongIndex>0</gongIndex>
+        </local.gongule.tools.data.Day_-Event>
+        <local.gongule.tools.data.Day_-Event>
+          <time>12:50:00</time>
+          <name>Meditate in the hall or in your room</name>
+          <gongIndex>1</gongIndex>
+        </local.gongule.tools.data.Day_-Event>
+        <local.gongule.tools.data.Day_-Event>
+          <time>14:20:00</time>
+          <name>Group meditation in the hall</name>
+          <gongIndex>1</gongIndex>
+        </local.gongule.tools.data.Day_-Event>
+        <local.gongule.tools.data.Day_-Event>
+          <time>15:30:00</time>
+          <name>Meditate in the hall or in your room</name>
+          <gongIndex>0</gongIndex>
+        </local.gongule.tools.data.Day_-Event>
+        <local.gongule.tools.data.Day_-Event>
+          <time>17:00:00</time>
+          <name>Tea break</name>
+          <gongIndex>0</gongIndex>
+        </local.gongule.tools.data.Day_-Event>
+        <local.gongule.tools.data.Day_-Event>
+          <time>17:50:00</time>
+          <name>Group meditation in the hall</name>
+          <gongIndex>1</gongIndex>
+        </local.gongule.tools.data.Day_-Event>
+        <local.gongule.tools.data.Day_-Event>
+          <time>19:00:00</time>
+          <name>Teacher&apos;s discourse in the hall</name>
+          <gongIndex>0</gongIndex>
+        </local.gongule.tools.data.Day_-Event>
+      </events>
+    </local.gongule.tools.data.Day>
+    <local.gongule.tools.data.Day>
+      <name>Last day</name>
+      <events/>
+    </local.gongule.tools.data.Day>
+  </days>
+  <courses/>
+  <calendar/>
+</local.gongule.tools.data.Data>

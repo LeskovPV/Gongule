@@ -1,0 +1,93 @@
+<tr>
+    <td>
+        <table class='table border'> <!--Days-->
+            <tr>
+                <td>
+                    <table class='table data'>
+                        <tr style='display:${day_display}'>
+                            <td width='35%'>
+                                <select name='selected_day' width='100%' title='Choose day' onchange='setAction("change_day");this.form.submit()'>
+                                    ${day_options}
+                                </select>
+                            </td>
+                            <td>
+                                <button name='delete_day' title='Delete day' onclick='setAction(this.name)'>
+                                    <img src='resource?png/delete.png' valign='top'/>
+                                </button>
+                            </td>
+                            <td width='100%'>
+                            </td>
+                        </tr>
+                        <tr style='display:${day_display}'>
+                            <td colspan='3' >
+                                <table class='table border named'> <!--Timetable-->
+                                    <tr>
+                                        <td>
+                                            <img src='resource?png/timetable.png' />
+                                        </td>
+                                        <td width='100%'>
+                                            Timetable
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan='2'>
+                                            <table class='table data'>
+                                                <tr>
+                                                    <th>
+                                                        Time
+                                                    </th>
+                                                    <th>
+                                                        Gong
+                                                    </th>
+                                                    <th>
+                                                        Event
+                                                    </th>
+                                                    <th>
+
+                                                    </th>
+                                                </tr>
+                                                ${day_events}
+                                                <tr>
+                                                    <td>
+                                                        <input type='text' name='event_time' size='5' placeholder='hh:mm'/>
+                                                    </td>
+                                                    <td width='25%'>
+                                                        <select name='selected_gong' >
+                                                            ${gong_options}
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <input type='text' name='event_name' placeholder='Event name...'/>
+                                                    </td>
+                                                    <td>
+                                                        <button name='create_event' title='Create event' onclick='setAction(this.name)'>
+                                                            <nobr>
+                                                                <img src='resource?png/create.png' valign='top'/>
+                                                            </nobr>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type='text' name='day_name' width='100%' placeholder='Day name...'/>
+                            </td>
+                            <td>
+                                <button name='create_day' title='Create day' onclick='setAction(this.name)'>
+                                    <img src='resource?png/create.png' valign='top'/>
+                                </button>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>

@@ -1,0 +1,141 @@
+<tr>
+    <td>
+        <table class='table border named'> <!--Gongs-->
+            <tr>
+                <td>
+                    <img src='resource?png/gongs.png' />
+                </td>
+                <td>
+                    Gongs
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <table class='table data'>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Amount
+                            </th>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                        ${gong_rows}
+                        <tr>
+                            <td>
+                                <input type='text' name='gong_name' value='' size='13' placeholder='Gong name...'/>
+                            </td>
+                            <td>
+                                <input type='number' name='gong_amount' value='1' min='1' max='10' size='5'/>
+                            </td>
+                            <td>
+                                <button name='create_gong' title='Create gong' onclick='setAction(this.name)'>
+                                    <img src='resource?png/create.png' valign='top'/>
+                                </button>
+                            </td>
+                            <td>
+                            </td>
+                            <td width='100%'>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td>
+        <table class='table border named'> <!--Interface-->
+            <tr>
+                <td>
+                    <img src='resource?png/interface.png' />
+                </td>
+                <td>
+                    Interface
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <table class='table data'>
+                        <tr>
+                            <td>
+                                <label>Color:</label>
+                            </td>
+                            <td colspan='2' width='100%'>
+                                <input type='color' name='selected_color' value='${color_value}' onchange='setAction("change_color"); this.form.submit()' title='Choose base interface color'>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align='right'>
+                                <label>Font:</label>
+                            </td>
+                            <td width='35%'>
+                                <select name='selected_font' onchange='setAction("change_font"); this.form.submit()' title='Choose base interface font'>
+                                    ${font_options}
+                                </select>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td>
+        <table class='table border named'> <!--Configurations-->
+            <tr>
+                <td>
+                    <img src='resource?png/configurations.png' />
+                </td>
+                <td>
+                    Configurations
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <table class='table data'>
+                        <tr>
+                            <td width='35%'>
+                                <select name='selected_configuration' width='100%'>
+                                    ${configuration_options}
+                                </select>
+                            </td>
+                            <td>
+                                <button name='load_configuration' title='Load configuration' onclick='setAction(this.name)'>
+                                    <img src='resource?png/load.png' valign='top'/>
+                                </button>
+                            </td>
+                            <td>
+                                <button name='delete_configuration' title='Delete configuration' onclick='setAction(this.name)'>
+                                    <img src='resource?png/delete.png' valign='top'/>
+                                </button>
+                            </td>
+                            <td width='100%'>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type='text' name='configuration_name' width='100%' placeholder='Configuration name...'/>
+                            </td>
+                            <td colspan='3'>
+                                <button name='save_configuration' title='Save configuration' onclick='setAction(this.name)'>
+                                    <img src='resource?png/save.png' valign='top'/>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>

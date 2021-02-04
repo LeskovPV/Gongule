@@ -1,0 +1,177 @@
+﻿:root { /* Global content */
+    --site_color: ${site_color};
+    --base_color: ${base_color};
+    --deep_color: ${deep_color};
+    --text_color: ${text_color};
+    --half_color: ${half_color};
+    --font_family: ${font_family};
+    --border_radius: 4px;
+}
+
+body { /* Page content */
+    color: var(--text_color);
+    background-color: var(--site_color);
+    font-family: var(--font_family);
+    font-size: 100%;
+    text-align:left;
+}
+
+.table { /* All tables */
+    border: 0px;
+    border-radius: var(--border_radius);
+    border-spacing: 0px;
+}
+
+.table.border { /* Tables with a frame */
+    background-color: var(--base_color);
+    /*border-spacing: 5px;
+    margin: 5px; */
+    border-spacing: 0px;
+    padding: 2px;
+    margin: 0px;
+    width: 100%;
+}
+
+.table.border.entry { /* Authorization table */
+    margin: auto;
+    width: auto;
+}
+
+.table.border.named { /* Authorization table */
+    color: var(--half_color);
+    background-color: var(--deep_color);
+    font-weight: bold;
+    margin: auto;
+}
+
+.table.border.named td:last-child {
+    width:100%;
+}
+
+
+.table.data { /* Таблицы в рамке */
+    background-color: var(--site_color);
+    color: var(--text_color);
+    font-weight: normal;
+    border-spacing: 5px;
+    padding: 0px;
+    width: 100%;
+}
+
+.table.data th{ /* Header of table */
+    color: var(--half_color);
+    font-weight: bold;
+}
+
+.table.menu { /* Главное меню и строка состояния */
+     background-color: var(--base_color);
+     font-weight: bold;
+     width: 100%;
+     border-spacing: 0px;
+     padding: 2px;
+     margin: 0px;
+}
+
+.table.menu.status { /* Главное меню и строка состояния */
+     padding: 0px;
+     font-weight: normal;
+     font-size: x-small;
+}
+
+.table.menu tr { /* Строка меню */
+    padding: 0px;
+    width: 0;
+    white-space: nowrap;
+}
+
+.table.menu td  { /* Элемент меню */
+    /*border-radius: var(--border_radius);*/
+    padding: 5px;
+}
+
+.table.tr.title { /* Строка таблицы с заголовком */
+    border-radius: var(--border_radius);
+    font-weight: bold;
+    background-color: var(--deep_color);
+}
+
+button { /* Кнопки */
+    text-align: left;
+    font-weight: normal;
+    border-radius: var(--border_radius);
+    border: 0px solid var(--text_color);
+    padding: 5px 13px 5px 13px;
+    vertical-align: middle;
+    box-shadow: 0px  0px 2px var(--text_color);
+    background-color: var(--deep_color);
+}
+
+button img{
+    vertical-align: middle;
+}
+
+button.menu {
+    width: 100%;
+}
+
+button:hover, button:focus {
+    /*background-color: var(--base_color);*/
+    box-shadow:
+       1px  1px 1px var(--text_color),
+       -1px  1px 1px var(--text_color),
+       1px  -1px 1px var(--text_color),
+       -1px  -1px 1px var(--text_color);
+  color: var(--deep_color);
+  text-shadow:
+   1px  1px 2px var(--text_color),
+   1px -1px 2px var(--text_color),
+  -1px -1px 2px var(--text_color),
+  -1px  1px 2px var(--text_color);
+}
+
+button:disabled, button[disabled] {
+    color: var(--half_color);
+    text-shadow: var(--half_color) 0px 0px 0px;
+    box-shadow: 0px  0px 2px var(--text_color);
+}
+
+button:disabled img, button[disabled] img {
+    filter: grayscale(80%);
+    opacity: 0.2;
+}
+
+input, textarea, select, button, checkbox  {
+    font:inherit;
+    color:inherit;
+    background-color:var(--site_color);
+}
+
+input::placeholder {
+    color:var(--half_color);
+}
+
+select { /* Элементы с выпадаюшим списком */
+    width: 100%;
+}
+
+input:disabled, input[disabled], select:disabled, select[disabled]{
+    color: var(--half_color);
+    background-color: var(--deep_color);
+}
+
+a { /* link */
+  text-decoration: none;
+  color: var(--text_color);
+}
+
+a:hover {/* mouse over link */
+  color: var(--deep_color);
+  text-shadow:
+   1px  1px 3px var(--text_color),
+   1px -1px 3px var(--text_color),
+  -1px -1px 3px var(--text_color),
+  -1px  1px 3px var(--text_color);
+}
+
+/***********************************/
+
