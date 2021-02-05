@@ -1,10 +1,6 @@
 
-function element(name){
-    return $('[name="' + name + '"]');
-}
-
 function setAction(actionName){
-    element('action').val(actionName);
+    document.getElementsByName('action')[0].value = actionName;
 }
 
 

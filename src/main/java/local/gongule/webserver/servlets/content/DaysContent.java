@@ -28,9 +28,11 @@ public class DaysContent extends Content {
             piecesVariables.put("gong", Gongule.getData().getGong(event.gongIndex).name);
             piecesVariables.put("name", event.name);
             piecesVariables.put("value", String.valueOf(i));
+            piecesVariables.put("remove_display", "table-cell");
             rows += fillTemplate("html/pieces/event.html", piecesVariables) + "\n";
         }
         contentVariables.put("day_events", rows);
+
         String options = "";
         for (int i = 0; i < Gongule.getData().getDaysAmount(); i++) {
             Map<String, Object> piecesVariables = new HashMap();

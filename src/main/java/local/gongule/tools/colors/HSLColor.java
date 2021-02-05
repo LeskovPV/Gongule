@@ -38,6 +38,12 @@ public class HSLColor
         alpha = rgb.getAlpha() / 255.0f;
     }
 
+    public HSLColor(String rgb) {
+        Color color = Color.decode(rgb);
+        this.rgb = color;
+        hsl = fromRGB(color);
+        alpha = color.getAlpha() / 255.0f;
+    }
     /**
      *  Create a HSLColor object using individual HSL values and a default
      * alpha value of 1.0.

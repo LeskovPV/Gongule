@@ -13,8 +13,9 @@ public abstract class Content implements TemplateFillable {
 
     protected Map<String, Function<HttpServletRequest, Boolean>> actions = new HashMap();
 
+
     public boolean applyAction(String actionName, HttpServletRequest request) {
-        return actions.get(actionName).apply(request);
+        return actions.containsKey(actionName) ? actions.get(actionName).apply(request) : false;
     }
 
 //    public boolean set(HttpServletRequest request) {

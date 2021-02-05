@@ -84,7 +84,7 @@
                                 </transformer>
                             </transformers>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <minimizeJar>true</minimizeJar>
+                            <minimizeJar>false</minimizeJar>
                             <!--shadedClassifierName>shaded</shadedClassifierName-->
                             <!--shadedArtifactAttached>false</shadedArtifactAttached-->
                             <!--outputFile>/home/data/leskov/projects/gongule/target/G.jar</outputFile-->

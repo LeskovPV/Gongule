@@ -15,10 +15,10 @@ import java.time.*;
 public class Data implements Serializable {
 
     //private static final long serialVersionUID = -519958441268523608L;
-    public class Event implements Serializable {
+    public class Note implements Serializable {
         public LocalDate date;
         public int courseIndex;
-        public Event(int courseIndex, LocalDate date) {
+        public Note(int courseIndex, LocalDate date) {
             this.courseIndex = courseIndex;
             this.date = date;
         }
@@ -27,11 +27,28 @@ public class Data implements Serializable {
     private List<Gong> gongs = new ArrayList(0);
     private List<Day> days = new ArrayList(0);
     private List<Course> courses = new ArrayList(0);
-    public List<Event> calendar = new ArrayList(0);
+    public List<Note> calendar = new ArrayList(0);
 
-    public Map<Date, Gong> getTodayEvent() {
-        Map<Date, Gong> result = new HashMap(0);
+    public List<Day.Event> getTodayEvent() {
+        List<Day.Event> result = new ArrayList(0);
+        result.add(new Day.Event(LocalTime.now(), "Test event", 0));
         return result;
+    }
+
+    ////////////////////////////////////////////////////////////////
+    // Calendar
+    ////////////////////////////////////////////////////////////////
+
+    public boolean addCalendarNote(int courseIndex, LocalDate courseDate) {
+        calendar.add(new Note(courseIndex, courseDate));
+        save();
+        return true;
+    }
+
+    public boolean removeCalendarNote(int noteIndex) {
+        calendar.remove(noteIndex);
+        save();
+        return true;
     }
 
     ////////////////////////////////////////////////////////////////

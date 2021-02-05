@@ -67,37 +67,21 @@ public class MainServlet extends HttpServlet implements TemplateFillable {
         Log.printInfo("===================================");
         for (String name: request.getParameterMap().keySet())
             Log.printInfo(name + " = " + request.getParameter(name));
-
-
+        String actionName = request.getParameter("action");
         for (PageType pageType : PageType.values()) {
             // check menu button click
-            if (request.getParameter(pageType.getName() + "_menu") != null) {
+            if (actionName.equals(pageType.getName() + "_menu")) {
                 response.sendRedirect("/main?" + pageType.getName());
                 return;
             }
-
             // check action on page
-            if (request.getParameter(pageType.getName()) != null) {
-                String actionName = request.getParameter("action");
-                if (actionName !=null)
-                    if (!actionName.trim().isEmpty())
-                        content.get(pageType).applyAction(actionName, request);
+            if (content.get(pageType).applyAction(actionName, request)) {
                 response.sendRedirect("/main?" + pageType.getName());
                 return;
             }
-//            if (content.get(pageType).set(request)) {
-//                response.sendRedirect("/main?" + pageType.getName());
-//                return;
-//            }
-            // check this page
-
-//            if (request.getParameter(pageType.getName()) != null) {
-//                response.sendRedirect("/main?" + pageType.getName());
-//                return;
-//            }
         }
 
-        response.sendRedirect("/main?" + PageType.getDefault().getName());
+//        response.sendRedirect("/main?" + PageType.getDefault().getName());
 
     }
 

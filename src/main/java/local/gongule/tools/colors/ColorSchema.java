@@ -6,7 +6,7 @@ public class ColorSchema {
 
     private float baseRatio = 0.5f;
 
-    private HSLColor baseColor = new HSLColor(Color.lightGray);
+    private HSLColor baseColor = new HSLColor("#7F7F7F");
 
 
     public ColorSchema() {

@@ -1,87 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset='UTF-8'>
-    <title>${site_title}</title>
-    <link href='resource?css/general.css' rel='stylesheet' type='text/css'>
-    <link href='resource?png/icon.png' rel='icon' type='image/x-icon'>
-    <script src='resource?js/jquery/jquery.js'></script>
-    <script src='resource?js/main.js'></script>
-</head>
-
-<body>
-    <table>
-        <tr>
-            <td>
-                <form action='/main' method='post'>
-                    <table class='table menu'>
+    <head>
+        <meta charset='UTF-8'>
+        <title>${site_title}</title>
+        <link href='resource?css/general.css' rel='stylesheet' type='text/css'>
+        <link href='resource?png/icon.png' rel='icon' type='image/x-icon'>
+        <script src='resource?js/main.js'></script>
+    </head>
+    <body>
+        <form action='/main?${page_name}' method='post'>
+            <input type='hidden' name='action'/>
+            <table>
+                <tr>
+                    <td>
+                        <table class='table menu'>
+                            <tr>
+                                <td >
+                                    <button class='button menu' name='control_menu' ${control_disabled} title='${control_title}' onclick='setAction(this.name)'>
+                                        <nobr>
+                                            <img src='resource?png/menu/control.png' valign='top'/>
+                                            Control
+                                        </nobr>
+                                    </button>
+                                </td>
+                                <td >
+                                    <button class='button menu' name='courses_menu' ${courses_disabled} title='${courses_title}' onclick='setAction(this.name)'>
+                                        <nobr>
+                                            <img src='resource?png/menu/courses.png' valign='top'/>
+                                            Courses
+                                        </nobr>
+                                    </button>
+                                </td>
+                                <td >
+                                    <button class='button menu' name='days_menu' ${days_disabled} title='${days_title}' onclick='setAction(this.name)'>
+                                        <nobr>
+                                            <img src='resource?png/menu/days.png' valign='top'/>
+                                            Days
+                                        </nobr>
+                                    </button>
+                                </td>
+                                <td >
+                                    <button class='button menu' name='setup_menu' ${setup_disabled} title='${setup_title}' onclick='setAction(this.name)'>
+                                        <nobr>
+                                            <img src='resource?png/menu/setup.png' valign='top'/>
+                                            Setup
+                                        </nobr>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                    ${page_content}
+                <tr>
+                    <td>
+                        <table class='table menu status' >
                         <tr>
                             <td >
-                                <button class='button menu' name='control_menu' ${control_disabled} title='${control_title}'>
-                                    <nobr>
-                                        <img src='resource?png/menu/control.png' valign='top'/>
-                                        Control
-                                    </nobr>
-                                </button>
+                                    <img src='resource?png/menu/${page_name}.png' />
                             </td>
-                            <td >
-                                <button class='button menu' name='courses_menu' ${courses_disabled} title='${courses_title}'>
-                                    <nobr>
-                                        <img src='resource?png/menu/courses.png' valign='top'/>
-                                        Courses
-                                    </nobr>
-                                </button>
+                            <td align=left title='Current page'>
+                                    ${page_title}
                             </td>
-                            <td >
-                                <button class='button menu' name='days_menu' ${days_disabled} title='${days_title}'>
-                                    <nobr>
-                                        <img src='resource?png/menu/days.png' valign='top'/>
-                                        Days
-                                    </nobr>
-                                </button>
+                            <td align=center title='${website_link}' width=100%>
+                                <a href='${website_link}' target='_blank'>🄯 ${site_title}</a>
                             </td>
-                            <td >
-                                <button class='button menu' name='setup_menu' ${setup_disabled} title='${setup_title}'>
-                                    <nobr>
-                                        <img src='resource?png/menu/setup.png' valign='top'/>
-                                        Setup
-                                    </nobr>
-                                </button>
+                            <td align=right title='Process status'>
+                                    Process is run
+                            </td>
+                            <td>
+                                    <img src='resource?png/start.png' valign='center'/>
                             </td>
                         </tr>
                     </table>
-                </form>
-            </td>
-        </tr>
-            <form action='/main?${page_name}' method='post'>
-                <input type='hidden' name='action'/>
-                ${page_content}
-            </form>
-        <tr>
-            <td>
-                <table class='table menu status' >
-                <tr>
-                    <td >
-                            <img src='resource?png/menu/${page_name}.png' />
-                    </td>
-                    <td align=left title='Current page'>
-                            ${page_title}
-                    </td>
-                    <td align=center title='${website_link}' width=100%>
-                        <a href='${website_link}' target='_blank'>🄯 ${site_title}</a>
-                    </td>
-                    <td align=right title='Process status'>
-                            Process is run
-                    </td>
-                    <td>
-                            <img src='resource?png/start.png' valign='center'/>
                     </td>
                 </tr>
             </table>
-            </td>
-        </tr>
-    </table>
-
-</body>
-
+        </form>
+    </body>
 </html>
