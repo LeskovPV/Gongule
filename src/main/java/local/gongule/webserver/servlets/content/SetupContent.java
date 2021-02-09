@@ -58,7 +58,7 @@ public class SetupContent extends Content{
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
         contentVariables.put("configuration_options", options);
-        return super.get(contentVariables);
+        return super.getFromTemplate(contentVariables);
     }
 
     private boolean deleteGong(HttpServletRequest request) {

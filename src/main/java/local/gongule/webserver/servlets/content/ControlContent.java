@@ -1,17 +1,18 @@
 package local.gongule.webserver.servlets.content;
 
 import local.gongule.Gongule;
+import local.gongule.tools.formatter.DateFormatter;
 import local.gongule.tools.Log;
+import local.gongule.tools.formatter.TimeFormatter;
 import local.gongule.tools.data.Course;
 import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Day;
-
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ControlContent extends Content{
+public class ControlContent extends Content {
 
     public ControlContent() {
         actions.put("add_note", (HttpServletRequest request) -> addNote(request));
@@ -25,9 +26,9 @@ public class ControlContent extends Content{
             Map<String, Object> piecesVariables = new HashMap();
             Data.Note note = Gongule.getData().calendar.get(i);
             Course course = Gongule.getData().getCourse(note.courseIndex);
-            piecesVariables.put("begin", note.date);
+            piecesVariables.put("begin", note.date.format(DateFormatter.get()));
             piecesVariables.put("name", course.name);
-            piecesVariables.put("end", note.date.plusDays(course.dayIndexes.size()));
+            piecesVariables.put("end", note.getEndDate().format(DateFormatter.get()));
             piecesVariables.put("value", i);
             rows += fillTemplate("html/pieces/note.html", piecesVariables) + "\n";
         }
@@ -42,30 +43,29 @@ public class ControlContent extends Content{
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
         contentVariables.put("course_options", options);
-        contentVariables.put("today_date", LocalDate.now());
+        contentVariables.put("today_date", LocalDate.now().format(DateFormatter.get()));
         contentVariables.put("today_display", (Gongule.getData().getTodayEvent().size() == 0) ? "none" : "table-row");
         rows = "";
         for (Day.Event event: Gongule.getData().getTodayEvent()) {
             Map<String, Object> piecesVariables = new HashMap();
-            piecesVariables.put("time", event.time.toString());
+            piecesVariables.put("time", event.time.format(TimeFormatter.get()));
             piecesVariables.put("gong", Gongule.getData().getGong(event.gongIndex).name);
             piecesVariables.put("name", event.name);
             piecesVariables.put("value", -1);
             piecesVariables.put("remove_display", "none");
             rows += fillTemplate("html/pieces/event.html", piecesVariables) + "\n";
         }
-
+        contentVariables.put("date_pattern", DateFormatter.pattern);
+        contentVariables.put("date_size", DateFormatter.getSize());
         contentVariables.put("today_events", rows);
-        return super.get(contentVariables);
+        return super.getFromTemplate(contentVariables);
     }
 
     private boolean addNote(HttpServletRequest request) {
-        Log.printInfo("Now is " + LocalDate.now());
         try {
             int courseIndex = Integer.valueOf(request.getParameter("selected_course"));
-            LocalDate courseDate = LocalDate.parse(request.getParameter("course_date"));
+            LocalDate courseDate = LocalDate.parse(request.getParameter("course_date"), DateFormatter.get());
             setAttribute(request, "selected_course", String.valueOf(courseIndex));
-            Log.printInfo("Date = " + courseDate);
             Gongule.getData().addCalendarNote(courseIndex, courseDate);
             return true;
         } catch (Exception exception) {
@@ -83,6 +83,5 @@ public class ControlContent extends Content{
             return false;
         }
     }
-
 
 }

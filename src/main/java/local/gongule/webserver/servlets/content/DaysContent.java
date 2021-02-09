@@ -1,6 +1,7 @@
 package local.gongule.webserver.servlets.content;
 
 import local.gongule.Gongule;
+import local.gongule.tools.formatter.TimeFormatter;
 import local.gongule.tools.data.Day;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalTime;
@@ -24,7 +25,7 @@ public class DaysContent extends Content {
         for (int i = 0; i < Gongule.getData().getDayEventsAmount(selectedDay); i++) {
             Map<String, Object> piecesVariables = new HashMap();
             Day.Event event = Gongule.getData().getDayEvent(selectedDay, i);
-            piecesVariables.put("time", event.time.toString());
+            piecesVariables.put("time", event.time.format(TimeFormatter.get()));
             piecesVariables.put("gong", Gongule.getData().getGong(event.gongIndex).name);
             piecesVariables.put("name", event.name);
             piecesVariables.put("value", String.valueOf(i));
@@ -51,9 +52,11 @@ public class DaysContent extends Content {
             piecesVariables.put("caption", Gongule.getData().getGong(i).name);
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
+        contentVariables.put("time_pattern", TimeFormatter.pattern);
+        contentVariables.put("time_size", TimeFormatter.getSize());
         contentVariables.put("gong_options", options);
         contentVariables.put("day_display", Gongule.getData().getDaysAmount() > 0 ? "table-row" : "none");
-        return super.get(contentVariables);
+        return super.getFromTemplate(contentVariables);
     }
 
     private boolean createDay(HttpServletRequest request) {
@@ -89,7 +92,7 @@ public class DaysContent extends Content {
     private boolean addEvent(HttpServletRequest request) {
         try {
             int dayIndex = Integer.valueOf(request.getParameter("selected_day"));
-            LocalTime eventTime = LocalTime.parse(request.getParameter("event_time"));
+            LocalTime eventTime = LocalTime.parse(request.getParameter("event_time"), TimeFormatter.get());
             String eventName = request.getParameter("event_name");
             int gongIndex = Integer.valueOf(request.getParameter( "selected_gong"));
             setAttribute(request, "selected_gong", String.valueOf(gongIndex));

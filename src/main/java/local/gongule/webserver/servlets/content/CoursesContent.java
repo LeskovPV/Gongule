@@ -4,11 +4,10 @@ import local.gongule.Gongule;
 import local.gongule.tools.data.Day;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CoursesContent  extends Content{
+public class CoursesContent extends Content {
 
     public CoursesContent() {
         actions.put("create_course", (HttpServletRequest request) -> createCourse(request));
@@ -52,7 +51,7 @@ public class CoursesContent  extends Content{
         }
         contentVariables.put("day_options", options);
         contentVariables.put("course_display", Gongule.getData().getCoursesAmount() > 0 ? "table-row" : "none");
-        return super.get(contentVariables);
+        return super.getFromTemplate(contentVariables);
     }
 
     private boolean createCourse(HttpServletRequest request) {
@@ -107,6 +106,5 @@ public class CoursesContent  extends Content{
             return false;
         }
     }
-
 
 }

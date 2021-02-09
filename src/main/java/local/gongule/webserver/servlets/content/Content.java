@@ -1,7 +1,6 @@
 package local.gongule.webserver.servlets.content;
 
 import local.gongule.tools.TemplateFillable;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,18 +12,9 @@ public abstract class Content implements TemplateFillable {
 
     protected Map<String, Function<HttpServletRequest, Boolean>> actions = new HashMap();
 
-
     public boolean applyAction(String actionName, HttpServletRequest request) {
         return actions.containsKey(actionName) ? actions.get(actionName).apply(request) : false;
     }
-
-//    public boolean set(HttpServletRequest request) {
-//        if (request.getParameter(pageType.getName()) != null)
-//            for (String name : actions.keySet())
-//                if (request.getParameter(name) != null)
-//                    actions.get(name).apply(request);
-//        return false;
-//    }
 
     public void setPageType(PageType pageType) {
         this.pageType = pageType;
@@ -32,7 +22,7 @@ public abstract class Content implements TemplateFillable {
 
     public abstract String get(HttpServletRequest request);
 
-    protected String get(Map<String, Object> contentVariables) {
+    protected String getFromTemplate(Map<String, Object> contentVariables) {
         return fillTemplate("html/content/" + pageType.getName().toLowerCase() + ".html", contentVariables);
     }
 

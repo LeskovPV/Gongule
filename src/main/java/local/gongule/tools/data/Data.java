@@ -22,6 +22,12 @@ public class Data implements Serializable {
             this.courseIndex = courseIndex;
             this.date = date;
         }
+        public LocalDate getEndDate() {
+            return date.plusDays(courses.get(courseIndex).dayIndexes.size()-1);
+        }
+        public Course getCourse() {
+            return courses.get(courseIndex);
+        }
     }
 
     private List<Gong> gongs = new ArrayList(0);
@@ -40,7 +46,22 @@ public class Data implements Serializable {
     ////////////////////////////////////////////////////////////////
 
     public boolean addCalendarNote(int courseIndex, LocalDate courseDate) {
-        calendar.add(new Note(courseIndex, courseDate));
+        int newNoteIndex = 0;
+        Note newNote = new Note(courseIndex, courseDate);
+        for (int noteIndex = 0; noteIndex < calendar.size(); noteIndex++) {
+            if (calendar.get(noteIndex).getEndDate().isBefore(newNote.date)) {
+                newNoteIndex = noteIndex + 1;
+                continue;
+            }
+            if (calendar.get(noteIndex).date.isAfter(newNote.getEndDate())) {
+                newNoteIndex = noteIndex;
+                break;
+            }
+            calendar.remove(noteIndex);
+            noteIndex--;
+            newNoteIndex = calendar.size();
+        }
+        calendar.add(newNoteIndex, newNote);
         save();
         return true;
     }
@@ -78,8 +99,18 @@ public class Data implements Serializable {
         return true;
     }
 
-    public boolean courseDelete(int dayIndex) {
-        courses.remove(dayIndex);
+    public boolean courseDelete(int courseIndex) {
+        List<Integer> indexes = new ArrayList();
+        for (Note note: calendar) {
+            if (note.courseIndex == courseIndex)
+                indexes.add(0, calendar.indexOf(note));
+        }
+        for (int index: indexes)
+            calendar.remove(index);
+        for (int index = 0; index < calendar.size(); index++)
+            if (calendar.get(index).courseIndex > courseIndex)
+                calendar.get(index).courseIndex = calendar.get(index).courseIndex - 1;
+        courses.remove(courseIndex);
         save();
         return true;
     }
@@ -174,12 +205,22 @@ public class Data implements Serializable {
         }
     }
 
-    public boolean addDayEvent(int dayIndex, LocalTime time, String name, int gongIndex) {
-        //int gongIndex = getGongIndex(gongName);
+    public boolean addDayEvent(int dayIndex, LocalTime eventTime, String eventName, int gongIndex) {
         if (gongIndex < 0)
             return false;
-        Day.Event dayEvent = new Day.Event(time, name, gongIndex);
-        days.get(dayIndex).events.add(dayEvent);
+        Day.Event dayEvent = new Day.Event(eventTime, eventName, gongIndex);
+        int newEventIndex = 0;
+        for (int eventIndex = 0; eventIndex < days.get(dayIndex).events.size(); eventIndex++) {
+            newEventIndex = eventIndex;
+            if (days.get(dayIndex).events.get(eventIndex).time.equals(eventTime)) {
+                days.get(dayIndex).events.remove(eventIndex);
+                break;
+            }
+            if (days.get(dayIndex).events.get(eventIndex).time.isAfter(eventTime))
+                break;
+            newEventIndex++;
+        }
+        days.get(dayIndex).events.add(newEventIndex, dayEvent);
         save();
         return true;
     }

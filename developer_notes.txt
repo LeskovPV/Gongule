@@ -5,6 +5,4 @@
 ############################################
 
 NEEDING
-* time-sort when add gong to timetable
-* date-sort when add course to calendar
-* add format for time and date
+* Calculate today events

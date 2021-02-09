@@ -5,9 +5,13 @@
         <title>${site_title}</title>
         <link href='resource?css/general.css' rel='stylesheet' type='text/css'>
         <link href='resource?png/icon.png' rel='icon' type='image/x-icon'>
-        <script src='resource?js/main.js'></script>
     </head>
     <body>
+        <script>
+            function setAction(actionName) {
+                document.getElementsByName('action')[0].value = actionName;
+            }
+        </script>
         <form action='/main?${page_name}' method='post'>
             <input type='hidden' name='action'/>
             <table>
@@ -15,64 +19,33 @@
                     <td>
                         <table class='table menu'>
                             <tr>
-                                <td >
-                                    <button class='button menu' name='control_menu' ${control_disabled} title='${control_title}' onclick='setAction(this.name)'>
-                                        <nobr>
-                                            <img src='resource?png/menu/control.png' valign='top'/>
-                                            Control
-                                        </nobr>
-                                    </button>
-                                </td>
-                                <td >
-                                    <button class='button menu' name='courses_menu' ${courses_disabled} title='${courses_title}' onclick='setAction(this.name)'>
-                                        <nobr>
-                                            <img src='resource?png/menu/courses.png' valign='top'/>
-                                            Courses
-                                        </nobr>
-                                    </button>
-                                </td>
-                                <td >
-                                    <button class='button menu' name='days_menu' ${days_disabled} title='${days_title}' onclick='setAction(this.name)'>
-                                        <nobr>
-                                            <img src='resource?png/menu/days.png' valign='top'/>
-                                            Days
-                                        </nobr>
-                                    </button>
-                                </td>
-                                <td >
-                                    <button class='button menu' name='setup_menu' ${setup_disabled} title='${setup_title}' onclick='setAction(this.name)'>
-                                        <nobr>
-                                            <img src='resource?png/menu/setup.png' valign='top'/>
-                                            Setup
-                                        </nobr>
-                                    </button>
-                                </td>
+                            ${main_menu}
                             </tr>
                         </table>
                     </td>
                 </tr>
-                    ${page_content}
+                ${page_content}
                 <tr>
                     <td>
                         <table class='table menu status' >
-                        <tr>
-                            <td >
+                            <tr>
+                                <td>
                                     <img src='resource?png/menu/${page_name}.png' />
-                            </td>
-                            <td align=left title='Current page'>
+                                </td>
+                                <td align=left title='Current page'>
                                     ${page_title}
-                            </td>
-                            <td align=center title='${website_link}' width=100%>
-                                <a href='${website_link}' target='_blank'>🄯 ${site_title}</a>
-                            </td>
-                            <td align=right title='Process status'>
+                                </td>
+                                <td align=center title='${website_link}' width=100%>
+                                    <a href='${website_link}' target='_blank'>🄯 ${site_title}</a>
+                                </td>
+                                <td align=right title='Process status'>
                                     Process is run
-                            </td>
-                            <td>
+                                </td>
+                                <td>
                                     <img src='resource?png/start.png' valign='center'/>
-                            </td>
-                        </tr>
-                    </table>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
             </table>
