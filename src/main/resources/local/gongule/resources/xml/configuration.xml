@@ -83,6 +83,10 @@
       <name>Last day</name>
       <events/>
     </local.gongule.tools.data.Day>
+    <local.gongule.tools.data.Day>
+      <name>Service day</name>
+      <events/>
+    </local.gongule.tools.data.Day>
   </days>
   <courses>
     <local.gongule.tools.data.Course>
@@ -99,6 +103,12 @@
         <int>1</int>
         <int>1</int>
         <int>2</int>
+      </dayIndexes>
+    </local.gongule.tools.data.Course>
+    <local.gongule.tools.data.Course>
+      <name>Service period</name>
+      <dayIndexes>
+        <int>3</int>
       </dayIndexes>
     </local.gongule.tools.data.Course>
   </courses>

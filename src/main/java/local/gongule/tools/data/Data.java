@@ -18,13 +18,16 @@ public class Data implements Serializable {
     public class Note implements Serializable {
         public LocalDate date;
         public int courseIndex;
+
         public Note(int courseIndex, LocalDate date) {
             this.courseIndex = courseIndex;
             this.date = date;
         }
+
         public LocalDate getEndDate() {
-            return date.plusDays(courses.get(courseIndex).dayIndexes.size()-1);
+            return date.plusDays(courses.get(courseIndex).dayIndexes.size() - 1);
         }
+
         public Course getCourse() {
             return courses.get(courseIndex);
         }
@@ -35,10 +38,49 @@ public class Data implements Serializable {
     private List<Course> courses = new ArrayList(0);
     public List<Note> calendar = new ArrayList(0);
 
-    public List<Day.Event> getTodayEvent() {
-        List<Day.Event> result = new ArrayList(0);
-        result.add(new Day.Event(LocalTime.now(), "Test event", 0));
-        return result;
+    public int getCurrentNoteIndex() {
+        LocalDate today = LocalDate.now();
+        for (Note note : calendar)
+            if (note.date.isBefore(today.plusDays(1)) && (note.getEndDate().isAfter(today.minusDays(1))))
+                return calendar.indexOf(note);
+        return -1;
+    }
+
+    public String getCurrentCourseName(){
+        return getCurrentCourseName(getCurrentNoteIndex());
+    }
+    public String getCurrentCourseName(int currentNoteIndex) {
+        if (currentNoteIndex < 0)
+            return "";
+        return courses.get(calendar.get(currentNoteIndex).courseIndex).name;
+    }
+
+    public int getCurrentDayNumber() {
+        return getCurrentDayNumber(getCurrentNoteIndex());
+    }
+
+    public int getCurrentDayNumber(int currentNoteIndex) {
+        if (currentNoteIndex < 0)
+            return -1;
+        LocalDate today = LocalDate.now();
+        Note note = calendar.get(currentNoteIndex);
+        return today.compareTo(note.date);
+    }
+
+    public int getCurrentDayIndex() {
+        return getCurrentDayIndex(getCurrentNoteIndex());
+    }
+
+    public int getCurrentDayIndex(int currentNoteIndex) {
+        if (currentNoteIndex < 0)
+            return -1;
+        LocalDate today = LocalDate.now();
+        Note note = calendar.get(currentNoteIndex);
+        int courseIndex = note.courseIndex;
+        int dayIndex = today.compareTo(note.date);
+        if (dayIndex < 0)
+            return -1;
+        return courses.get(courseIndex).dayIndexes.get(dayIndex);
     }
 
     ////////////////////////////////////////////////////////////////

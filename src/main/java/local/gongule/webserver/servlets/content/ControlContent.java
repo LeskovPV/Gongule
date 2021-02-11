@@ -42,22 +42,29 @@ public class ControlContent extends Content {
             piecesVariables.put("caption", Gongule.getData().getCourse(i).name);
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
+        int todayIndex = Gongule.getData().getCurrentDayIndex();
         contentVariables.put("course_options", options);
         contentVariables.put("today_date", LocalDate.now().format(DateFormatter.get()));
-        contentVariables.put("today_display", (Gongule.getData().getTodayEvent().size() == 0) ? "none" : "table-row");
+        contentVariables.put("today_day", (todayIndex >= 0) ? Gongule.getData().getDay(todayIndex).name : "");
+        contentVariables.put("today_index", Gongule.getData().getCurrentDayNumber());
+        contentVariables.put("today_course", Gongule.getData().getCurrentCourseName());
+        contentVariables.put("today_display", (todayIndex < 0) ? "none" : "table-row");
         rows = "";
-        for (Day.Event event: Gongule.getData().getTodayEvent()) {
-            Map<String, Object> piecesVariables = new HashMap();
-            piecesVariables.put("time", event.time.format(TimeFormatter.get()));
-            piecesVariables.put("gong", Gongule.getData().getGong(event.gongIndex).name);
-            piecesVariables.put("name", event.name);
-            piecesVariables.put("value", -1);
-            piecesVariables.put("remove_display", "none");
-            rows += fillTemplate("html/pieces/event.html", piecesVariables) + "\n";
-        }
+        if (todayIndex >= 0)
+            for (Day.Event event: Gongule.getData().getDay(todayIndex).events) {
+                Map<String, Object> piecesVariables = new HashMap();
+                piecesVariables.put("time", event.time.format(TimeFormatter.get()));
+                piecesVariables.put("gong", Gongule.getData().getGong(event.gongIndex).name);
+                piecesVariables.put("name", event.name);
+                piecesVariables.put("value", -1);
+                piecesVariables.put("remove_display", "none");
+                rows += fillTemplate("html/pieces/event.html", piecesVariables) + "\n";
+            }
+        contentVariables.put("events_display", rows.isEmpty() ? "none" : "table-row");
+        contentVariables.put("noevents_display", rows.isEmpty() ? "table-row" : "none");
+        contentVariables.put("today_events", rows);
         contentVariables.put("date_pattern", DateFormatter.pattern);
         contentVariables.put("date_size", DateFormatter.getSize());
-        contentVariables.put("today_events", rows);
         return super.getFromTemplate(contentVariables);
     }
 

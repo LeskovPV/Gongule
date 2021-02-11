@@ -20,14 +20,21 @@
                             <td colspan='2' >
                                 <table class='table border named'> <!--Today events-->
                                     <tr>
-                                        <td>
+                                        <th>
                                             Today
-                                        </td>
-                                        <td align='right'>
+                                        </th>
+                                        <th align='right'>
                                             ${today_date}
-                                        </td>
+                                        </th>
                                     </tr>
                                     <tr>
+                                        <td colspan='2'>
+                                            <nobr>
+                                                ${today_day} (№${today_index}) of ${today_course}
+                                            </nobr>
+                                        </td>
+                                    </tr>
+                                    <tr style='display:${events_display}'>
                                         <td colspan='2'>
                                             <table class='table data'>
                                                 <tr>
@@ -45,6 +52,17 @@
                                             </table>
                                         </td>
                                     </tr>
+                                    <tr style='display:${noevents_display}'>
+                                        <td colspan='2'>
+                                            <table class='table data'>
+                                                <tr>
+                                                    <td>
+                                                        No events today
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
                                 </table> <!-- Process-->
                             </td>
                         </tr>
@@ -58,12 +76,12 @@
     <td>
         <table class='table border named'> <!--Calendar-->
             <tr>
-                <td>
+                <th>
                     <img src='resource?png/calendar.png' />
-                </td>
-                <td width='100%'>
+                </th>
+                <th width='100%'>
                     Calendar
-                </td>
+                </th>
             </tr>
             <tr>
                 <td colspan='2'>

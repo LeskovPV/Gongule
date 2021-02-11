@@ -24,23 +24,15 @@ body { /* Page content */
 
 .table.border { /* Tables with a frame */
     background-color: var(--base_color);
-    /*border-spacing: 5px;
-    margin: 5px; */
     border-spacing: 0px;
     padding: 2px;
     margin: 0px;
     width: 100%;
 }
 
-.table.border.entry { /* Authorization table */
-    margin: auto;
-    width: auto;
-}
-
-.table.border.named { /* Authorization table */
+.table.border.named {
     color: var(--half_color);
     background-color: var(--deep_color);
-    font-weight: bold;
     margin: auto;
 }
 
@@ -49,21 +41,19 @@ body { /* Page content */
 }
 
 
-.table.data { /* Таблицы в рамке */
+.table.data {
     background-color: var(--site_color);
     color: var(--text_color);
-    font-weight: normal;
     border-spacing: 5px;
     padding: 0px;
     width: 100%;
 }
 
-.table.data th{ /* Header of table */
+.table.data th{
     color: var(--half_color);
-    font-weight: bold;
 }
 
-.table.menu { /* Главное меню и строка состояния */
+.table.menu {
      background-color: var(--base_color);
      font-weight: bold;
      width: 100%;
@@ -72,30 +62,29 @@ body { /* Page content */
      margin: 0px;
 }
 
-.table.menu.status { /* Главное меню и строка состояния */
+.table.menu.status {
      padding: 0px;
      font-weight: normal;
      font-size: x-small;
 }
 
-.table.menu tr { /* Строка меню */
+.table.menu tr {
     padding: 0px;
     width: 0;
     white-space: nowrap;
 }
 
-.table.menu td  { /* Элемент меню */
-    /*border-radius: var(--border_radius);*/
+.table.menu td  {
     padding: 5px;
 }
 
-.table.tr.title { /* Строка таблицы с заголовком */
+.table.tr.title {
     border-radius: var(--border_radius);
     font-weight: bold;
     background-color: var(--deep_color);
 }
 
-button { /* Кнопки */
+button {
     text-align: left;
     font-weight: normal;
     border-radius: var(--border_radius);
@@ -150,7 +139,7 @@ input::placeholder {
     color:var(--half_color);
 }
 
-select { /* Элементы с выпадаюшим списком */
+select {
     width: 100%;
 }
 
@@ -159,12 +148,12 @@ input:disabled, input[disabled], select:disabled, select[disabled]{
     background-color: var(--deep_color);
 }
 
-a { /* link */
+a { /* links */
   text-decoration: none;
   color: var(--text_color);
 }
 
-a:hover {/* mouse over link */
+a:hover { /* mouse over link */
   color: var(--deep_color);
   text-shadow:
    1px  1px 3px var(--text_color),
@@ -173,5 +162,4 @@ a:hover {/* mouse over link */
   -1px  1px 3px var(--text_color);
 }
 
-/***********************************/
 
