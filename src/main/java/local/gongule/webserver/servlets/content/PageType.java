@@ -30,15 +30,6 @@ public enum PageType {
         return CONTROL;
     }
 
-    public static boolean contains(String name) {
-        try {
-            PageType.valueOf(name.toUpperCase());
-            return true;
-        } catch (Exception exception) {
-            return false;
-        }
-    }
-
     public static PageType getValueOf(String name) {
         try {
             return PageType.valueOf(name.toUpperCase());

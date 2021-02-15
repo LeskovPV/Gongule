@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class Log {
 
-    private static final String dateFormat = "HH:mm:ss DD.MM.YY";
+    private static final String dateFormat = "HH:mm:ss dd.MM.yyyy";
 
     private static String dateToString(Date date){
         try {

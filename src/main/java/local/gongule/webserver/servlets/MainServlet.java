@@ -2,6 +2,7 @@ package local.gongule.webserver.servlets;
 
 import local.gongule.Gongule;
 import local.gongule.tools.TemplateFillable;
+import local.gongule.tools.process.GongExecutor;
 import local.gongule.webserver.servlets.content.*;
 import local.gongule.webserver.WebServer;
 import javax.servlet.http.HttpServlet;
@@ -41,12 +42,13 @@ public class MainServlet extends HttpServlet implements TemplateFillable {
             mainMenu += fillTemplate("html/pieces/menu.html", piecesVariables) + "\n";
         }
         pageVariables.put("main_menu", mainMenu);
-        pageVariables.put("site_title", Gongule.getFullName());
+        pageVariables.put("site_title", Gongule.getProjectName());
         pageVariables.put("page_name", selectedPageType.getName());
         pageVariables.put("page_title", selectedPageType.getTitle());
         pageVariables.put("page_content", content.get(selectedPageType).get(request));
         pageVariables.put("website_link", Gongule.getProjectWebsite());
         pageVariables.put("deep_color", WebServer.getColorSchema().getDeepColor());
+        pageVariables.put("process_status", GongExecutor.processIsPaused() ? "pause" : "run");
         String result = fillTemplate("html/main.html", pageVariables);
         response.getOutputStream().write( result.getBytes("UTF-8") );
         response.setContentType("text/html; charset=UTF-8");
@@ -62,12 +64,12 @@ public class MainServlet extends HttpServlet implements TemplateFillable {
         for (PageType pageType: PageType.values()) {
             // check menu button click
             if (actionName.equals(pageType.getName() + "_menu")) {
-                response.sendRedirect("/main?" + pageType.getName());
+                response.sendRedirect("/ui?" + pageType.getName());
                 return;
             }
             // check action on page
             if (content.get(pageType).applyAction(actionName, request)) {
-                response.sendRedirect("/main?" + pageType.getName());
+                response.sendRedirect("/ui?" + pageType.getName());
                 return;
             }
         }

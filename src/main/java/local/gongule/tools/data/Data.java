@@ -350,7 +350,7 @@ public class Data implements Serializable {
             //Log.printWarn("Impossible save configuration as '" + defaultName + "'. It is reserved filename");
             return false;
         }
-        String fullFileName = ((fileName == null) ? Resources.getJarDirName() + Gongule.getFullName() : getFullDirName() + fileName) + ".xml";
+        String fullFileName = ((fileName == null) ? Resources.getJarDirName() + Gongule.getProjectName() : getFullDirName() + fileName) + ".xml";
         XStream xstream = new XStream();
         try {
             xstream.toXML(data, new FileWriter(fullFileName));
@@ -369,7 +369,7 @@ public class Data implements Serializable {
         XStream xstream = new XStream();
         String fullFileName = getFullDirName() + fileName + ".xml";
         if (fileName == null) {
-            Path path = Paths.get(Resources.getJarDirName() + Gongule.getFullName() + ".xml");
+            Path path = Paths.get(Resources.getJarDirName() + Gongule.getProjectName() + ".xml");
             fullFileName = Files.exists(path) ? path.toString() : getFullDirName() + getDefaultName() + ".xml";
         }
         try {

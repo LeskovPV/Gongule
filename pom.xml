@@ -84,10 +84,10 @@
                                 </transformer>
                             </transformers>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <outputFile>${project.build.directory}/${project.artifactId}.jar</outputFile>
                             <minimizeJar>false</minimizeJar>
                             <!--shadedClassifierName>shaded</shadedClassifierName-->
                             <!--shadedArtifactAttached>false</shadedArtifactAttached-->
-                            <!--outputFile>/home/data/leskov/projects/gongule/target/G.jar</outputFile-->
                             <!--shadedArtifactAttached>false</shadedArtifactAttached-->
                         </configuration>
                     </execution>

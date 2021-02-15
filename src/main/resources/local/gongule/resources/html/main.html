@@ -12,7 +12,7 @@
                 document.getElementsByName('action')[0].value = actionName;
             }
         </script>
-        <form action='/main?${page_name}' method='post'>
+        <form action='/ui?${page_name}' method='post'>
             <input type='hidden' name='action'/>
             <table>
                 <tr>
@@ -39,10 +39,10 @@
                                     <a href='${website_link}' target='_blank'>🄯 ${site_title}</a>
                                 </td>
                                 <td align=right title='Process status'>
-                                    Process is run
+                                    Process is ${process_status}
                                 </td>
                                 <td>
-                                    <img src='resource?png/start.png' valign='center'/>
+                                    <img src='resource?png/${process_status}.png' valign='center'/>
                                 </td>
                             </tr>
                         </table>

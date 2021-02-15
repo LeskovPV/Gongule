@@ -103,10 +103,18 @@
             </tr>
             <tr>
                 <td colspan='2'>
+                    <script>
+                        window.onload = function() {
+                            onSelectConfiguration(document.getElementsByName('selected_configuration')[0].value)
+                        }
+                        function onSelectConfiguration(value) {
+                            document.getElementsByName('delete_configuration')[0].disabled = (value == 'default');
+                        }
+                    </script>
                     <table class='table data'>
                         <tr>
                             <td width='35%'>
-                                <select name='selected_configuration' width='100%'>
+                                <select name='selected_configuration' width='100%' onChange='onSelectConfiguration(this.value)'>
                                     ${configuration_options}
                                 </select>
                             </td>

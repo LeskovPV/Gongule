@@ -7,6 +7,9 @@ import local.gongule.tools.formatter.TimeFormatter;
 import local.gongule.tools.data.Course;
 import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Day;
+import local.gongule.tools.process.GongExecutor;
+import local.gongule.tools.process.GongTask;
+
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -17,6 +20,8 @@ public class ControlContent extends Content {
     public ControlContent() {
         actions.put("add_note", (HttpServletRequest request) -> addNote(request));
         actions.put("remove_note", (HttpServletRequest request) -> removeNote(request));
+        actions.put("run_process", (HttpServletRequest request) -> runProcess(request));
+        actions.put("pause_process", (HttpServletRequest request) -> pauseProcess(request));
     }
 
     public String get(HttpServletRequest request) {
@@ -60,6 +65,9 @@ public class ControlContent extends Content {
                 piecesVariables.put("remove_display", "none");
                 rows += fillTemplate("html/pieces/event.html", piecesVariables) + "\n";
             }
+        contentVariables.put("run_disabled", GongExecutor.processIsPaused() ? "" : "disabled");
+        contentVariables.put("pause_disabled", GongExecutor.processIsPaused() ? "disabled" : "");
+
         contentVariables.put("events_display", rows.isEmpty() ? "none" : "table-row");
         contentVariables.put("noevents_display", rows.isEmpty() ? "table-row" : "none");
         contentVariables.put("today_events", rows);
@@ -89,6 +97,16 @@ public class ControlContent extends Content {
         } catch (Exception exception) {
             return false;
         }
+    }
+
+    private boolean runProcess(HttpServletRequest request) {
+        GongExecutor.run();
+        return true;
+    }
+
+    private boolean pauseProcess(HttpServletRequest request) {
+        GongExecutor.pause();
+        return true;
     }
 
 }

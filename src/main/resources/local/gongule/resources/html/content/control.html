@@ -6,12 +6,12 @@
                     <table class='table data'>
                         <tr>
                             <td>
-                                <button class='button' name='start_button' >
-                                    <img src='resource?png/start.png' valign='top'/>
+                                <button name='run_process' ${run_disabled} onclick='setAction(this.name)'>
+                                    <img src='resource?png/run.png'/>
                                 </button>
                             </td>
                             <td align='right'>
-                                <button name='pause_button' title='Process pause'>
+                                <button name='pause_process' ${pause_disabled} title='Process pause' onclick='setAction(this.name)'>
                                     <img src='resource?png/pause.png'/>
                                 </button>
                             </td>

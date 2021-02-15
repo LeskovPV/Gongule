@@ -133,7 +133,7 @@ public class WebServer {
 
     private static ServerConnector getHttpsConnector() {
         checkPort(httpsPort);
-        String keyStorePath = Resources.getAsFile(keyStore, Gongule.getFullName() + ".key").getPath();
+        String keyStorePath = Resources.getAsFile(keyStore, Gongule.getProjectName() + ".key").getPath();
         // HTTPS configuration
         HttpConfiguration https = new HttpConfiguration();
         https.addCustomizer(new SecureRequestCustomizer());            // Configuring SSL
@@ -184,11 +184,7 @@ public class WebServer {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         ServletHolder MainServletHolder = new ServletHolder(new MainServlet());
         context.addServlet(MainServletHolder,"");
-        context.addServlet(MainServletHolder,"/main");
-//        ServletHolder entryServletHolder = new ServletHolder(new EntryServlet(accountService));
-//        context.addServlet(entryServletHolder,"");
-//        context.addServlet(new ServletHolder(new MainServlet(accountService)),"/main");
-//        context.addServlet(new ServletHolder(new EntryServlet(accountService)),"/entry");
+        context.addServlet(MainServletHolder,"/ui");
         context.addServlet(new ServletHolder(new ResourceServlet()),"/resource");
         HandlerList handlers = new HandlerList();
         handlers.addHandler(context);

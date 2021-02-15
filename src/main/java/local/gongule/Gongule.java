@@ -1,6 +1,7 @@
 package local.gongule;
 
 import com.pi4j.io.gpio.RaspiPin;
+import local.gongule.tools.process.GongExecutor;
 import local.gongule.tools.data.Data;
 import local.gongule.tools.Log;
 import local.gongule.tools.ParsableProperties;
@@ -29,7 +30,7 @@ public class Gongule {
         applyProperties();
         applyCongiguration();
         WebServer.start();
-        MainWindow.open(getFullName());
+        MainWindow.open(getProjectName());
     }
 
     public static RuntimeConfiguration runtimeConfiguration;
@@ -55,7 +56,7 @@ public class Gongule {
         }
         setProjectVersion(properties.getProperty("gongule.version"));
         setProjectWebsite(properties.getProperty("gongule.website"));
-        runtimeConfiguration = new RuntimeConfiguration(Resources.getJarDirName() + getFullName() + ".tmp");
+        runtimeConfiguration = new RuntimeConfiguration(Resources.getJarDirName() + getProjectName() + ".tmp");
         Log.printInfo("Properties is appled");
     }
 
@@ -105,7 +106,7 @@ public class Gongule {
     public static File getGongFile() {
         if (gongFile == null)
             // Extract wav-file from jar-package to jar-directory
-            return Resources.getAsFile("wav/gong.wav", getFullName() + ".wav", false);
+            return Resources.getAsFile("wav/gong.wav", getProjectName() + ".wav", false);
         else
             return gongFile;
     }
@@ -143,7 +144,7 @@ public class Gongule {
     /**
      * Return full project name with version
      **/
-    public static String getFullName(){
+    public static String getFullName1(){
         return getProjectName() + "-" + getProjectVersion();
     }
 
@@ -153,7 +154,7 @@ public class Gongule {
     private static void applyCongiguration(){
         ParsableProperties properties = new ParsableProperties();
         String jarCfgName = "cfg/pattern.cfg"; // default cfg-file in jar-package resources
-        String cfgFileName = getFullName() + ".cfg"; // specific cfg-file in jar-directory
+        String cfgFileName = getProjectName() + ".cfg"; // specific cfg-file in jar-directory
         Resources.getAsFile(jarCfgName, cfgFileName, false); // Extract cfg-file from jar-package to jar-directory
         try {
             FileInputStream inputStream = new FileInputStream(Resources.getJarDirName() + cfgFileName);

@@ -5,6 +5,5 @@
 ############################################
 
 NEEDING
-* Control thread
-* Gong sound
+* Rerun GongExecutor every day at midnight
 
