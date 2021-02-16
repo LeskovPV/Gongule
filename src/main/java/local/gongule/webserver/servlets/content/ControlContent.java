@@ -9,9 +9,11 @@ import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Day;
 import local.gongule.tools.process.GongExecutor;
 import local.gongule.tools.process.GongTask;
+import local.gongule.webserver.WebServer;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +36,7 @@ public class ControlContent extends Content {
             piecesVariables.put("begin", note.date.format(DateFormatter.get()));
             piecesVariables.put("name", course.name);
             piecesVariables.put("end", note.getEndDate().format(DateFormatter.get()));
+            piecesVariables.put("color", note.date.isBefore(LocalDate.now().plusDays(1)) && note.getEndDate().isAfter(LocalDate.now().minusDays(1)) ? WebServer.getColorSchema().getTextColor() : WebServer.getColorSchema().getHalfColor());
             piecesVariables.put("value", i);
             rows += fillTemplate("html/pieces/note.html", piecesVariables) + "\n";
         }
@@ -58,6 +61,7 @@ public class ControlContent extends Content {
         if (todayIndex >= 0)
             for (Day.Event event: Gongule.getData().getDay(todayIndex).events) {
                 Map<String, Object> piecesVariables = new HashMap();
+                piecesVariables.put("color", event.time.isAfter(LocalTime.now()) ? WebServer.getColorSchema().getTextColor() : WebServer.getColorSchema().getHalfColor());
                 piecesVariables.put("time", event.time.format(TimeFormatter.get()));
                 piecesVariables.put("gong", Gongule.getData().getGong(event.gongIndex).name);
                 piecesVariables.put("name", event.name);

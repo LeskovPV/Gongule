@@ -4,6 +4,8 @@ import local.gongule.Gongule;
 import local.gongule.tools.Log;
 import local.gongule.tools.data.Day;
 import local.gongule.tools.data.Gong;
+
+import java.time.LocalTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -22,12 +24,12 @@ public class GongExecutor {
         Day today = Gongule.getData().getDay(todayIndex);
         if (service != null) pause();
         service = Executors.newScheduledThreadPool(today.events.size());
-        int i=0;
         for (Day.Event event: Gongule.getData().getDay(todayIndex).events) {
+            int seconds = event.time.toSecondOfDay() - LocalTime.now().toSecondOfDay();
+            if (seconds < 0) continue;
             Gong gong = Gongule.getData().getGong(event.gongIndex);
             GongTask gongTask = new GongTask(gong);
-            service.schedule(gongTask, 5*i, TimeUnit.SECONDS);
-            i++;
+            service.schedule(gongTask, seconds, TimeUnit.SECONDS);
         }
     }
 

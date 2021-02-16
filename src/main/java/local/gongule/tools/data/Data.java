@@ -3,6 +3,7 @@ package local.gongule.tools.data;
 import com.thoughtworks.xstream.XStream;
 import local.gongule.Gongule;
 import local.gongule.tools.Log;
+import local.gongule.tools.formatter.TimeFunctions;
 import local.gongule.tools.resources.Resources;
 
 import java.io.*;
@@ -250,11 +251,16 @@ public class Data implements Serializable {
     public boolean addDayEvent(int dayIndex, LocalTime eventTime, String eventName, int gongIndex) {
         if (gongIndex < 0)
             return false;
+        int minutes = 5;
         Day.Event dayEvent = new Day.Event(eventTime, eventName, gongIndex);
         int newEventIndex = 0;
+        if (TimeFunctions.isAfterMidnight(eventTime, minutes))
+            for (int eventIndex = days.get(dayIndex).events.size() - 1; eventIndex >= 0; eventIndex--)
+                if (TimeFunctions.isBeforeMidnight(days.get(dayIndex).events.get(eventIndex).time, minutes))
+                    days.get(dayIndex).events.remove(eventIndex);
         for (int eventIndex = 0; eventIndex < days.get(dayIndex).events.size(); eventIndex++) {
             newEventIndex = eventIndex;
-            if (days.get(dayIndex).events.get(eventIndex).time.equals(eventTime)) {
+            if (TimeFunctions.isNear(days.get(dayIndex).events.get(eventIndex).time, eventTime, minutes)) {
                 days.get(dayIndex).events.remove(eventIndex);
                 break;
             }
@@ -262,7 +268,10 @@ public class Data implements Serializable {
                 break;
             newEventIndex++;
         }
-        days.get(dayIndex).events.add(newEventIndex, dayEvent);
+        if (TimeFunctions.isBeforeMidnight(eventTime, minutes))
+            days.get(dayIndex).events.add(dayEvent);
+        else
+            days.get(dayIndex).events.add(newEventIndex, dayEvent);
         save();
         return true;
     }

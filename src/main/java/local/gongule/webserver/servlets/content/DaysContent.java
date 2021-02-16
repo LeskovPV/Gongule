@@ -3,6 +3,8 @@ package local.gongule.webserver.servlets.content;
 import local.gongule.Gongule;
 import local.gongule.tools.formatter.TimeFormatter;
 import local.gongule.tools.data.Day;
+import local.gongule.webserver.WebServer;
+
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -25,6 +27,7 @@ public class DaysContent extends Content {
         for (int i = 0; i < Gongule.getData().getDayEventsAmount(selectedDay); i++) {
             Map<String, Object> piecesVariables = new HashMap();
             Day.Event event = Gongule.getData().getDayEvent(selectedDay, i);
+            piecesVariables.put("color", WebServer.getColorSchema().getTextColor());
             piecesVariables.put("time", event.time.format(TimeFormatter.get()));
             piecesVariables.put("gong", Gongule.getData().getGong(event.gongIndex).name);
             piecesVariables.put("name", event.name);
