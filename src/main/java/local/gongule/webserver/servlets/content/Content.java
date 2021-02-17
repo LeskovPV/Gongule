@@ -1,6 +1,6 @@
 package local.gongule.webserver.servlets.content;
 
-import local.gongule.tools.TemplateFillable;
+import local.gongule.utils.TemplateFillable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;

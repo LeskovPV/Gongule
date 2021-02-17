@@ -2,9 +2,9 @@ package local.gongule.tools.data;
 
 import com.thoughtworks.xstream.XStream;
 import local.gongule.Gongule;
-import local.gongule.tools.Log;
-import local.gongule.tools.formatter.TimeFunctions;
-import local.gongule.tools.resources.Resources;
+import local.gongule.utils.logging.Loggible;
+import local.gongule.utils.formatter.TimeFunctions;
+import local.gongule.utils.resources.Resources;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.time.*;
 
-public class Data implements Serializable {
+public class Data implements Serializable, Loggible {
 
     //private static final long serialVersionUID = -519958441268523608L;
     public class Note implements Serializable {
@@ -365,7 +365,7 @@ public class Data implements Serializable {
             xstream.toXML(data, new FileWriter(fullFileName));
             return true;
         } catch(Exception exception) {
-            Log.printError("Impossible save to " + fullFileName, exception);
+            logger.error("Impossible save to {}: {}", fullFileName, exception);
             return false;
         }
     }
@@ -384,7 +384,7 @@ public class Data implements Serializable {
         try {
             return (Data) xstream.fromXML(new File(fullFileName));
         } catch(Exception exception) {
-            Log.printError("Impossible load '" + fullFileName + "' configuration", exception);
+            logger.error("Impossible load '{}' configuration: {}", fullFileName, exception);
             return null;
         }
     }

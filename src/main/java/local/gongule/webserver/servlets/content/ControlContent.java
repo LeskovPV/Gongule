@@ -1,14 +1,12 @@
 package local.gongule.webserver.servlets.content;
 
 import local.gongule.Gongule;
-import local.gongule.tools.formatter.DateFormatter;
-import local.gongule.tools.Log;
-import local.gongule.tools.formatter.TimeFormatter;
+import local.gongule.utils.formatter.DateFormatter;
+import local.gongule.utils.formatter.TimeFormatter;
 import local.gongule.tools.data.Course;
 import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Day;
 import local.gongule.tools.process.GongExecutor;
-import local.gongule.tools.process.GongTask;
 import local.gongule.webserver.WebServer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -88,7 +86,7 @@ public class ControlContent extends Content {
             Gongule.getData().addCalendarNote(courseIndex, courseDate);
             return true;
         } catch (Exception exception) {
-            Log.printError(exception);
+            logger.error(exception);
             return false;
         }
     }

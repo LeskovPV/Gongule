@@ -1,8 +1,9 @@
-package local.gongule.tools;
+package local.gongule.utils;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import local.gongule.tools.resources.Resources;
+import local.gongule.utils.logging.Loggible;
+import local.gongule.utils.resources.Resources;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,7 +13,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-public interface TemplateFillable {
+public interface TemplateFillable extends Loggible {
+
     /**
      * Заполняет html-шаблон данными
      */
@@ -27,7 +29,7 @@ public interface TemplateFillable {
             Template template = new Template(fileName, new InputStreamReader(inputStream, charset), conf, codePage);
             template.process(data, stream);
         } catch (Exception exception) {
-            Log.printError("Unpossible fill template", exception);
+            logger.error("Unpossible fill template", exception);
         }
         return stream.toString();
     }

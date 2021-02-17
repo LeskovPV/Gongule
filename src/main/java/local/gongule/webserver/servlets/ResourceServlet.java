@@ -1,10 +1,9 @@
 package local.gongule.webserver.servlets;
 
-import local.gongule.tools.TemplateFillable;
-import local.gongule.tools.resources.ResourceType;
-import local.gongule.tools.resources.Resources;
-import local.gongule.tools.SystemInformation;
-import local.gongule.tools.colors.ColorSchema;
+import local.gongule.utils.TemplateFillable;
+import local.gongule.utils.resources.ResourceType;
+import local.gongule.utils.resources.Resources;
+import local.gongule.utils.colors.ColorSchema;
 import local.gongule.webserver.WebServer;
 
 
@@ -48,7 +47,6 @@ public class ResourceServlet extends HttpServlet implements TemplateFillable {
             Map<String, Object> pageVariables = new HashMap(0);
             switch (ResourceType.getByName(resourceName)){
                 case CSS:
-                case JS:
                     ColorSchema colorSchema = WebServer.getColorSchema();
                     pageVariables.put("site_color", colorSchema.getSiteColor());
                     pageVariables.put("deep_color", colorSchema.getDeepColor());

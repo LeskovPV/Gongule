@@ -1,11 +1,11 @@
 package local.gongule.windows;
 
-import local.gongule.tools.Log;
+import local.gongule.utils.logging.Loggible;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-public class MainWindowListener implements WindowListener {
+public class MainWindowListener implements WindowListener, Loggible {
 
     public void windowActivated(WindowEvent event) {
 
@@ -16,7 +16,7 @@ public class MainWindowListener implements WindowListener {
     }
 
     public void windowClosing(WindowEvent event) {
-        Log.printWarn("Closing window and ending GongA");
+        logger.warn("Closing window and ending GongA");
     }
 
     public void windowDeactivated(WindowEvent event) {

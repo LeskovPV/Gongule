@@ -5,8 +5,8 @@ import java.net.URL;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 
-import local.gongule.tools.Log;
-import local.gongule.tools.resources.Resources;
+import local.gongule.utils.logging.Loggible;
+import local.gongule.utils.resources.Resources;
 import local.gongule.webserver.WebServer;
 
 /*
@@ -14,7 +14,7 @@ import local.gongule.webserver.WebServer;
  * Contains only the "Management" button to go to the web interface,
  * Closing window terminates the entire application
  */
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements Loggible {
 
     /*
      * The single instance of the class
@@ -32,7 +32,7 @@ public class MainWindow extends JFrame {
         if (instance != null)
             return;
         instance = new MainWindow(windowTilte);
-        Log.printInfo("Open window");
+        logger.info("Open window");
     }
 
     /*
@@ -53,7 +53,7 @@ public class MainWindow extends JFrame {
             try {
                 openBrowse(WebServer.getLocalURL());
             } catch (Exception exception) {
-                Log.printError("Unpossible open browser", exception);
+                logger.error("Unpossible open browser: {}", exception);
             }
         });
         container.add(button);

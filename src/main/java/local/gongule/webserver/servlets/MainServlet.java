@@ -1,7 +1,7 @@
 package local.gongule.webserver.servlets;
 
 import local.gongule.Gongule;
-import local.gongule.tools.TemplateFillable;
+import local.gongule.utils.TemplateFillable;
 import local.gongule.tools.process.GongExecutor;
 import local.gongule.webserver.servlets.content.*;
 import local.gongule.webserver.WebServer;
@@ -57,9 +57,9 @@ public class MainServlet extends HttpServlet implements TemplateFillable {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-//        Log.printInfo("===================================");
+//        logger.info("===================================");
 //        for (String name: request.getParameterMap().keySet())
-//            Log.printInfo(name + " = " + request.getParameter(name));
+//            logger.info(name + " = " + request.getParameter(name));
         String actionName = request.getParameter("action");
         for (PageType pageType: PageType.values()) {
             // check menu button click

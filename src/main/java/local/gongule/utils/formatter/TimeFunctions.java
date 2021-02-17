@@ -1,4 +1,4 @@
-package local.gongule.tools.formatter;
+package local.gongule.utils.formatter;
 
 import java.time.LocalTime;
 

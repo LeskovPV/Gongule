@@ -1,7 +1,7 @@
 package local.gongule.webserver.servlets.content;
 
 import local.gongule.Gongule;
-import local.gongule.tools.formatter.TimeFormatter;
+import local.gongule.utils.formatter.TimeFormatter;
 import local.gongule.tools.data.Day;
 import local.gongule.webserver.WebServer;
 

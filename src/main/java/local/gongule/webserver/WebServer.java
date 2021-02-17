@@ -1,22 +1,22 @@
 package local.gongule.webserver;
 
-import local.gongule.tools.FontFamily;
+import local.gongule.utils.logging.Loggible;
+import local.gongule.utils.FontFamily;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import local.gongule.Gongule;
-import local.gongule.tools.Log;
-import local.gongule.tools.resources.Resources;
-import local.gongule.tools.colors.ColorSchema;
+import local.gongule.utils.resources.Resources;
+import local.gongule.utils.colors.ColorSchema;
 import local.gongule.webserver.servlets.MainServlet;
 import local.gongule.webserver.servlets.ResourceServlet;
 
 import java.io.IOException;
 import java.net.*;
 
-public class WebServer {
+public class WebServer implements Loggible {
 
     ////////////////////////////////////////////////////////////////
     private static int httpPort = 80;
@@ -116,7 +116,7 @@ public class WebServer {
         try {
             Socket socket = new Socket("localhost", port);
             if (socket.isConnected()) {
-                Log.printError("Port " + String.valueOf(port) + " is busy");
+                logger.error("Port {} is busy", port);
                 System.exit(0);
             }
         } catch (IOException e) {
@@ -191,11 +191,9 @@ public class WebServer {
         server.setHandler(handlers);
         try {
             server.start();
-            Log.printInfo("Web-server is start");
-            //server.join();
+            logger.info("Web-server is start");
         } catch (Exception exception){
-            Log.printError("Unpossible start web-server", exception);
-
+            logger.error("Unpossible start web-server: {}", exception.getMessage());
             System.exit(0);
         }
     }

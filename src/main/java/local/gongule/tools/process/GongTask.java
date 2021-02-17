@@ -1,11 +1,12 @@
 package local.gongule.tools.process;
 
 import local.gongule.Gongule;
-import local.gongule.tools.Log;
 import local.gongule.tools.data.Gong;
+import local.gongule.utils.logging.Loggible;
+
 import java.util.TimerTask;
 
-public class GongTask extends TimerTask {
+public class GongTask extends TimerTask implements Loggible {
 
     Gong gong;
 
@@ -15,7 +16,7 @@ public class GongTask extends TimerTask {
 
     @Override
     public void run() {
-        Log.printInfo("Play " + gong.name + " gong");
+        logger.info("Play {} gong", gong.name);
         //for(int i=0; i<gong.amount; i++) {
             Sound.playSound(Gongule.getGongFile().getAbsolutePath());
             try {

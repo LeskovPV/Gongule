@@ -1,16 +1,16 @@
 package local.gongule.tools.process;
 
 import local.gongule.Gongule;
-import local.gongule.tools.Log;
 import local.gongule.tools.data.Day;
 import local.gongule.tools.data.Gong;
+import local.gongule.utils.logging.Loggible;
 
 import java.time.LocalTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class GongExecutor {
+public class GongExecutor implements Loggible {
 
     static private ScheduledExecutorService service = null;
 
@@ -31,12 +31,13 @@ public class GongExecutor {
             GongTask gongTask = new GongTask(gong);
             service.schedule(gongTask, seconds, TimeUnit.SECONDS);
         }
+        logger.warn("Process ran");
     }
 
     static public void pause() {
         if (service == null) return;
         service.shutdownNow();
-        Log.printInfo("Process paused");
+        logger.warn("Process paused");
         service = null;
     }
 

@@ -1,8 +1,7 @@
 package local.gongule.webserver.servlets.content;
 
 import local.gongule.Gongule;
-import local.gongule.tools.FontFamily;
-import local.gongule.tools.Log;
+import local.gongule.utils.FontFamily;
 import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Gong;
 import local.gongule.webserver.WebServer;
@@ -47,7 +46,7 @@ public class SetupContent extends Content{
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
         contentVariables.put("font_options", options);
-        // Log.printInfo(file);
+        // logger.info(file);
         options = "";
         List<String> files = Data.getFiles();
         for(String file: files) {
@@ -66,10 +65,10 @@ public class SetupContent extends Content{
         String gongIndex = request.getParameter("delete_gong");
         try {
             Gongule.getData().gongDelete(Integer.valueOf(gongIndex));
-            Log.printInfo("Gong '" + gongIndex + "' is deleted");
+            logger.info("Gong '" + gongIndex + "' is deleted");
             return true;
         } catch (Exception exception) {
-            Log.printInfo("Impossible delete '" + gongIndex + "' configuration");
+            logger.info("Impossible delete '" + gongIndex + "' configuration");
             return false;
         }
     }
@@ -111,10 +110,10 @@ public class SetupContent extends Content{
     private boolean saveConfiguration(HttpServletRequest request) {
         String name = request.getParameter("configuration_name");
         if (Gongule.getData().save(name)) {
-            Log.printInfo("Configuration save as '" + name + "'");
+            logger.info("Configuration save as '{}'", name);
             return true;
         } else {
-            Log.printWarn("Impossible save configuration as '" + name + "'");
+            logger.warn("Impossible save configuration as '{}'", name);
             return false;
         }
     }
@@ -122,7 +121,7 @@ public class SetupContent extends Content{
     private boolean loadConfiguration(HttpServletRequest request) {
         String name = request.getParameter("selected_configuration");
         boolean result = Gongule.setData(Data.load(name));
-        Log.printInfo(result ? "Configuration '" + name + "' is loaded" : "Impossible load '" + name + "' configuration");
+        logger.info(result ? "Configuration '{}' is loaded" : "Impossible load '{}' configuration", name);
         return result;
     }
 
@@ -130,9 +129,9 @@ public class SetupContent extends Content{
         String name = request.getParameter("selected_configuration");
         boolean result = Data.detete(name);
         if (result)
-            Log.printInfo("Configuration '" + name + "' is deleted");
+            logger.info("Configuration '{}' is deleted", name);
         else
-            Log.printInfo("Impossible delete '" + name + "' configuration");
+            logger.info("Impossible delete '{}' configuration", name);
         return result;
     }
 

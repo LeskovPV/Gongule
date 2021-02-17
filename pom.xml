@@ -14,12 +14,13 @@
         <properties.maven.plugin>1.0.0</properties.maven.plugin>
         <maven.compiler.version>3.8.1</maven.compiler.version>
         <exec.maven.version>1.6.0</exec.maven.version>
-        <maven.shade.version>3.2.1</maven.shade.version>
+        <maven.shade.version>3.2.4</maven.shade.version>
         <org.eclipse.jetty.version>9.4.18.v20190429</org.eclipse.jetty.version>
         <org.freemarker.version>2.3.28</org.freemarker.version>
         <mysql.version>8.0.16</mysql.version>
         <pi4j.version>1.2</pi4j.version>
         <xstream.version>1.4.15</xstream.version>
+        <log4j.version>2.14.0</log4j.version>
     </properties>
     <!--==============-->
     <build>
@@ -153,9 +154,19 @@
             <version>${pi4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
+            <groupId>com.thoughtworks.xstream</groupId>  <!-- for serialization  -->
             <artifactId>xstream</artifactId>
             <version>${xstream.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
         </dependency>
     </dependencies>
 </project>

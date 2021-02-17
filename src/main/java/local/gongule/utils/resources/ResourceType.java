@@ -1,4 +1,4 @@
-package local.gongule.tools.resources;
+package local.gongule.utils.resources;
 
 
 /**

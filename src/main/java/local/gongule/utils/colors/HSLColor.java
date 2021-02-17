@@ -1,4 +1,4 @@
-package local.gongule.tools.colors;
+package local.gongule.utils.colors;
 
 import java.awt.Color;
 

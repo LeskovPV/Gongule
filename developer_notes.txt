@@ -8,4 +8,4 @@ NEEDING
 * Rerun GongExecutor every day at midnight
 * Handling relays (for RPi)
 * Refactoring
-
+* Set to config file a amplifier turn-on advance time

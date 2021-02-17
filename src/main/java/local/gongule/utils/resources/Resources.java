@@ -1,18 +1,17 @@
-package local.gongule.tools.resources;
+package local.gongule.utils.resources;
 
-import local.gongule.tools.Log;
+import local.gongule.utils.TemplateFillable;
+import local.gongule.utils.logging.LogService;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Map;
 
 // Контейнер методов для работы с ресурсами из jar-файла
-public class Resources {
+public class Resources implements TemplateFillable{
 
     public static String getJarDirName(){
         // Full path to jar-package
@@ -23,6 +22,19 @@ public class Resources {
 
     public static InputStream getAsStream(String resourceName){
         return Resources.class.getResourceAsStream("/local/gongule/resources/" + resourceName);
+    }
+
+    public static File getAsFile(String resourceName, String targetName, Map<String, Object> pageVariables) {
+        try {
+            File targetFile = new File(getJarDirName() + targetName);
+            String result = new Resources().fillTemplate(resourceName, pageVariables);
+            FileWriter fileWriter = new FileWriter(targetFile.getPath());
+            fileWriter.write(result);
+            fileWriter.flush();
+            return targetFile;
+        } catch (Exception exception) {
+            return null;
+        }
     }
 
     public static File getAsFile(String resourceName, String targetName, boolean replace){

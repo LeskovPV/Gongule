@@ -1,40 +1,40 @@
 package local.gongule;
 
 import com.pi4j.io.gpio.RaspiPin;
-import local.gongule.tools.formatter.DateFormatter;
-import local.gongule.tools.formatter.TimeFormatter;
-import local.gongule.tools.process.GongExecutor;
+import local.gongule.tools.*;
 import local.gongule.tools.data.Data;
-import local.gongule.tools.Log;
-import local.gongule.tools.ParsableProperties;
-import local.gongule.tools.RuntimeConfiguration;
 import local.gongule.tools.devices.CoolingDevice;
-import local.gongule.tools.resources.Resources;
+import local.gongule.utils.logging.Loggible;
+import local.gongule.utils.resources.Resources;
+import local.gongule.utils.ParsableProperties;
 import local.gongule.webserver.WebServer;
 import local.gongule.windows.MainWindow;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
-/*
+/**
  * Main class of gong schedule
  */
-public class Gongule {
+public class Gongule implements Loggible {
 
     /**
      *  Point of entry
      */
     public static void main(String[] args) {
+        logger.warn("Gongule is started");
         applyProperties();
         applyCongiguration();
         WebServer.start();
         MainWindow.open(getProjectName());
+        logger.info("Test info message");
+        logger.warn("Test warn message");
+        logger.error("Test error message");
+        logger.debug("Test debug message");
+        logger.trace("Test trace message");
     }
 
     public static RuntimeConfiguration runtimeConfiguration;
@@ -55,13 +55,13 @@ public class Gongule {
         try {
             properties.load(Resources.getAsStream("properties")); // load properties from jar-package resources
         } catch (Exception exception) {
-            Log.printError("Unpossible apply properties", exception);
+            logger.error("Unpossible apply properties", exception);
             System.exit(0);
         }
         setProjectVersion(properties.getProperty("gongule.version"));
         setProjectWebsite(properties.getProperty("gongule.website"));
         runtimeConfiguration = new RuntimeConfiguration(Resources.getJarDirName() + getProjectName() + ".tmp");
-        Log.printInfo("Properties is appled");
+        logger.info("Properties is appled");
     }
 
     private static String projectWebsite = "https://www.google.com/search?q=" + getProjectName();
@@ -131,10 +131,10 @@ public class Gongule {
                 if (!Files.exists(path))
                     Files.createDirectories(path);
             } catch (Exception exception) {
-                Log.printError("Impossible create data directory '" + Data.getFullDirName() + "'", exception);
+                logger.error("Impossible create data directory '{}': {}", Data.getFullDirName(), exception);
             }
             // Create default configuration
-            Resources.getAsFile("xml/configuration.xml", Data.getDirName() + Data.getDefaultName() + ".xml", true); // Extract cfg-file from jar-package to jar-directory
+            Resources.getAsFile("xml/data.xml", Data.getDirName() + Data.getDefaultName() + ".xml", true); // Extract cfg-file from jar-package to jar-directory
             // Load current configuration
             data = Data.load();
             if (data == null)
@@ -164,7 +164,7 @@ public class Gongule {
             FileInputStream inputStream = new FileInputStream(Resources.getJarDirName() + cfgFileName);
             properties.load(inputStream);
         }catch (Exception exception){
-            Log.printError("Impossible apply configuration", exception);
+            logger.error("Impossible apply configuration: {}", exception);
             return;
         }
         //properties.store();
@@ -180,7 +180,7 @@ public class Gongule {
         double cpuTemperature = properties.getDoubleProperty("pi.cpu_temperature", 50);
         CoolingDevice coolingDevice = new CoolingDevice(RaspiPin.getPinByAddress(fanPin), cpuTemperature);
 
-        Log.printInfo("Configuration is appled");
+        logger.info("Configuration is appled");
     }
 
 }

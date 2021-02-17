@@ -147,3 +147,52 @@
         </table>
     </td>
 </tr>
+<tr>
+    <td>
+        <table class='table border named'> <!--Administration-->
+            <tr>
+                <th>
+                    <img src='resource?png/configurations.png' />
+                </th>
+                <th width='100%'>
+                    Administration
+                </th>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <table class='table data'>
+                        <tr>
+                            <td width='35%'>
+                                <select name='selected_configuration' width='100%' onChange='onSelectConfiguration(this.value)'>
+                                    ${configuration_options}
+                                </select>
+                            </td>
+                            <td>
+                                <button name='load_configuration' title='Load configuration' onclick='setAction(this.name)'>
+                                    <img src='resource?png/load.png' valign='top'/>
+                                </button>
+                            </td>
+                            <td>
+                                <button name='delete_configuration' title='Delete configuration' onclick='setAction(this.name)'>
+                                    <img src='resource?png/delete.png' valign='top'/>
+                                </button>
+                            </td>
+                            <td width='100%'>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type='text' name='configuration_name' width='100%' placeholder='Configuration name...'/>
+                            </td>
+                            <td colspan='3'>
+                                <button name='save_configuration' title='Save configuration' onclick='setAction(this.name)'>
+                                    <img src='resource?png/save.png' valign='top'/>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
