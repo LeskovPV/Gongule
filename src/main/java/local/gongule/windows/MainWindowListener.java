@@ -16,7 +16,7 @@ public class MainWindowListener implements WindowListener, Loggible {
     }
 
     public void windowClosing(WindowEvent event) {
-        logger.warn("Closing window and ending GongA");
+        logger.warn("Gongule closed from application window");
     }
 
     public void windowDeactivated(WindowEvent event) {

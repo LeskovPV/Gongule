@@ -2,7 +2,7 @@ package local.gongule.tools.devices;
 
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.Pin;
-import local.gongule.utils.SystemInformation;
+import local.gongule.utils.system.SystemInformation;
 
 /**
  * <b>Переключатель</b> позволяет работать с реле, светодиодами и т.п.<br>

@@ -10,7 +10,6 @@ public enum ResourceType {
     CSS,
     HTML,
     PNG,
-    JS,
     XML,
     UNKNOWN;
 

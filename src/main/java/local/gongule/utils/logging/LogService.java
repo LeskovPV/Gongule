@@ -6,8 +6,8 @@ import local.gongule.utils.resources.Resources;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
-
-import java.io.File;
+import org.apache.commons.io.IOUtils;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,7 +31,7 @@ public class LogService{
         }
         Map<String, Object> pageVariables = new HashMap(0);
         pageVariables.put("logfile", getFullName());
-        File logConfFile = Resources.getAsFile(resourceLogConfig, getDirName() + "config.xml", pageVariables);
+        File logConfFile = Resources.getAsFile(resourceLogConfig, getDirName() + "config.xml", pageVariables, false);
         LoggerContext context = (LoggerContext) LogManager.getContext(false);
         context.setConfigLocation(logConfFile.toURI());
     }
@@ -52,4 +52,31 @@ public class LogService{
         return getFullDirName() + getName();
     }
 
+    public static File getAllLogFile() throws IOException{
+        String allLogFileName = getFullDirName() + Gongule.getProjectName() + "-log.txt";
+        File allLogFile = new File(allLogFileName);
+        if (allLogFile.exists())
+            allLogFile.delete();
+        OutputStream output = null;
+        try {
+            output = new BufferedOutputStream(new FileOutputStream(allLogFileName, true));
+            File file = new File(getFullName() + "-1");
+            if (file.exists())
+                appendFile(output, new File(getFullName() + "-1"));
+            appendFile(output, new File(getFullName()));
+        } finally {
+            IOUtils.closeQuietly(output);
+        }
+        return allLogFile;
+    }
+
+    private static void appendFile(OutputStream output, File source) throws IOException {
+        InputStream input = null;
+        try {
+            input = new BufferedInputStream(new FileInputStream(source));
+            IOUtils.copy(input, output);
+        } finally {
+            IOUtils.closeQuietly(input);
+        }
+    }
 }

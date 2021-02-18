@@ -1,4 +1,4 @@
-package local.gongule.utils;
+package local.gongule.utils.system;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

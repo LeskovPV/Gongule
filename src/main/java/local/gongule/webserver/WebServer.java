@@ -1,5 +1,6 @@
 package local.gongule.webserver;
 
+import local.gongule.webserver.servlets.LogServlet;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.FontFamily;
 import org.eclipse.jetty.server.*;
@@ -186,6 +187,7 @@ public class WebServer implements Loggible {
         context.addServlet(MainServletHolder,"");
         context.addServlet(MainServletHolder,"/ui");
         context.addServlet(new ServletHolder(new ResourceServlet()),"/resource");
+        context.addServlet(new ServletHolder(new LogServlet()),"/log");
         HandlerList handlers = new HandlerList();
         handlers.addHandler(context);
         server.setHandler(handlers);

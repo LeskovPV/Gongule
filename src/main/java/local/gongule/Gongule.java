@@ -30,11 +30,6 @@ public class Gongule implements Loggible {
         applyCongiguration();
         WebServer.start();
         MainWindow.open(getProjectName());
-        logger.info("Test info message");
-        logger.warn("Test warn message");
-        logger.error("Test error message");
-        logger.debug("Test debug message");
-        logger.trace("Test trace message");
     }
 
     public static RuntimeConfiguration runtimeConfiguration;
@@ -125,8 +120,7 @@ public class Gongule implements Loggible {
 
     public static Data getData() {
         if (data == null) {
-            // Create data directory
-            try {
+            try { // Create data directory
                 Path path = Paths.get(Data.getFullDirName());
                 if (!Files.exists(path))
                     Files.createDirectories(path);
@@ -168,7 +162,6 @@ public class Gongule implements Loggible {
             return;
         }
         //properties.store();
-        // Применяем конфигурацию
         WebServer.setHttpPort(properties.getIntegerProperty("web.http_port"));
         WebServer.setHttpsPort(properties.getIntegerProperty("web.https_port"));
         WebServer.setUseHttp(properties.getBooleanProperty("web.use_http"));

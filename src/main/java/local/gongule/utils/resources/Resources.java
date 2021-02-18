@@ -24,13 +24,15 @@ public class Resources implements TemplateFillable{
         return Resources.class.getResourceAsStream("/local/gongule/resources/" + resourceName);
     }
 
-    public static File getAsFile(String resourceName, String targetName, Map<String, Object> pageVariables) {
+    public static File getAsFile(String resourceName, String targetName, Map<String, Object> pageVariables, boolean replace) {
         try {
             File targetFile = new File(getJarDirName() + targetName);
-            String result = new Resources().fillTemplate(resourceName, pageVariables);
-            FileWriter fileWriter = new FileWriter(targetFile.getPath());
-            fileWriter.write(result);
-            fileWriter.flush();
+            if (!targetFile.exists() || replace) {
+                String result = new Resources().fillTemplate(resourceName, pageVariables);
+                FileWriter fileWriter = new FileWriter(targetFile.getPath());
+                fileWriter.write(result);
+                fileWriter.flush();
+            }
             return targetFile;
         } catch (Exception exception) {
             return null;

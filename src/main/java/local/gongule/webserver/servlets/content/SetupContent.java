@@ -4,8 +4,9 @@ import local.gongule.Gongule;
 import local.gongule.utils.FontFamily;
 import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Gong;
+import local.gongule.utils.formatter.DateFormatter;
+import local.gongule.utils.formatter.TimeFormatter;
 import local.gongule.webserver.WebServer;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ public class SetupContent extends Content{
         actions.put("save_configuration", (HttpServletRequest request) -> saveConfiguration(request));
         actions.put("load_configuration", (HttpServletRequest request) -> loadConfiguration(request));
         actions.put("delete_configuration", (HttpServletRequest request) -> deleteConfiguration(request));
+        actions.put("sys_shutdown", (HttpServletRequest request) -> shutdownSystem(request));
     }
 
     public String get(HttpServletRequest request) {
@@ -57,7 +59,9 @@ public class SetupContent extends Content{
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
         contentVariables.put("configuration_options", options);
-
+        contentVariables.put("time_pattern", TimeFormatter.pattern);
+        contentVariables.put("date_pattern", DateFormatter.pattern);
+        contentVariables.put("datetime_size", TimeFormatter.getSize() > DateFormatter.getSize() ? TimeFormatter.getSize() : DateFormatter.getSize());
         return super.getFromTemplate(contentVariables);
     }
 
@@ -135,4 +139,15 @@ public class SetupContent extends Content{
         return result;
     }
 
+    private boolean shutdownSystem(HttpServletRequest request) {
+        logger.warn("Shutdown system");
+        logger.trace("Test trace message");
+        logger.debug("Test debug message");
+        logger.info("Test info message");
+        logger.warn("Test warn message");
+        logger.error("Test error message");
+        logger.fatal("Test trace fatal");
+
+        return true;
+    }
 }
