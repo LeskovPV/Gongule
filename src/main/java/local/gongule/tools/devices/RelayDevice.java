@@ -2,7 +2,7 @@ package local.gongule.tools.devices;
 
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.Pin;
-import local.gongule.utils.system.SystemInformation;
+import local.gongule.utils.system.SystemUtils;
 
 /**
  * <b>Переключатель</b> позволяет работать с реле, светодиодами и т.п.<br>
@@ -19,7 +19,7 @@ public class RelayDevice{
 
     public boolean set(boolean value) {
         Boolean acceptedValue = (this.value == value);
-        if (!SystemInformation.isRaspbian) return acceptedValue;
+        if (!SystemUtils.isRaspbian) return acceptedValue;
         if (value) {
             gpioPin.high();
         } else {

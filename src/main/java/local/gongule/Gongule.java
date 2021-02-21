@@ -138,7 +138,6 @@ public class Gongule implements Loggible {
         return  data;
     }
 
-
     /**
      * Return full project name with version
      **/

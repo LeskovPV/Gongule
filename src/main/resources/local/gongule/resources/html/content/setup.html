@@ -164,14 +164,14 @@
                         <tr>
                             <td>
                                 <nobr>
-                                    Set date:
+                                    Date:
                                 </nobr>
                             </td>
                             <td>
-                                <input type='text' name='sys_date' size='${datetime_size}' placeholder='${date_pattern}'/>
+                                <input type='text' name='date_value' value='${date_value}' size='${datetime_size}'/>
                             </td>
                             <td>
-                                <button name='apply_date' title='Apply date' onclick='setAction(this.name)'>
+                                <button name='change_date' title='Set date' onclick='setAction(this.name)'>
                                     <img src='resource?png/apply.png' valign='top'/>
                                 </button>
                             </td>
@@ -181,14 +181,14 @@
                         <tr>
                             <td>
                                 <nobr>
-                                    Set time:
+                                    Time:
                                 </nobr>
                             </td>
                             <td>
-                                <input type='text' name='sys_time' size='${datetime_size}' placeholder='${time_pattern}'/>
+                                <input type='text' name='time_value' value='${time_value}' size='${datetime_size}' '/>
                             </td>
                             <td>
-                                <button name='apply_time' title='Apply time' onclick='setAction(this.name)'>
+                                <button name='change_time' title='Set time' onclick='setAction(this.name)'>
                                     <img src='resource?png/apply.png' valign='top'/>
                                 </button>
                             </td>

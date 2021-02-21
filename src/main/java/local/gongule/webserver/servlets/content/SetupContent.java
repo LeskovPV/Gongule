@@ -6,8 +6,11 @@ import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Gong;
 import local.gongule.utils.formatter.DateFormatter;
 import local.gongule.utils.formatter.TimeFormatter;
+import local.gongule.utils.system.SystemUtils;
 import local.gongule.webserver.WebServer;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +27,8 @@ public class SetupContent extends Content{
         actions.put("load_configuration", (HttpServletRequest request) -> loadConfiguration(request));
         actions.put("delete_configuration", (HttpServletRequest request) -> deleteConfiguration(request));
         actions.put("sys_shutdown", (HttpServletRequest request) -> shutdownSystem(request));
+        actions.put("change_time", (HttpServletRequest request) -> changeTime(request));
+        actions.put("change_date", (HttpServletRequest request) -> changeDate(request));
     }
 
     public String get(HttpServletRequest request) {
@@ -59,9 +64,9 @@ public class SetupContent extends Content{
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
         contentVariables.put("configuration_options", options);
-        contentVariables.put("time_pattern", TimeFormatter.pattern);
-        contentVariables.put("date_pattern", DateFormatter.pattern);
-        contentVariables.put("datetime_size", TimeFormatter.getSize() > DateFormatter.getSize() ? TimeFormatter.getSize() : DateFormatter.getSize());
+        contentVariables.put("time_value", LocalTime.now().format(TimeFormatter.get(true)));
+        contentVariables.put("date_value", LocalDate.now().format(DateFormatter.get()));
+        contentVariables.put("datetime_size", TimeFormatter.getSize(true) > DateFormatter.getSize() ? TimeFormatter.getSize(true) : DateFormatter.getSize());
         return super.getFromTemplate(contentVariables);
     }
 
@@ -140,14 +145,34 @@ public class SetupContent extends Content{
     }
 
     private boolean shutdownSystem(HttpServletRequest request) {
-        logger.warn("Shutdown system");
-        logger.trace("Test trace message");
-        logger.debug("Test debug message");
-        logger.info("Test info message");
-        logger.warn("Test warn message");
-        logger.error("Test error message");
-        logger.fatal("Test trace fatal");
-
+        SystemUtils.shutdown();
         return true;
     }
+
+    private boolean changeTime(HttpServletRequest request) {
+        //String time = request.getParameter("time_value");
+        LocalTime time = LocalTime.now();
+        //LocalTime time = LocalTime.now();
+        try {
+            time = LocalTime.parse(request.getParameter("time_value"), TimeFormatter.get(true));
+        } catch (Exception exception) {
+            logger.error("Impossible parse '{}' to time value", request.getParameter("time_value"));
+            return false;
+        }
+        SystemUtils.setTime(time);
+        return true;
+    }
+
+    private boolean changeDate(HttpServletRequest request) {
+        LocalDate date = LocalDate.now();
+        try {
+            date = LocalDate.parse(request.getParameter("date_value"), DateFormatter.get());
+        } catch (Exception exception) {
+            logger.error("Impossible parse '{}' to date value", request.getParameter("date_value"));
+            return false;
+        }
+        SystemUtils.setDate(date);
+        return true;
+    }
+
 }

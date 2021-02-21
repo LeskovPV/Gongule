@@ -2,7 +2,7 @@ package local.gongule.tools.devices;
 
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.Pin;
-import local.gongule.utils.system.SystemInformation;
+import local.gongule.utils.system.SystemUtils;
 
 /**
  * <b>Cooling device</b>, singleton class<br>
@@ -27,11 +27,11 @@ public class CoolingDevice extends RelayDevice {
         while (true) {
             try {
                 Thread.sleep(10000);
-                double t = SystemInformation.getCPUTemperature(temperature);
+                double t = SystemUtils.getCPUTemperature(temperature);
                 System.out.println("Temperature = " + t );
                 temperature = t;
                 set(t > temperature);
-                if(!SystemInformation.isRaspbian) continue;
+                if(!SystemUtils.isRaspbian) continue;
             } catch (Exception exception) {
                 exception.printStackTrace();
                 break;
@@ -41,7 +41,7 @@ public class CoolingDevice extends RelayDevice {
 
 
     public static boolean used() {
-        return SystemInformation.isRaspbian;
+        return SystemUtils.isRaspbian;
     }
 
 }
