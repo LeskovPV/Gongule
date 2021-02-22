@@ -1,7 +1,8 @@
 package local.gongule.tools.data;
 
 import local.gongule.Gongule;
-import local.gongule.tools.process.Sound;
+import local.gongule.tools.process.GongSound;
+import local.gongule.utils.Sound;
 import local.gongule.utils.logging.Loggible;
 
 import java.io.Serializable;
@@ -25,19 +26,7 @@ public class Gong implements Serializable, Loggible {
     }
 
     public void play() {
-        Sound.playGong(this);
-//        if (sound.isPlaying()) {
-//            logger.warn("Прерываем играет");
-//        }
-//        new Thread(() -> {
-//            for (int i = 0; i < amount; i++) {
-//                logger.info("Paying № {}", i);
-//                sound.play(true);
-//                sound.join();
-//                //sound.playSound(Gongule.getGongFile().getPath()).join();
-//                //Thread.sleep(1000);
-//            }
-//        }).start();
+        GongSound.play(this);
     }
 
 }

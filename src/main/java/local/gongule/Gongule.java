@@ -3,7 +3,9 @@ package local.gongule;
 import com.pi4j.io.gpio.RaspiPin;
 import local.gongule.tools.*;
 import local.gongule.tools.data.Data;
+import local.gongule.tools.data.Gong;
 import local.gongule.tools.devices.CoolingDevice;
+import local.gongule.tools.process.GongSound;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.resources.Resources;
 import local.gongule.utils.ParsableProperties;
@@ -161,6 +163,9 @@ public class Gongule implements Loggible {
             return;
         }
         //properties.store();
+        GongSound.setDelay(properties.getIntegerProperty("gong.delay"));
+
+
         WebServer.setHttpPort(properties.getIntegerProperty("web.http_port"));
         WebServer.setHttpsPort(properties.getIntegerProperty("web.https_port"));
         WebServer.setUseHttp(properties.getBooleanProperty("web.use_http"));

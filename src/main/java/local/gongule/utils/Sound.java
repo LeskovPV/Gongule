@@ -1,13 +1,8 @@
-package local.gongule.tools.process;
+package local.gongule.utils;
 
-import local.gongule.Gongule;
-import local.gongule.tools.data.Gong;
 import local.gongule.utils.logging.Loggible;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.Exchanger;
-
 import javax.sound.sampled.*;
 
 public class Sound implements AutoCloseable, Loggible {
@@ -143,25 +138,4 @@ public class Sound implements AutoCloseable, Loggible {
         return snd;
     }
 
-    public static Sound gongSound = new Sound(Gongule.getGongFile().getPath());
-    public static RunnableSound thread;
-    public static void playGong(Gong gong) {
-        if (gongSound.isPlaying()) {
-            logger.trace("gongSound.stop()");
-            gongSound.stop();
-        }
-
-        try {
-            if (thread != null)
-            if (thread.isAlive()) {
-                thread.stop = true;
-                thread.join();
-            }
-        } catch (Exception exception) {
-            logger.trace(exception);
-        }
-
-        thread = new RunnableSound(gongSound, gong);
-        thread.start();
-    }
 }

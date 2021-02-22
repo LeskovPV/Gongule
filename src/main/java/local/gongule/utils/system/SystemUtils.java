@@ -22,14 +22,12 @@ public class SystemUtils implements Loggible {
     public static final boolean isRaspbian = isRaspbian();
 
     private static String getOSRelease() {
-        if (osName.toLowerCase().contains("linux")) {
+        if (isLinux())
             try (FileInputStream fileInputStream = new FileInputStream("/etc/os-release")) {
                 Properties properties = new Properties();
                 properties.load(fileInputStream);
                 return properties.getProperty("ID");
-            } catch (Exception exception) {
-            }
-        }
+            } catch (Exception exception) {}
         return "";
     }
 
@@ -37,36 +35,33 @@ public class SystemUtils implements Loggible {
         return osRelease.equalsIgnoreCase("raspbian");
     }
 
-    private static boolean isLinux() {
+    public static boolean isLinux() {
         String os = osName.toLowerCase();
         return os.contains("nix") || os.contains("nux") || os.contains("aix") || isRaspbian();
     }
 
-    private static boolean isWindows() {
+    public static boolean isWindows() {
         String os = osName.toLowerCase();
         return os.contains("win");
     }
 
-    private static boolean isMacos() {
+    public static boolean isMacos() {
         String os = osName.toLowerCase();
         return os.contains("mac") || os.contains("darwin");
     }
 
-    private static boolean isSunos() {
+    public static boolean isSunos() {
         String os = osName.toLowerCase();
         return os.contains("sunos");
     }
 
     public static double getCPUTemperature(double defaultValue){
-        if (!isRaspbian) return defaultValue;
-        try (FileInputStream fstream = new FileInputStream("/sys/class/thermal/thermal_zone0/temp")) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-            return Integer.parseInt(br.readLine())/1000d;
-        }
-        catch(Exception exception){
-            exception.printStackTrace();
-            return defaultValue;
-        }
+        if (isRaspbian())
+            try (FileInputStream fstream = new FileInputStream("/sys/class/thermal/thermal_zone0/temp")) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+                return Integer.parseInt(br.readLine())/1000d;
+            } catch (Exception exception) {}
+        return defaultValue;
     }
 
     public static boolean reboot() {
@@ -103,7 +98,6 @@ public class SystemUtils implements Loggible {
             final Process timeProcess = Runtime.getRuntime().exec(cmd);
             timeProcess.waitFor();
             timeProcess.exitValue();
-            logger.warn(command);
             logger.warn("Changed time. New value is {}", time.format(TimeFormatter.get(true)));
         } catch (Exception exception) {
             logger.error("Impossible set time: {}", exception.getMessage());
@@ -125,7 +119,6 @@ public class SystemUtils implements Loggible {
             final Process timeProcess = Runtime.getRuntime().exec(cmd);
             timeProcess.waitFor();
             timeProcess.exitValue();
-            logger.warn(command);
             logger.warn("Changed date. New value is {}", date.format(DateFormatter.get()));
         } catch (Exception exception) {
             logger.error("Impossible set date: {}", exception.getMessage());

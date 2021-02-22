@@ -2,6 +2,7 @@ package local.gongule.tools.process;
 
 import local.gongule.Gongule;
 import local.gongule.tools.data.Gong;
+import local.gongule.utils.Sound;
 import local.gongule.utils.logging.Loggible;
 
 import java.util.TimerTask;
@@ -16,15 +17,7 @@ public class GongTask extends TimerTask implements Loggible {
 
     @Override
     public void run() {
-        logger.info("Play {} gong", gong.name);
-        //for(int i=0; i<gong.amount; i++) {
-            Sound.playSound(Gongule.getGongFile().getAbsolutePath());
-            try {
-                Thread.sleep(1000 * 7);
-            } catch (Exception exception) {
-
-            }
-        //}
+        GongSound.play(gong);
     }
 
 }

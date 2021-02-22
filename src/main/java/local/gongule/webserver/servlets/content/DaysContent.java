@@ -1,6 +1,7 @@
 package local.gongule.webserver.servlets.content;
 
 import local.gongule.Gongule;
+import local.gongule.tools.process.GongExecutor;
 import local.gongule.utils.formatter.TimeFormatter;
 import local.gongule.tools.data.Day;
 import local.gongule.webserver.WebServer;
@@ -86,6 +87,7 @@ public class DaysContent extends Content {
         try {
             Gongule.getData().dayDelete(Integer.valueOf(request.getParameter("selected_day")));
             setAttribute(request, "selected_day", new Integer(0).toString());
+            GongExecutor.reset();
             return true;
         } catch (Exception exception) {
             return false;
@@ -100,6 +102,7 @@ public class DaysContent extends Content {
             int gongIndex = Integer.valueOf(request.getParameter( "selected_gong"));
             setAttribute(request, "selected_gong", String.valueOf(gongIndex));
             Gongule.getData().addDayEvent(dayIndex, eventTime, eventName, gongIndex);
+            GongExecutor.reset();
             return true;
         } catch (Exception exception) {
             return false;
@@ -111,6 +114,7 @@ public class DaysContent extends Content {
             int dayIndex = Integer.valueOf(request.getParameter("selected_day"));
             int eventIndex = Integer.valueOf(request.getParameter("remove_event"));
             Gongule.getData().removeDayEvent(dayIndex, eventIndex);
+            GongExecutor.reset();
             return true;
         } catch (Exception exception) {
             return false;

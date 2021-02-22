@@ -26,23 +26,15 @@ public class ResourceServlet extends HttpServlet implements TemplateFillable {
             "keystore"
     );
 
-
-
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        //String resourceName = request.getQueryString();
         String[] requests = request.getQueryString().split("&");
-
         String resourceName = requests.length > 0 ? requests[0] : null;
-
         if (resourceName == null) {
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
             return;
         }
-
-//        if (privateResources.contains(resourceName))
-//            if (!accountService.accessIsAllow(request)) return;
-
+        if (privateResources.contains(resourceName)) return;
         try {
             Map<String, Object> pageVariables = new HashMap(0);
             switch (ResourceType.getByName(resourceName)){

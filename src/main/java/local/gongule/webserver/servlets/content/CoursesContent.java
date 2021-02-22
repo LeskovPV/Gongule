@@ -2,6 +2,7 @@ package local.gongule.webserver.servlets.content;
 
 import local.gongule.Gongule;
 import local.gongule.tools.data.Day;
+import local.gongule.tools.process.GongExecutor;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -78,6 +79,7 @@ public class CoursesContent extends Content {
         try {
             Gongule.getData().courseDelete(Integer.valueOf(request.getParameter("selected_course")));
             setAttribute(request, "selected_course", new Integer(0).toString());
+            GongExecutor.reset();
             return true;
         } catch (Exception exception) {
             return false;
@@ -90,6 +92,7 @@ public class CoursesContent extends Content {
             int dayIndex = Integer.valueOf(request.getParameter("selected_day"));
             setAttribute(request, "selected_day", String.valueOf(dayIndex));
             Gongule.getData().createCourseDay(courseIndex, dayIndex);
+            GongExecutor.reset();
             return true;
         } catch (Exception exception) {
             return false;
@@ -101,6 +104,7 @@ public class CoursesContent extends Content {
             int courseIndex = Integer.valueOf(request.getParameter("selected_course"));
             int dayIndex = Integer.valueOf(request.getParameter("remove_day"));
             Gongule.getData().removeCourseDay(courseIndex, dayIndex);
+            GongExecutor.reset();
             return true;
         } catch (Exception exception) {
             return false;

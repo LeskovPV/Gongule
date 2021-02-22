@@ -36,9 +36,17 @@ public class GongExecutor implements Loggible {
 
     static public void pause() {
         if (service == null) return;
+        GongSound.play(null);
         service.shutdownNow();
         logger.warn("Process paused");
         service = null;
+    }
+
+
+    static public void reset() {
+        boolean isRun = (service != null);
+        pause();
+        if(isRun) run();
     }
 
 }

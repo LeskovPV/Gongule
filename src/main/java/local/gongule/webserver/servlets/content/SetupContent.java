@@ -1,6 +1,7 @@
 package local.gongule.webserver.servlets.content;
 
 import local.gongule.Gongule;
+import local.gongule.tools.process.GongExecutor;
 import local.gongule.utils.FontFamily;
 import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Gong;
@@ -75,6 +76,7 @@ public class SetupContent extends Content{
         try {
             Gongule.getData().gongDelete(Integer.valueOf(gongIndex));
             logger.info("Gong '" + gongIndex + "' is deleted");
+            GongExecutor.reset();
             return true;
         } catch (Exception exception) {
             logger.info("Impossible delete '" + gongIndex + "' configuration");
@@ -84,8 +86,7 @@ public class SetupContent extends Content{
 
     private boolean playGong(HttpServletRequest request) {
         try {
-            Gongule.getData().gongPlay(
-                    Integer.valueOf(request.getParameter("play_gong")));
+            Gongule.getData().gongPlay(Integer.valueOf(request.getParameter("play_gong")));
         } catch (Exception exception) {
             return false;
         }
@@ -131,6 +132,7 @@ public class SetupContent extends Content{
         String name = request.getParameter("selected_configuration");
         boolean result = Gongule.setData(Data.load(name));
         logger.info(result ? "Configuration '{}' is loaded" : "Impossible load '{}' configuration", name);
+        if (result) GongExecutor.reset();
         return result;
     }
 
@@ -150,9 +152,7 @@ public class SetupContent extends Content{
     }
 
     private boolean changeTime(HttpServletRequest request) {
-        //String time = request.getParameter("time_value");
-        LocalTime time = LocalTime.now();
-        //LocalTime time = LocalTime.now();
+        LocalTime time;
         try {
             time = LocalTime.parse(request.getParameter("time_value"), TimeFormatter.get(true));
         } catch (Exception exception) {
@@ -160,11 +160,12 @@ public class SetupContent extends Content{
             return false;
         }
         SystemUtils.setTime(time);
+        GongExecutor.reset();
         return true;
     }
 
     private boolean changeDate(HttpServletRequest request) {
-        LocalDate date = LocalDate.now();
+        LocalDate date;
         try {
             date = LocalDate.parse(request.getParameter("date_value"), DateFormatter.get());
         } catch (Exception exception) {
@@ -172,6 +173,7 @@ public class SetupContent extends Content{
             return false;
         }
         SystemUtils.setDate(date);
+        GongExecutor.reset();
         return true;
     }
 

@@ -84,6 +84,7 @@ public class ControlContent extends Content {
             LocalDate courseDate = LocalDate.parse(request.getParameter("course_date"), DateFormatter.get());
             setAttribute(request, "selected_course", String.valueOf(courseIndex));
             Gongule.getData().addCalendarNote(courseIndex, courseDate);
+            GongExecutor.reset();
             return true;
         } catch (Exception exception) {
             logger.error(exception);
@@ -95,6 +96,7 @@ public class ControlContent extends Content {
         try {
             int noteIndex = Integer.valueOf(request.getParameter("remove_note"));
             Gongule.getData().removeCalendarNote(noteIndex);
+            GongExecutor.reset();
             return true;
         } catch (Exception exception) {
             return false;
