@@ -2,6 +2,7 @@ package local.gongule.webserver.servlets.content;
 
 import local.gongule.Gongule;
 import local.gongule.tools.process.GongExecutor;
+import local.gongule.tools.process.GongSound;
 import local.gongule.utils.FontFamily;
 import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Gong;
@@ -86,7 +87,8 @@ public class SetupContent extends Content{
 
     private boolean playGong(HttpServletRequest request) {
         try {
-            Gongule.getData().gongPlay(Integer.valueOf(request.getParameter("play_gong")));
+            Gong gong = Gongule.getData().getGong(Integer.valueOf(request.getParameter("play_gong")));
+            GongSound.play(gong ,false);
         } catch (Exception exception) {
             return false;
         }
@@ -161,6 +163,7 @@ public class SetupContent extends Content{
         }
         SystemUtils.setTime(time);
         GongExecutor.reset();
+        GongExecutor.midnightReset();
         return true;
     }
 

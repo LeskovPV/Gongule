@@ -4,13 +4,16 @@ import local.gongule.Gongule;
 import local.gongule.tools.data.Gong;
 import local.gongule.utils.Sound;
 import local.gongule.utils.logging.Loggible;
+import local.gongule.utils.system.SystemUtils;
 
 public class GongSound extends Thread implements Loggible {
 
     private Gong gong;
+    private boolean useAdvanceTime;
 
-    private GongSound(Gong gong){
+    private GongSound(Gong gong, boolean useAdvanceTime){
         this.gong = gong;
+        this.useAdvanceTime = useAdvanceTime;
         start();
     }
 
@@ -26,16 +29,32 @@ public class GongSound extends Thread implements Loggible {
 
     @Override
     public void run() {
+        logger.info("Begin of {} gong", gong.name);
+        if (useAdvanceTime) {
+            if (SystemUtils.isRaspbian) {
+                // Если реле не включено, то включаем
+            }
+            try {
+                sleep(GongExecutor.getAdvanceTime() * 1000);
+            } catch (InterruptedException exception) {
+                logger.info("Waked up from advance time");
+            }
+        }
         for (int i = 0; i < gong.amount; i++) {
             logger.info("Paying № {} of {} gong", i, gong.name);
             sound.play(true);
             sound.join();
             logger.info("End of paying {} gong", gong.name);
             try {
-                sleep(delay * 1000);
+                sleep(strikesDelay * 1000);
             } catch (InterruptedException exception) {
-                logger.info("Unsleeped");
+                logger.info("Waked up from strikes delay");
                 break;
+            }
+        }
+        if (useAdvanceTime) {
+            if (SystemUtils.isRaspbian) {
+                // Выключаем реле
             }
         }
     }
@@ -43,15 +62,15 @@ public class GongSound extends Thread implements Loggible {
     /**
      * Delay between gongs in seconds for multiple strikes
      */
-    private static int delay = 3;
+    private static int strikesDelay = 3;
 
-    public static int getDelay() {
-        return delay;
+    public static int getStrikesDelay() {
+        return strikesDelay;
     }
 
-    public static void setDelay(Integer delay) {
-        if (delay!= null)
-            GongSound.delay = delay;
+    public static void setStrikesDelay(Integer strikesDelay) {
+        if (strikesDelay != null)
+            GongSound.strikesDelay = strikesDelay;
     }
 
     private static final Sound sound = new Sound(Gongule.getGongFile().getPath());
@@ -59,8 +78,12 @@ public class GongSound extends Thread implements Loggible {
     private static GongSound instance;
 
     public static void play(Gong gong) {
+        play(gong, true);
+    }
+
+    public static void play(Gong gong, boolean useAdvanceTime) {
         if (instance != null) instance.cancel();
-        if (gong != null) instance = new GongSound(gong);
+        if (gong != null) instance = new GongSound(gong, useAdvanceTime);
     }
 
 }

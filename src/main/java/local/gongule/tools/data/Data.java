@@ -322,11 +322,6 @@ public class Data implements Serializable, Loggible {
         return true;
     }
 
-    public boolean gongPlay(int index) {
-        gongs.get(index).play();
-        return true;
-    }
-
     public boolean gongCreate(String name, int amount) {
         if (name == null) return false;
         if (name.trim().equals("")) return false;
