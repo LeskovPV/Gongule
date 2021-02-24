@@ -5,9 +5,13 @@ import local.gongule.tools.data.Gong;
 import local.gongule.tools.devices.PowerRelay;
 import local.gongule.utils.Sound;
 import local.gongule.utils.logging.Loggible;
+import local.gongule.utils.resources.Resources;
 import local.gongule.utils.system.SystemUtils;
 
+import java.io.File;
+
 public class GongSound extends Thread implements Loggible {
+
 
     private Gong gong;
     private boolean useAdvanceTime;
@@ -69,7 +73,7 @@ public class GongSound extends Thread implements Loggible {
             GongSound.strikesDelay = strikesDelay;
     }
 
-    private static final Sound sound = new Sound(Gongule.getGongFile().getPath());
+    private static final Sound sound = new Sound(getGongFile().getPath());
 
     private static GongSound instance;
 
@@ -80,6 +84,16 @@ public class GongSound extends Thread implements Loggible {
     public static void play(Gong gong, boolean useAdvanceTime) {
         if (instance != null) instance.cancel();
         if (gong != null) instance = new GongSound(gong, useAdvanceTime);
+    }
+
+    private static File gongFile = null;
+
+    public static File getGongFile() {
+        if (gongFile == null)
+            // Extract wav-file from jar-package to jar-directory
+            return Resources.getAsFile("wav/gong.wav", Gongule.getProjectName() + ".wav", false);
+        else
+            return gongFile;
     }
 
 }

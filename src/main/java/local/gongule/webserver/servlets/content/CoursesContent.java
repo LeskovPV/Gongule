@@ -1,6 +1,7 @@
 package local.gongule.webserver.servlets.content;
 
 import local.gongule.Gongule;
+import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Day;
 import local.gongule.tools.process.GongExecutor;
 
@@ -22,9 +23,10 @@ public class CoursesContent extends Content {
         Map<String, Object> contentVariables = new HashMap();
         int selectedCourse = Integer.valueOf(getAttribute(request, "selected_course", "0"));
         String rows = "";
-        for (int i = 0; i < Gongule.getData().getCourseDaysAmount(selectedCourse); i++) {
+        Data data = Data.getInstance();
+        for (int i = 0; i < data.getCourseDaysAmount(selectedCourse); i++) {
             Map<String, Object> piecesVariables = new HashMap();
-            Day day = Gongule.getData().getCourseDay(selectedCourse, i);
+            Day day = data.getCourseDay(selectedCourse, i);
             piecesVariables.put("number", i);
             piecesVariables.put("name", day.name);
             piecesVariables.put("value", i);
@@ -32,33 +34,34 @@ public class CoursesContent extends Content {
         }
         contentVariables.put("course_days", rows);
         String options = "";
-        for (int i = 0; i < Gongule.getData().getCoursesAmount(); i++) {
+        for (int i = 0; i < data.getCoursesAmount(); i++) {
             Map<String, Object> piecesVariables = new HashMap();
             piecesVariables.put("value", i);
             piecesVariables.put("selected", (i == selectedCourse) ? "selected" : "");
-            piecesVariables.put("caption", Gongule.getData().getCourse(i).name);
+            piecesVariables.put("caption", data.getCourse(i).name);
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
         contentVariables.put("course_options", options);
 
         options = "";
         int dayIndex = Integer.valueOf(getAttribute(request, "selected_day", "0"));
-        for (int i = 0; i < Gongule.getData().getDaysAmount(); i++) {
+        for (int i = 0; i < data.getDaysAmount(); i++) {
             Map<String, Object> piecesVariables = new HashMap();
             piecesVariables.put("value", i);
             piecesVariables.put("selected", (i == dayIndex) ? "selected" : "");
-            piecesVariables.put("caption", Gongule.getData().getDay(i).name);
+            piecesVariables.put("caption", data.getDay(i).name);
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
         contentVariables.put("day_options", options);
-        contentVariables.put("course_display", Gongule.getData().getCoursesAmount() > 0 ? "table-row" : "none");
+        contentVariables.put("course_display", data.getCoursesAmount() > 0 ? "table-row" : "none");
         return super.getFromTemplate(contentVariables);
     }
 
     private boolean createCourse(HttpServletRequest request) {
         try {
-            Gongule.getData().courseCreate(request.getParameter("course_name"));
-            setAttribute(request, "selected_course", String.valueOf(Gongule.getData().getCoursesAmount()-1));
+            Data data = Data.getInstance();
+            data.courseCreate(request.getParameter("course_name"));
+            setAttribute(request, "selected_course", String.valueOf(data.getCoursesAmount()-1));
             return true;
         } catch (Exception exception) {
             return false;
@@ -77,7 +80,7 @@ public class CoursesContent extends Content {
 
     private boolean deleteCourse(HttpServletRequest request) {
         try {
-            Gongule.getData().courseDelete(Integer.valueOf(request.getParameter("selected_course")));
+            Data.getInstance().courseDelete(Integer.valueOf(request.getParameter("selected_course")));
             setAttribute(request, "selected_course", new Integer(0).toString());
             GongExecutor.reset();
             return true;
@@ -91,7 +94,7 @@ public class CoursesContent extends Content {
             int courseIndex = Integer.valueOf(request.getParameter("selected_course"));
             int dayIndex = Integer.valueOf(request.getParameter("selected_day"));
             setAttribute(request, "selected_day", String.valueOf(dayIndex));
-            Gongule.getData().createCourseDay(courseIndex, dayIndex);
+            Data.getInstance().createCourseDay(courseIndex, dayIndex);
             GongExecutor.reset();
             return true;
         } catch (Exception exception) {
@@ -103,7 +106,7 @@ public class CoursesContent extends Content {
         try {
             int courseIndex = Integer.valueOf(request.getParameter("selected_course"));
             int dayIndex = Integer.valueOf(request.getParameter("remove_day"));
-            Gongule.getData().removeCourseDay(courseIndex, dayIndex);
+            Data.getInstance().removeCourseDay(courseIndex, dayIndex);
             GongExecutor.reset();
             return true;
         } catch (Exception exception) {

@@ -20,6 +20,8 @@ public class CoolingRelay extends Relay {
         return instance;
     }
 
+    private int measureDelay = 30;
+
     private double relayTemperature;
 
     public double getRelayTemperature() {
@@ -34,7 +36,7 @@ public class CoolingRelay extends Relay {
     private Thread coolingThread = new Thread(() -> {
         while (true) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1000 * measureDelay);
             } catch (InterruptedException exception) {
                 break;
             }

@@ -39,7 +39,7 @@ public class ResourceServlet extends HttpServlet implements TemplateFillable {
             Map<String, Object> pageVariables = new HashMap(0);
             switch (ResourceType.getByName(resourceName)){
                 case CSS:
-                    ColorSchema colorSchema = WebServer.getColorSchema();
+                    ColorSchema colorSchema = ColorSchema.getInstance();
                     pageVariables.put("site_color", colorSchema.getSiteColor());
                     pageVariables.put("deep_color", colorSchema.getDeepColor());
                     pageVariables.put("base_color", colorSchema.getBaseColor());

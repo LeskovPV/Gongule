@@ -1,16 +1,26 @@
 package local.gongule.utils.colors;
 
+import local.gongule.tools.RuntimeConfiguration;
+
 import java.awt.*;
 
 public class ColorSchema {
+
+    private static ColorSchema instance = new ColorSchema(RuntimeConfiguration.getInstance().get("BaseColor"));
+
+    static public ColorSchema getInstance() {
+        return instance;
+    }
 
     private float baseRatio = 0.5f;
 
     //private HSLColor baseColor = new HSLColor("#7F7F7F"); //dark gray
     private HSLColor baseColor = new HSLColor("#6e7f88"); //dirty dark blue
 
-    public ColorSchema() {
-    }
+    /**
+     * Constructor
+     */
+    private ColorSchema() { }
 
     public ColorSchema(String baseColor) {
         setBaseColor(baseColor);

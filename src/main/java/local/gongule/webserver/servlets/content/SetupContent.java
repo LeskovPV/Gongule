@@ -6,6 +6,7 @@ import local.gongule.tools.process.GongSound;
 import local.gongule.utils.FontFamily;
 import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Gong;
+import local.gongule.utils.colors.ColorSchema;
 import local.gongule.utils.formatter.DateFormatter;
 import local.gongule.utils.formatter.TimeFormatter;
 import local.gongule.utils.system.SystemUtils;
@@ -36,8 +37,9 @@ public class SetupContent extends Content{
     public String get(HttpServletRequest request) {
         Map<String, Object> contentVariables = new HashMap();
         String rows = "";
-        for(int i = 0; i < Gongule.getData().getGongsAmount(); i++) {
-            Gong gong = Gongule.getData().getGong(i);
+        Data data = Data.getInstance();
+        for(int i = 0; i < data.getGongsAmount(); i++) {
+            Gong gong = data.getGong(i);
             Map<String, Object> piecesVariables = new HashMap();
             piecesVariables.put("name", gong.name);
             piecesVariables.put("amount", gong.amount);
@@ -45,7 +47,7 @@ public class SetupContent extends Content{
             rows += fillTemplate("html/pieces/gong.html", piecesVariables) + "\n";
         }
         contentVariables.put("gong_rows", rows);
-        contentVariables.put("color_value", WebServer.getColorSchema().getBaseColor());
+        contentVariables.put("color_value", ColorSchema.getInstance().getBaseColor());
         String options = "";
         for (int i = 0; i < FontFamily.values.size(); i++) {
             Map<String, Object> piecesVariables = new HashMap();
@@ -61,7 +63,7 @@ public class SetupContent extends Content{
         for(String file: files) {
             Map<String, Object> piecesVariables = new HashMap();
             piecesVariables.put("value", file);
-            piecesVariables.put("selected", (file.equalsIgnoreCase(Data.getDefaultName())) ? "selected" : "");
+            piecesVariables.put("selected", (file.equalsIgnoreCase(data.defaultName)) ? "selected" : "");
             piecesVariables.put("caption", file);
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
@@ -75,7 +77,7 @@ public class SetupContent extends Content{
     private boolean deleteGong(HttpServletRequest request) {
         String gongIndex = request.getParameter("delete_gong");
         try {
-            Gongule.getData().gongDelete(Integer.valueOf(gongIndex));
+            Data.getInstance().gongDelete(Integer.valueOf(gongIndex));
             logger.info("Gong '" + gongIndex + "' is deleted");
             GongExecutor.reset();
             return true;
@@ -87,7 +89,7 @@ public class SetupContent extends Content{
 
     private boolean playGong(HttpServletRequest request) {
         try {
-            Gong gong = Gongule.getData().getGong(Integer.valueOf(request.getParameter("play_gong")));
+            Gong gong = Data.getInstance().getGong(Integer.valueOf(request.getParameter("play_gong")));
             GongSound.play(gong ,false);
         } catch (Exception exception) {
             return false;
@@ -97,7 +99,7 @@ public class SetupContent extends Content{
 
     private boolean createGong(HttpServletRequest request) {
         try {
-            return Gongule.getData().gongCreate(
+            return Data.getInstance().gongCreate(
                     request.getParameter("gong_name"),
                     Integer.valueOf(request.getParameter("gong_amount")));
         } catch (Exception exception) {
@@ -121,7 +123,7 @@ public class SetupContent extends Content{
 
     private boolean saveConfiguration(HttpServletRequest request) {
         String name = request.getParameter("configuration_name");
-        if (Gongule.getData().save(name)) {
+        if (Data.getInstance().save(name)) {
             logger.info("Configuration save as '{}'", name);
             return true;
         } else {
@@ -132,7 +134,7 @@ public class SetupContent extends Content{
 
     private boolean loadConfiguration(HttpServletRequest request) {
         String name = request.getParameter("selected_configuration");
-        boolean result = Gongule.setData(Data.load(name));
+        boolean result = Data.setInstance(Data.load(name));
         logger.info(result ? "Configuration '{}' is loaded" : "Impossible load '{}' configuration", name);
         if (result) GongExecutor.reset();
         return result;
@@ -163,7 +165,7 @@ public class SetupContent extends Content{
         }
         SystemUtils.setTime(time);
         GongExecutor.reset();
-        GongExecutor.midnightReset();
+        GongExecutor.runMidnightReset();
         return true;
     }
 

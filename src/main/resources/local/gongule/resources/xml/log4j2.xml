@@ -13,7 +13,7 @@
                 append="true">
             <PatternLayout pattern="%d{yyyy.MM.dd}\t%d{HH:mm:ss.SSS}\t%p\t%m%n"/>
             <Policies>
-                <SizeBasedTriggeringPolicy size="1 KB"/>
+                <SizeBasedTriggeringPolicy size="512 KB"/>
             </Policies>
             <DefaultRolloverStrategy
                     max="2"

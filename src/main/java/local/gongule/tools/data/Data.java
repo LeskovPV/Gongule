@@ -2,6 +2,8 @@ package local.gongule.tools.data;
 
 import com.thoughtworks.xstream.XStream;
 import local.gongule.Gongule;
+import local.gongule.tools.RuntimeConfiguration;
+import local.gongule.utils.colors.ColorSchema;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.formatter.TimeFunctions;
 import local.gongule.utils.resources.Resources;
@@ -15,7 +17,8 @@ import java.time.*;
 
 public class Data implements Serializable, Loggible {
 
-    //private static final long serialVersionUID = -519958441268523608L;
+    private Data() {}
+
     public class Note implements Serializable {
         public LocalDate date;
         public int courseIndex;
@@ -50,6 +53,7 @@ public class Data implements Serializable, Loggible {
     public String getCurrentCourseName(){
         return getCurrentCourseName(getCurrentNoteIndex());
     }
+
     public String getCurrentCourseName(int currentNoteIndex) {
         if (currentNoteIndex < 0)
             return "";
@@ -286,13 +290,6 @@ public class Data implements Serializable, Loggible {
     // Gongs
     ////////////////////////////////////////////////////////////////
 
-    public int getGongIndex(String name) {
-        for (Gong gong: gongs)
-            if (gong.name.equalsIgnoreCase(name))
-                return gongs.indexOf(gong);
-        return -1;
-    }
-
     public int getGongsAmount() {
         return gongs.size();
     }
@@ -345,12 +342,30 @@ public class Data implements Serializable, Loggible {
         return save(this, fileName);
     }
 
+
+
+    ////////////////////////////////////////////////////////////////
+    // Static
+    ////////////////////////////////////////////////////////////////
+
+    private static Data instance = load();
+
+    public static Data getInstance() {
+        return instance;
+    }
+
+    public static boolean setInstance(Data data) {
+        if (data == null) return false;
+        instance = data;
+        return true;
+    }
+
     public static boolean save(Data data) {
         return save(data, null);
     }
 
     public static boolean save(Data data, String fileName) {
-        if (getDefaultName().equalsIgnoreCase(fileName)) {
+        if (defaultName.equalsIgnoreCase(fileName)) {
             //Log.printWarn("Impossible save configuration as '" + defaultName + "'. It is reserved filename");
             return false;
         }
@@ -370,37 +385,53 @@ public class Data implements Serializable, Loggible {
     }
 
     public static Data load(String fileName) {
-        XStream xstream = new XStream();
-        String fullFileName = getFullDirName() + fileName + ".xml";
-        if (fileName == null) {
-            Path path = Paths.get(Resources.getJarDirName() + Gongule.getProjectName() + ".xml");
-            fullFileName = Files.exists(path) ? path.toString() : getFullDirName() + getDefaultName() + ".xml";
-        }
-        try {
-            return (Data) xstream.fromXML(new File(fullFileName));
+        String fullFileName = "";
+        try { // Create data directory
+            if (fileName != null) fullFileName = getFullDirName() + fileName + ".xml"; else {
+                //Path path = Paths.get(Resources.getJarDirName() + Gongule.getProjectName() + ".xml");
+                fullFileName = Files.exists(Paths.get(getFullCurrentName())) ? getFullCurrentName() : getFullDefaultName();
+                Path path = Paths.get(Data.getFullDirName());
+                if (!Files.exists(path))
+                    Files.createDirectories(path);
+
+                path = Paths.get(getFullDefaultName());
+                if (!Files.exists(path)) // Create default configuration
+                    Resources.getAsFile("xml/data.xml", dirName + defaultName + ".xml", true); // Extract cfg-file from jar-package to jar-directory
+                    // Load current configuration
+            }
+            return (Data) new XStream().fromXML(new File(fullFileName));
         } catch(Exception exception) {
             logger.error("Impossible load '{}' configuration: {}", fullFileName, exception);
             return null;
         }
+
     }
 
     public static boolean detete(String fileName) {
-        if (fileName.equalsIgnoreCase(getDefaultName()))
+        if (fileName.equalsIgnoreCase(defaultName))
             return false;
         File file = new File(getFullDirName() + fileName + ".xml");
         return file.delete();
     }
 
-    public static String getDefaultName() {
-        return "default";
+    public static final String dirName = "data/";
+
+    public static final String defaultName = "default";
+
+    public static String getFullDefaultName() {
+        return getFullDirName() + defaultName + ".xml";
     }
 
-    public static String getDirName() {
-        return "data/";
+    public static String getFullCurrentName() {
+        return Resources.getJarDirName() + Gongule.getProjectName() + ".xml";
+    }
+
+    public static String getFullAnyName(String anyName) {
+        return getFullDirName() + anyName + ".xml";
     }
 
     public static String getFullDirName() {
-        return Resources.getJarDirName() + getDirName();
+        return Resources.getJarDirName() + dirName;
     }
 
     public static List<String> getFiles() {

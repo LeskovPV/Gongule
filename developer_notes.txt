@@ -5,9 +5,7 @@
 ############################################
 
 NEEDING
-+ Rerun GongExecutor every day at midnight -> midnightReset()
-+ Set to config file a amplifier turn-on advance time
-+ Handling relays (for RPi)
+* Change certificate store
 * Support setting timezone from user interface
 * Support setting audio canal from user interface
-* Refactoring
+* Refactoring 

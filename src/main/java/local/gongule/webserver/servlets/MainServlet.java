@@ -3,6 +3,7 @@ package local.gongule.webserver.servlets;
 import local.gongule.Gongule;
 import local.gongule.utils.TemplateFillable;
 import local.gongule.tools.process.GongExecutor;
+import local.gongule.utils.colors.ColorSchema;
 import local.gongule.webserver.servlets.content.*;
 import local.gongule.webserver.WebServer;
 import javax.servlet.http.HttpServlet;
@@ -47,7 +48,7 @@ public class MainServlet extends HttpServlet implements TemplateFillable {
         pageVariables.put("page_title", selectedPageType.getTitle());
         pageVariables.put("page_content", content.get(selectedPageType).get(request));
         pageVariables.put("website_link", Gongule.getProjectWebsite());
-        pageVariables.put("deep_color", WebServer.getColorSchema().getDeepColor());
+        pageVariables.put("deep_color", ColorSchema.getInstance().getDeepColor());
         pageVariables.put("process_status", GongExecutor.processIsPaused() ? "pause" : "run");
         String result = fillTemplate("html/main.html", pageVariables);
         response.getOutputStream().write( result.getBytes("UTF-8") );
