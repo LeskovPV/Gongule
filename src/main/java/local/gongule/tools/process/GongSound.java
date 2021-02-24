@@ -2,6 +2,7 @@ package local.gongule.tools.process;
 
 import local.gongule.Gongule;
 import local.gongule.tools.data.Gong;
+import local.gongule.tools.devices.PowerRelay;
 import local.gongule.utils.Sound;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.system.SystemUtils;
@@ -31,9 +32,7 @@ public class GongSound extends Thread implements Loggible {
     public void run() {
         logger.info("Begin of {} gong", gong.name);
         if (useAdvanceTime) {
-            if (SystemUtils.isRaspbian) {
-                // Если реле не включено, то включаем
-            }
+            PowerRelay.getInstance().set(true);
             try {
                 sleep(GongExecutor.getAdvanceTime() * 1000);
             } catch (InterruptedException exception) {
@@ -52,11 +51,8 @@ public class GongSound extends Thread implements Loggible {
                 break;
             }
         }
-        if (useAdvanceTime) {
-            if (SystemUtils.isRaspbian) {
-                // Выключаем реле
-            }
-        }
+        if (useAdvanceTime) PowerRelay.getInstance().set(false);
+
     }
 
     /**

@@ -3,7 +3,7 @@ package local.gongule;
 import com.pi4j.io.gpio.RaspiPin;
 import local.gongule.tools.*;
 import local.gongule.tools.data.Data;
-import local.gongule.tools.devices.CoolingDevice;
+import local.gongule.tools.devices.CoolingRelay;
 import local.gongule.tools.process.GongExecutor;
 import local.gongule.tools.process.GongSound;
 import local.gongule.utils.logging.Loggible;
@@ -166,6 +166,7 @@ public class Gongule implements Loggible {
         //properties.store();
         GongSound.setStrikesDelay(properties.getIntegerProperty("gong.strikes_delay"));
         GongExecutor.setAdvanceTime(properties.getIntegerProperty("gong.advance_time"));
+        CoolingRelay.getInstance().setRelayTemperature(properties.getDoubleProperty("gong.cpu_temperature"));
 
         WebServer.setHttpPort(properties.getIntegerProperty("web.http_port"));
         WebServer.setHttpsPort(properties.getIntegerProperty("web.https_port"));
@@ -174,9 +175,6 @@ public class Gongule implements Loggible {
         WebServer.setStorePassword(properties.getProperty("web.store_password"));
         WebServer.setManagerPassword(properties.getProperty("web.manager_password"));
 
-        int fanPin = properties.getIntegerProperty("pi.fan_pin", -1);
-        double cpuTemperature = properties.getDoubleProperty("pi.cpu_temperature", 50);
-        CoolingDevice coolingDevice = new CoolingDevice(RaspiPin.getPinByAddress(fanPin), cpuTemperature);
 
         logger.info("Configuration is appled");
     }
