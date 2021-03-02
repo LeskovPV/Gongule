@@ -14,7 +14,6 @@ import local.gongule.utils.resources.Resources;
 import local.gongule.utils.colors.ColorSchema;
 import local.gongule.webserver.servlets.MainServlet;
 import local.gongule.webserver.servlets.ResourceServlet;
-
 import java.io.IOException;
 import java.net.*;
 
@@ -131,7 +130,7 @@ public class WebServer implements Loggible {
 
     private static ServerConnector getHttpsConnector() {
         checkPort(httpsPort);
-        String keyStorePath = Resources.getAsFile(keyStore, Gongule.getProjectName() + ".key").getPath();
+        String keyStorePath = Resources.getAsFile(keyStore, Gongule.projectName + ".key").getPath();
         // HTTPS configuration
         HttpConfiguration https = new HttpConfiguration();
         https.addCustomizer(new SecureRequestCustomizer());            // Configuring SSL

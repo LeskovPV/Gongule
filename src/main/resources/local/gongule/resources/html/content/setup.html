@@ -29,10 +29,10 @@
                         ${gong_rows}
                         <tr>
                             <td>
-                                <input type='text' name='gong_name' value='' size='13' placeholder='Gong name...'/>
+                                <input type='text' name='gong_name' value='' size='10' placeholder='Gong name...'/>
                             </td>
                             <td>
-                                <input type='number' name='gong_amount' value='1' min='1' max='10' size='5'/>
+                                <input type='number' name='gong_amount' value='1' min='1' max='10' size='3'/>
                             </td>
                             <td>
                                 <button name='create_gong' title='Create gong' onclick='setAction(this.name)'>
@@ -162,7 +162,7 @@
                 <td colspan='2'>
                     <table class='table data'>
                         <tr>
-                            <td>
+                            <td align='right'>
                                 <nobr>
                                     Date:
                                 </nobr>
@@ -171,7 +171,7 @@
                                 <input type='text' name='date_value' value='${date_value}' size='${datetime_size}'/>
                             </td>
                             <td>
-                                <button name='change_date' title='Set date' onclick='setAction(this.name)'>
+                                <button name='set_date' title='Set date' onclick='setAction(this.name)'>
                                     <img src='resource?png/apply.png' valign='top'/>
                                 </button>
                             </td>
@@ -179,24 +179,44 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td align='right'>
                                 <nobr>
                                     Time:
                                 </nobr>
                             </td>
                             <td>
-                                <input type='text' name='time_value' value='${time_value}' size='${datetime_size}' '/>
+                                <input type='text' name='time_value' value='${time_value}' size='${datetime_size}'/>
                             </td>
                             <td>
-                                <button name='change_time' title='Set time' onclick='setAction(this.name)'>
+                                <button name='set_time' title='Set time' onclick='setAction(this.name)'>
                                     <img src='resource?png/apply.png' valign='top'/>
                                 </button>
                             </td>
                             <td width='100%'>
                             </td>
                         </tr>
+                        <tr style='display:${advance_display}'>
+                            <td align='right'>
+                                <nobr>Advance time:</nobr>
+                            </td>
+                            <td>
+                                <nobr>
+                                    <input type='number' name='advance_time' value='${advance_time}' min='0' max='99' size='5' title='A power turn-on advance time in seconds (for audio-amplifier)'/>
+                                    sec
+                                </nobr>
+                            </td>
+                            <td>
+                                <button name='set_advance' title='Set advance time' onclick='setAction(this.name)'>
+                                    <img src='resource?png/apply.png' valign='top'/>
+                                </button>
+                            </td>
+                            <td>
+                            </td>
+                            <td width='100%'>
+                            </td>
+                        </tr>
                         <tr>
-                            <td colspan='2'>
+                            <td>
                                 <button type="reset" title='Download system log file' onclick='location.href="log"'>
                                     <nobr>
                                         <img src='resource?png/log.png' valign='top'/>
@@ -204,7 +224,7 @@
                                     </nobr>
                                 </button>
                             </td>
-                            <td>
+                            <td colspan='2' align='right'>
                                 <button name='sys_shutdown' title='System shutdown' onclick='setAction(this.name)'>
                                     <nobr>
                                         <img src='resource?png/shutdown.png' valign='top'/>

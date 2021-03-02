@@ -1,4 +1,4 @@
-package local.gongule.tools.devices;
+package local.gongule.tools.relays;
 
 import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.RaspiPin;
@@ -13,7 +13,6 @@ public class PowerRelay extends Relay {
 
     private PowerRelay(Pin pin) {
         super("Power relay", pin, false);
-
     }
 
 }

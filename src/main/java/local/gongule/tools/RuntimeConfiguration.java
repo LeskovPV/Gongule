@@ -1,10 +1,7 @@
 package local.gongule.tools;
 
-import com.pi4j.io.gpio.RaspiPin;
 import local.gongule.Gongule;
-import local.gongule.tools.devices.CoolingRelay;
 import local.gongule.utils.resources.Resources;
-
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,7 +10,7 @@ import java.util.Properties;
 
 public class RuntimeConfiguration {
 
-    static private String fileName = Resources.getJarDirName() + Gongule.getProjectName() + ".tmp";
+    static private String fileName = Resources.getJarDirName() + Gongule.projectName + ".tmp";
 
     static private RuntimeConfiguration instance = new RuntimeConfiguration();
 

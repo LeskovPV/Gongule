@@ -1,13 +1,10 @@
 package local.gongule.webserver.servlets.content;
 
-import local.gongule.Gongule;
 import local.gongule.tools.data.Data;
 import local.gongule.tools.process.GongExecutor;
 import local.gongule.utils.colors.ColorSchema;
 import local.gongule.utils.formatter.TimeFormatter;
 import local.gongule.tools.data.Day;
-import local.gongule.webserver.WebServer;
-
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalTime;
 import java.util.HashMap;

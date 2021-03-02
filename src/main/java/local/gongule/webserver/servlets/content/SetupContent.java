@@ -1,6 +1,5 @@
 package local.gongule.webserver.servlets.content;
 
-import local.gongule.Gongule;
 import local.gongule.tools.process.GongExecutor;
 import local.gongule.tools.process.GongSound;
 import local.gongule.utils.FontFamily;
@@ -30,8 +29,9 @@ public class SetupContent extends Content{
         actions.put("load_configuration", (HttpServletRequest request) -> loadConfiguration(request));
         actions.put("delete_configuration", (HttpServletRequest request) -> deleteConfiguration(request));
         actions.put("sys_shutdown", (HttpServletRequest request) -> shutdownSystem(request));
-        actions.put("change_time", (HttpServletRequest request) -> changeTime(request));
-        actions.put("change_date", (HttpServletRequest request) -> changeDate(request));
+        actions.put("set_time", (HttpServletRequest request) -> setTime(request));
+        actions.put("set_date", (HttpServletRequest request) -> setDate(request));
+        actions.put("set_advance", (HttpServletRequest request) -> setAdvance(request));
     }
 
     public String get(HttpServletRequest request) {
@@ -70,6 +70,8 @@ public class SetupContent extends Content{
         contentVariables.put("configuration_options", options);
         contentVariables.put("time_value", LocalTime.now().format(TimeFormatter.get(true)));
         contentVariables.put("date_value", LocalDate.now().format(DateFormatter.get()));
+        contentVariables.put("advance_time", GongExecutor.getAdvanceTime());
+        contentVariables.put("advance_display", SystemUtils.isRaspbian ? "table-row" : "none");
         contentVariables.put("datetime_size", TimeFormatter.getSize(true) > DateFormatter.getSize() ? TimeFormatter.getSize(true) : DateFormatter.getSize());
         return super.getFromTemplate(contentVariables);
     }
@@ -155,7 +157,7 @@ public class SetupContent extends Content{
         return true;
     }
 
-    private boolean changeTime(HttpServletRequest request) {
+    private boolean setTime(HttpServletRequest request) {
         LocalTime time;
         try {
             time = LocalTime.parse(request.getParameter("time_value"), TimeFormatter.get(true));
@@ -169,7 +171,7 @@ public class SetupContent extends Content{
         return true;
     }
 
-    private boolean changeDate(HttpServletRequest request) {
+    private boolean setDate(HttpServletRequest request) {
         LocalDate date;
         try {
             date = LocalDate.parse(request.getParameter("date_value"), DateFormatter.get());
@@ -179,6 +181,15 @@ public class SetupContent extends Content{
         }
         SystemUtils.setDate(date);
         GongExecutor.reset();
+        return true;
+    }
+
+    private boolean setAdvance(HttpServletRequest request) {
+        try {
+            GongExecutor.setAdvanceTime(Integer.valueOf(request.getParameter("advance_time")));
+        } catch (Exception exception) {
+            return false;
+        }
         return true;
     }
 

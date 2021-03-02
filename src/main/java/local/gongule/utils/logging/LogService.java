@@ -14,20 +14,19 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LogService{
+public class LogService {
 
     static final Logger logger = LogManager.getRootLogger();
 
     static final String resourceLogConfig = "xml/log4j2.xml";
 
     static {
-
         try { // Create log directory
             Path path = Paths.get(getFullDirName());
             if (!Files.exists(path))
                 Files.createDirectories(path);
         } catch (Exception exception) {
-            logger.error("Impossible create data directory '{}': {}", Data.getFullDirName(), exception.getMessage());
+            logger.error("Impossible create data directory '{}': {}", getFullDirName(), exception.getMessage());
         }
         Map<String, Object> pageVariables = new HashMap(0);
         pageVariables.put("logfile", getFullName());
@@ -45,7 +44,7 @@ public class LogService{
     }
 
     public static String getName() {
-        return Gongule.getProjectName() + ".log";
+        return Gongule.projectName + ".log";
     }
 
     public static String getFullName() {
@@ -53,7 +52,7 @@ public class LogService{
     }
 
     public static File getAllLogFile() throws IOException{
-        String allLogFileName = getFullDirName() + Gongule.getProjectName() + "-log.txt";
+        String allLogFileName = getFullDirName() + Gongule.projectName + "-log.txt";
         File allLogFile = new File(allLogFileName);
         if (allLogFile.exists())
             allLogFile.delete();

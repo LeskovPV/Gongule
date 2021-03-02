@@ -4,7 +4,6 @@ import java.awt.*;
 import java.net.URL;
 import javax.swing.JFrame;
 import javax.swing.JButton;
-
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.resources.Resources;
 import local.gongule.webserver.WebServer;

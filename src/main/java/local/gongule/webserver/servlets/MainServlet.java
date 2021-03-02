@@ -5,7 +5,6 @@ import local.gongule.utils.TemplateFillable;
 import local.gongule.tools.process.GongExecutor;
 import local.gongule.utils.colors.ColorSchema;
 import local.gongule.webserver.servlets.content.*;
-import local.gongule.webserver.WebServer;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,10 +42,11 @@ public class MainServlet extends HttpServlet implements TemplateFillable {
             mainMenu += fillTemplate("html/pieces/menu.html", piecesVariables) + "\n";
         }
         pageVariables.put("main_menu", mainMenu);
-        pageVariables.put("site_title", Gongule.getProjectName());
+        pageVariables.put("site_title", Gongule.projectName);
         pageVariables.put("page_name", selectedPageType.getName());
         pageVariables.put("page_title", selectedPageType.getTitle());
         pageVariables.put("page_content", content.get(selectedPageType).get(request));
+        pageVariables.put("link_name", Gongule.getFullName());
         pageVariables.put("website_link", Gongule.getProjectWebsite());
         pageVariables.put("deep_color", ColorSchema.getInstance().getDeepColor());
         pageVariables.put("process_status", GongExecutor.processIsPaused() ? "pause" : "run");
@@ -58,9 +58,6 @@ public class MainServlet extends HttpServlet implements TemplateFillable {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-//        logger.info("===================================");
-//        for (String name: request.getParameterMap().keySet())
-//            logger.info(name + " = " + request.getParameter(name));
         String actionName = request.getParameter("action");
         for (PageType pageType: PageType.values()) {
             // check menu button click

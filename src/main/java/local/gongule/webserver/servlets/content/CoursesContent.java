@@ -1,10 +1,8 @@
 package local.gongule.webserver.servlets.content;
 
-import local.gongule.Gongule;
 import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Day;
 import local.gongule.tools.process.GongExecutor;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;

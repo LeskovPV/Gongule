@@ -2,18 +2,18 @@ package local.gongule.tools.process;
 
 import local.gongule.Gongule;
 import local.gongule.tools.data.Gong;
-import local.gongule.tools.devices.PowerRelay;
+import local.gongule.tools.relays.CoolingRelay;
+import local.gongule.tools.relays.PowerRelay;
 import local.gongule.utils.Sound;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.resources.Resources;
-import local.gongule.utils.system.SystemUtils;
 
 import java.io.File;
 
 public class GongSound extends Thread implements Loggible {
 
-
     private Gong gong;
+
     private boolean useAdvanceTime;
 
     private GongSound(Gong gong, boolean useAdvanceTime){
@@ -42,6 +42,8 @@ public class GongSound extends Thread implements Loggible {
             } catch (InterruptedException exception) {
                 logger.info("Waked up from advance time");
             }
+        } else {
+            PowerRelay.getInstance().set(true);
         }
         for (int i = 0; i < gong.amount; i++) {
             logger.info("Paying № {} of {} gong", i, gong.name);
@@ -55,8 +57,7 @@ public class GongSound extends Thread implements Loggible {
                 break;
             }
         }
-        if (useAdvanceTime) PowerRelay.getInstance().set(false);
-
+        PowerRelay.getInstance().set(false);
     }
 
     /**
@@ -91,7 +92,7 @@ public class GongSound extends Thread implements Loggible {
     public static File getGongFile() {
         if (gongFile == null)
             // Extract wav-file from jar-package to jar-directory
-            return Resources.getAsFile("wav/gong.wav", Gongule.getProjectName() + ".wav", false);
+            return Resources.getAsFile("wav/gong.wav", Gongule.projectName + ".wav", false);
         else
             return gongFile;
     }

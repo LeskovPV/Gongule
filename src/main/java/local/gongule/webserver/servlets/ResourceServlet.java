@@ -5,26 +5,20 @@ import local.gongule.utils.resources.ResourceType;
 import local.gongule.utils.resources.Resources;
 import local.gongule.utils.colors.ColorSchema;
 import local.gongule.webserver.WebServer;
-
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 
-import static java.util.Arrays.asList;
-
-import java.util.*;
-
-// Обработка запроса ресурса
-// вида: <server>:<port>/resource?<resourceName>
-// например: localhost/resource?js/jquery/flot/jquery.flot.js
-// или https://localhost/resource?png/logo.png
 public class ResourceServlet extends HttpServlet implements TemplateFillable {
 
-    // Список защищенных ресурсов, для получения которых требуется авторизация
-    public static final List<String> privateResources = asList(
-            "keystore"
-    );
+    /**
+     * Private resources list
+     */
+    public static final List<String> privateResources = Arrays.asList("keystore");
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {

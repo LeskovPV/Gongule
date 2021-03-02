@@ -1,13 +1,11 @@
 package local.gongule.tools.process;
 
-import local.gongule.Gongule;
 import local.gongule.tools.RuntimeConfiguration;
 import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Day;
 import local.gongule.tools.data.Gong;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.system.SystemUtils;
-
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +20,7 @@ public class GongExecutor implements Loggible {
     static private ScheduledExecutorService service = null;
 
     static public void init() {
-        RuntimeConfiguration rc = RuntimeConfiguration.getInstance();
-        String status = rc.get("processIsPaused", "false");
-        if (status.equalsIgnoreCase("true"))
+        if (RuntimeConfiguration.getInstance().get("processIsPaused", "false").equalsIgnoreCase("true"))
             pause();
         else
             run();
@@ -81,10 +77,8 @@ public class GongExecutor implements Loggible {
     public static void runMidnightReset() {
         long period = 1000 * 60 * 60 * 24; // one day in milliseconds
         long delay = period - 1000 * (LocalTime.now().toSecondOfDay() - 1); // milliseconds to 00:00:01
-        if (midnightTimer != null)
-            midnightTimer.cancel();
-        else
-            midnightTimer = new Timer();
+        if (midnightTimer != null) midnightTimer.cancel();
+        midnightTimer = new Timer();
         midnightTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -103,8 +97,9 @@ public class GongExecutor implements Loggible {
         return SystemUtils.isRaspbian ? advanceTime : 0;
     }
 
-    public static void setAdvanceTime(Integer advanceTime) {
-        if (advanceTime != null)
-            GongExecutor.advanceTime = advanceTime;
+    public static void setAdvanceTime(int advanceTime) {
+        GongExecutor.advanceTime = advanceTime;
+        if (SystemUtils.isRaspbian) reset();
     }
+
 }

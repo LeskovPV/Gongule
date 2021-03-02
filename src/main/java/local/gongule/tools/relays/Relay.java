@@ -1,4 +1,4 @@
-package local.gongule.tools.devices;
+package local.gongule.tools.relays;
 
 import com.pi4j.io.gpio.*;
 import local.gongule.utils.logging.Loggible;
@@ -13,12 +13,14 @@ abstract public class Relay implements Loggible {
 
     protected GpioPinDigitalOutput gpioPin;
 
-    private boolean value;
+    protected boolean value;
 
     public Relay(String name, Pin pin, Boolean value) {
         if (SystemUtils.isRaspbian) {
-            gpioPin = gpio.provisionDigitalOutputPin(pin, name, value ? PinState.HIGH : PinState.LOW);
+            gpioPin = gpio.provisionDigitalOutputPin(pin, name, PinState.HIGH);
             gpioPin.setShutdownOptions(true, PinState.LOW);
+            this.value = !value;
+            set(value);
         }
         this.value = value;
     }
@@ -26,6 +28,7 @@ abstract public class Relay implements Loggible {
     public boolean set(boolean value) {
         if (this.value == value) return value;
         if (!SystemUtils.isRaspbian) return this.value;
+        logger.trace("{} = {}", gpioPin.getName(), value);
         if (value)
             gpioPin.high();
         else

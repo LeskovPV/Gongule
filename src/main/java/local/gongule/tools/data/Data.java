@@ -2,12 +2,9 @@ package local.gongule.tools.data;
 
 import com.thoughtworks.xstream.XStream;
 import local.gongule.Gongule;
-import local.gongule.tools.RuntimeConfiguration;
-import local.gongule.utils.colors.ColorSchema;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.formatter.TimeFunctions;
 import local.gongule.utils.resources.Resources;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -161,7 +158,6 @@ public class Data implements Serializable, Loggible {
         save();
         return true;
     }
-
 
     ////////////////////////////////////////////////////////////////
     // Schedule (CourseDays)
@@ -342,8 +338,6 @@ public class Data implements Serializable, Loggible {
         return save(this, fileName);
     }
 
-
-
     ////////////////////////////////////////////////////////////////
     // Static
     ////////////////////////////////////////////////////////////////
@@ -369,7 +363,7 @@ public class Data implements Serializable, Loggible {
             //Log.printWarn("Impossible save configuration as '" + defaultName + "'. It is reserved filename");
             return false;
         }
-        String fullFileName = ((fileName == null) ? Resources.getJarDirName() + Gongule.getProjectName() : getFullDirName() + fileName) + ".xml";
+        String fullFileName = ((fileName == null) ? getFullCurrentName() : getFullAnyName(fileName));
         XStream xstream = new XStream();
         try {
             xstream.toXML(data, new FileWriter(fullFileName));
@@ -387,8 +381,8 @@ public class Data implements Serializable, Loggible {
     public static Data load(String fileName) {
         String fullFileName = "";
         try { // Create data directory
-            if (fileName != null) fullFileName = getFullDirName() + fileName + ".xml"; else {
-                //Path path = Paths.get(Resources.getJarDirName() + Gongule.getProjectName() + ".xml");
+            if (fileName != null) fullFileName = getFullAnyName(fileName); else {
+                //Path path = Paths.get(Resources.getJarDirName() + Gongule.projectName + ".xml");
                 fullFileName = Files.exists(Paths.get(getFullCurrentName())) ? getFullCurrentName() : getFullDefaultName();
                 Path path = Paths.get(Data.getFullDirName());
                 if (!Files.exists(path))
@@ -410,27 +404,27 @@ public class Data implements Serializable, Loggible {
     public static boolean detete(String fileName) {
         if (fileName.equalsIgnoreCase(defaultName))
             return false;
-        File file = new File(getFullDirName() + fileName + ".xml");
+        File file = new File(getFullAnyName(fileName));
         return file.delete();
     }
 
-    public static final String dirName = "data/";
-
     public static final String defaultName = "default";
 
-    public static String getFullDefaultName() {
+    private static final String dirName = "data/";
+
+    private static String getFullDefaultName() {
         return getFullDirName() + defaultName + ".xml";
     }
 
-    public static String getFullCurrentName() {
-        return Resources.getJarDirName() + Gongule.getProjectName() + ".xml";
+    private static String getFullCurrentName() {
+        return Resources.getJarDirName() + Gongule.projectName + ".xml";
     }
 
-    public static String getFullAnyName(String anyName) {
+    private static String getFullAnyName(String anyName) {
         return getFullDirName() + anyName + ".xml";
     }
 
-    public static String getFullDirName() {
+    private static String getFullDirName() {
         return Resources.getJarDirName() + dirName;
     }
 

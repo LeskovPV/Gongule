@@ -1,6 +1,6 @@
 package local.gongule;
 
-import local.gongule.tools.devices.CoolingRelay;
+import local.gongule.tools.relays.CoolingRelay;
 import local.gongule.tools.process.GongExecutor;
 import local.gongule.tools.process.GongSound;
 import local.gongule.utils.logging.Loggible;
@@ -24,9 +24,14 @@ public class Gongule implements Loggible {
         applyProperties();
         applyCongiguration();
         WebServer.start();
-        MainWindow.open(getProjectName());
+        MainWindow.open(projectName);
         GongExecutor.init();
     }
+
+    /**
+     * Project name is current (main) class name - Gongule
+     **/
+    public static final String projectName = MethodHandles.lookup().lookupClass().getSimpleName();
 
     /**
      * Project version
@@ -34,6 +39,8 @@ public class Gongule implements Loggible {
      * Real value assign from properties file in applyProperties method
      **/
     private static String projectVersion = "0.00";
+
+    private static String projectWebsite = "https://github.com/LeskovPV/Gongule";
 
     /**
      * Return project version
@@ -52,21 +59,11 @@ public class Gongule implements Loggible {
     }
 
     /**
-     * Return project name
-     * Project name is current (main) class name
-     **/
-    public static String getProjectName() {
-        return MethodHandles.lookup().lookupClass().getSimpleName();
-    }
-
-    /**
      * Return full project name with version
      **/
     public static String getFullName(){
-        return getProjectName() + "-" + getProjectVersion();
+        return projectName + "-" + getProjectVersion();
     }
-
-    private static String projectWebsite = "https://github.com/LeskovPV/Gongule";
 
     /**
      * Return project version
@@ -106,7 +103,7 @@ public class Gongule implements Loggible {
     private static void applyCongiguration(){
         ParsableProperties properties = new ParsableProperties();
         String jarCfgName = "cfg/pattern.cfg"; // default cfg-file in jar-package resources
-        String cfgFileName = getProjectName() + ".cfg"; // specific cfg-file in jar-directory
+        String cfgFileName = projectName + ".cfg"; // specific cfg-file in jar-directory
         Resources.getAsFile(jarCfgName, cfgFileName, false); // Extract cfg-file from jar-package to jar-directory
         try {
             FileInputStream inputStream = new FileInputStream(Resources.getJarDirName() + cfgFileName);
@@ -116,8 +113,10 @@ public class Gongule implements Loggible {
             return;
         }
         GongSound.setStrikesDelay(properties.getIntegerProperty("gong.strikes_delay"));
-        GongExecutor.setAdvanceTime(properties.getIntegerProperty("gong.advance_time"));
-        CoolingRelay.getInstance().setRelayTemperature(properties.getDoubleProperty("gong.cpu_temperature"));
+        CoolingRelay.getInstance().setTemperatures(
+            properties.getDoubleProperty("cpu.min_temperature"),
+            properties.getDoubleProperty("cpu.max_temperature")
+        );
         WebServer.setUseHttp(properties.getBooleanProperty("web.use_http"));
         WebServer.setHttpPort(properties.getIntegerProperty("web.http_port"));
         WebServer.setHttpsPort(properties.getIntegerProperty("web.https_port"));

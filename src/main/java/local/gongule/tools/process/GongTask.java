@@ -1,6 +1,7 @@
 package local.gongule.tools.process;
 
 import local.gongule.tools.data.Gong;
+import local.gongule.tools.relays.CoolingRelay;
 import local.gongule.utils.logging.Loggible;
 
 import java.util.TimerTask;
