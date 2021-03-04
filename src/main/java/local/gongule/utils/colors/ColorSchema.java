@@ -1,12 +1,12 @@
 package local.gongule.utils.colors;
 
-import local.gongule.tools.RuntimeConfiguration;
+import local.gongule.tools.ConfigFile;
 
 import java.awt.*;
 
 public class ColorSchema {
 
-    private static ColorSchema instance = new ColorSchema(RuntimeConfiguration.getInstance().get("BaseColor"));
+    private static ColorSchema instance = new ColorSchema(ConfigFile.getInstance().get("BaseColor"));
 
     static public ColorSchema getInstance() {
         return instance;

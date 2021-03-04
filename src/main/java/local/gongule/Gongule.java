@@ -1,14 +1,11 @@
 package local.gongule;
 
-import local.gongule.tools.relays.CoolingRelay;
 import local.gongule.tools.process.GongExecutor;
-import local.gongule.tools.process.GongSound;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.resources.Resources;
 import local.gongule.utils.ParsableProperties;
 import local.gongule.webserver.WebServer;
 import local.gongule.windows.MainWindow;
-import java.io.FileInputStream;
 import java.lang.invoke.MethodHandles;
 
 /**
@@ -20,9 +17,9 @@ public class Gongule implements Loggible {
      *  Point of entry
      */
     public static void main(String[] args) {
+        logger.warn("________________________________");
         logger.warn("Gongule is started");
         applyProperties();
-        applyCongiguration();
         WebServer.start();
         MainWindow.open(projectName);
         GongExecutor.init();
@@ -61,7 +58,7 @@ public class Gongule implements Loggible {
     /**
      * Return full project name with version
      **/
-    public static String getFullName(){
+    public static String getFullProjectName(){
         return projectName + "-" + getProjectVersion();
     }
 
@@ -94,37 +91,15 @@ public class Gongule implements Loggible {
         }
         setProjectVersion(properties.getProperty("gongule.version"));
         setProjectWebsite(properties.getProperty("gongule.website"));
+
+        WebServer.setUseHttp(properties.getBooleanProperty("http.use"));
+        WebServer.setHttpPort(properties.getIntegerProperty("http.port"));
+        WebServer.setHttpsPort(properties.getIntegerProperty("https.port"));
+        WebServer.setKeyStore(properties.getProperty("keystore.file"));
+        WebServer.setStorePassword(properties.getProperty("keystore.password"));
+        WebServer.setManagerPassword(properties.getProperty("keystore.manager"));
+
         logger.info("Properties is appled");
     }
-
-    /**
-     * Load congigure from cfg-file
-     */
-    private static void applyCongiguration(){
-        ParsableProperties properties = new ParsableProperties();
-        String jarCfgName = "cfg/pattern.cfg"; // default cfg-file in jar-package resources
-        String cfgFileName = projectName + ".cfg"; // specific cfg-file in jar-directory
-        Resources.getAsFile(jarCfgName, cfgFileName, false); // Extract cfg-file from jar-package to jar-directory
-        try {
-            FileInputStream inputStream = new FileInputStream(Resources.getJarDirName() + cfgFileName);
-            properties.load(inputStream);
-        }catch (Exception exception){
-            logger.error("Impossible open config file ({}): {}", Resources.getJarDirName() + cfgFileName, exception);
-            return;
-        }
-        GongSound.setStrikesDelay(properties.getIntegerProperty("gong.strikes_delay"));
-        CoolingRelay.getInstance().setTemperatures(
-            properties.getDoubleProperty("cpu.min_temperature"),
-            properties.getDoubleProperty("cpu.max_temperature")
-        );
-        WebServer.setUseHttp(properties.getBooleanProperty("web.use_http"));
-        WebServer.setHttpPort(properties.getIntegerProperty("web.http_port"));
-        WebServer.setHttpsPort(properties.getIntegerProperty("web.https_port"));
-        WebServer.setKeyStore(properties.getProperty("web.key_store"));
-        WebServer.setStorePassword(properties.getProperty("web.store_password"));
-        WebServer.setManagerPassword(properties.getProperty("web.manager_password"));
-        logger.info("Configuration is appled");
-    }
-
 
 }

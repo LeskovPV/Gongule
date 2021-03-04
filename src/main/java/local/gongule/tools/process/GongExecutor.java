@@ -1,6 +1,6 @@
 package local.gongule.tools.process;
 
-import local.gongule.tools.RuntimeConfiguration;
+import local.gongule.tools.ConfigFile;
 import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Day;
 import local.gongule.tools.data.Gong;
@@ -20,7 +20,7 @@ public class GongExecutor implements Loggible {
     static private ScheduledExecutorService service = null;
 
     static public void init() {
-        if (RuntimeConfiguration.getInstance().get("processIsPaused", "false").equalsIgnoreCase("true"))
+        if (ConfigFile.getInstance().get("processIsPaused", "false").equalsIgnoreCase("true"))
             pause();
         else
             run();
@@ -48,21 +48,21 @@ public class GongExecutor implements Loggible {
             service = Executors.newScheduledThreadPool(todayEvents.size());
             for (Day.Event realEvent : todayEvents) {
                 Gong gong = data.getGong(realEvent.gongIndex);
-                GongTask gongTask = new GongTask(gong);
+                GongTask gongTask = new GongTask(gong, realEvent.name);
                 int seconds = realEvent.time.toSecondOfDay() - now.toSecondOfDay();
                 service.schedule(gongTask, seconds, TimeUnit.SECONDS);
             }
         }
-        RuntimeConfiguration.getInstance().set("processIsPaused", "false");
+        ConfigFile.getInstance().set("processIsPaused", "false");
         logger.warn("Process ran");
     }
 
     static public void pause() {
         if (service == null) return;
-        GongSound.play(null);
+        GongSound.play(null, null);
         service.shutdownNow();
         service = null;
-        RuntimeConfiguration.getInstance().set("processIsPaused", "true");
+        ConfigFile.getInstance().set("processIsPaused", "true");
         logger.warn("Process paused");
     }
 

@@ -8,27 +8,26 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Properties;
 
-public class RuntimeConfiguration {
+public class ConfigFile {
 
-    static private String fileName = Resources.getJarDirName() + Gongule.projectName + ".tmp";
+    static private String fileName = Resources.getJarDirName() + Gongule.projectName + ".cfg";
 
-    static private RuntimeConfiguration instance = new RuntimeConfiguration();
+    static private ConfigFile instance = new ConfigFile();
 
-    static public RuntimeConfiguration getInstance() {
+    static public ConfigFile getInstance() {
         return instance;
     }
-
 
     private Properties properties = new Properties();
 
     /**
      * Constructor
      */
-    private RuntimeConfiguration() {}
+    private ConfigFile() {}
 
     private void save(String comments) {
         try {
-            properties.store(new FileWriter(fileName), "");
+            properties.store(new FileWriter(fileName), comments);
         } catch (IOException exception) { }
     }
 

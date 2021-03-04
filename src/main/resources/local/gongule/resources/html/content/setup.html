@@ -25,6 +25,10 @@
                             </th>
                             <th>
                             </th>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
                         </tr>
                         ${gong_rows}
                         <tr>
@@ -42,6 +46,38 @@
                             <td>
                             </td>
                             <td width='100%'>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <!--tr style='display:${raspbian_display}'-->
+                        <tr style='display:${raspbian_display}'>
+                            <td colspan='5' align='right'>
+                                Delay between gong strikes:
+                            </td>
+                            <td>
+                                <input type='number' name='gong_delay' value='${gong_delay}' min='0' max='30' size='4'/>
+                            </td>
+                            <td>
+                                <button name='set_delay' title='Set delay' onclick='setAction(this.name)'>
+                                    <img src='resource?png/apply.png' valign='top'/>
+                                </button>
+                            </td>
+                        </tr>
+                        <!--tr style='display:${raspbian_display}'-->
+                        <tr style='display:${raspbian_display}'>
+                            <td colspan='5' align='right'>
+                                Amplifier power turn-on advance time:
+                            </td>
+                            <td>
+                                <input type='number' name='advance_time' value='${advance_time}' min='0' max='99' size='4' title='Audio-amplifier power turn-on advance time in seconds'/>
+                            </td>
+                            <td>
+                                <button name='set_advance' title='Set advance time' onclick='setAction(this.name)'>
+                                    <img src='resource?png/apply.png' valign='top'/>
+                                </button>
                             </td>
                         </tr>
                     </table>
@@ -68,15 +104,13 @@
                             <td>
                                 <label>Color:</label>
                             </td>
-                            <td colspan='2' width='100%'>
+                            <td>
                                 <input type='color' name='selected_color' value='${color_value}' onchange='setAction("change_color"); this.form.submit()' title='Choose base interface color'>
                             </td>
-                        </tr>
-                        <tr>
-                            <td align='right'>
+                            <td align='right' width='35%'>
                                 <label>Font:</label>
                             </td>
-                            <td width='35%'>
+                            <td width='65%'>
                                 <select name='selected_font' onchange='setAction("change_font"); this.form.submit()' title='Choose base interface font'>
                                     ${font_options}
                                 </select>
@@ -162,61 +196,7 @@
                 <td colspan='2'>
                     <table class='table data'>
                         <tr>
-                            <td align='right'>
-                                <nobr>
-                                    Date:
-                                </nobr>
-                            </td>
-                            <td>
-                                <input type='text' name='date_value' value='${date_value}' size='${datetime_size}'/>
-                            </td>
-                            <td>
-                                <button name='set_date' title='Set date' onclick='setAction(this.name)'>
-                                    <img src='resource?png/apply.png' valign='top'/>
-                                </button>
-                            </td>
                             <td width='100%'>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align='right'>
-                                <nobr>
-                                    Time:
-                                </nobr>
-                            </td>
-                            <td>
-                                <input type='text' name='time_value' value='${time_value}' size='${datetime_size}'/>
-                            </td>
-                            <td>
-                                <button name='set_time' title='Set time' onclick='setAction(this.name)'>
-                                    <img src='resource?png/apply.png' valign='top'/>
-                                </button>
-                            </td>
-                            <td width='100%'>
-                            </td>
-                        </tr>
-                        <tr style='display:${advance_display}'>
-                            <td align='right'>
-                                <nobr>Advance time:</nobr>
-                            </td>
-                            <td>
-                                <nobr>
-                                    <input type='number' name='advance_time' value='${advance_time}' min='0' max='99' size='5' title='A power turn-on advance time in seconds (for audio-amplifier)'/>
-                                    sec
-                                </nobr>
-                            </td>
-                            <td>
-                                <button name='set_advance' title='Set advance time' onclick='setAction(this.name)'>
-                                    <img src='resource?png/apply.png' valign='top'/>
-                                </button>
-                            </td>
-                            <td>
-                            </td>
-                            <td width='100%'>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
                                 <button type="reset" title='Download system log file' onclick='location.href="log"'>
                                     <nobr>
                                         <img src='resource?png/log.png' valign='top'/>
@@ -224,7 +204,58 @@
                                     </nobr>
                                 </button>
                             </td>
-                            <td colspan='2' align='right'>
+                            <td align='right'>
+                                <nobr>
+                                    Date:
+                                </nobr>
+                            </td>
+                            <td>
+                                <input type='text' name='date_value' value='${date_value}' size='12'/>
+                            </td>
+                            <td>
+                                <button name='set_date' title='Set date' onclick='setAction(this.name)'>
+                                    <img src='resource?png/apply.png' valign='top'/>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width='100%'>
+                            </td>
+                            <td align='right'>
+                                <nobr>
+                                    Time:
+                                </nobr>
+                            </td>
+                            <td>
+                                <input type='text' name='time_value' value='${time_value}' size='12'/>
+                            </td>
+                            <td>
+                                <button name='set_time' title='Set time' onclick='setAction(this.name)'>
+                                    <img src='resource?png/apply.png' valign='top'/>
+                                </button>
+                            </td>
+                        </tr>
+                        <!--tr style='display:${raspbian_display}'-->
+                        <tr style='display:${raspbian_display}'>
+                            <td align='right' colspan='2'>
+                                <nobr>Fan relay temperature range:</nobr>
+                            </td>
+                            <td>
+                                <nobr>
+                                    <input type='number' name='min_temperature' value='${min_temperature}' min='50' max='80' size='4' title='Fan relay turn-off temperature'/>
+                                    -
+                                    <input type='number' name='max_temperature' value='${max_temperature}' min='50' max='80' size='4' title='Fan relay turn-on temperature'/>
+                                </nobr>
+                            </td>
+                            <td>
+                                <button name='set_temperatures' title='Set temperature range for fan relay' onclick='setAction(this.name)'>
+                                    <img src='resource?png/apply.png' valign='top'/>
+                                </button>
+                            </td>
+                        </tr>
+                        <!--tr style='display:${raspbian_display}'-->
+                        <tr style='display:${raspbian_display}'>
+                            <td>
                                 <button name='sys_shutdown' title='System shutdown' onclick='setAction(this.name)'>
                                     <nobr>
                                         <img src='resource?png/shutdown.png' valign='top'/>
@@ -232,7 +263,13 @@
                                     </nobr>
                                 </button>
                             </td>
-                            <td width='100%'>
+                            <td align='right'>
+                                <nobr>
+                                    CPU temperature:
+                                </nobr>
+                            </td>
+                            <td colspan='2'>
+                                ${cpu_temperature}°C
                             </td>
                         </tr>
                     </table>

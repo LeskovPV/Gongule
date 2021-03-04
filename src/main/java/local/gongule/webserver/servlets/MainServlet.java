@@ -46,7 +46,7 @@ public class MainServlet extends HttpServlet implements TemplateFillable {
         pageVariables.put("page_name", selectedPageType.getName());
         pageVariables.put("page_title", selectedPageType.getTitle());
         pageVariables.put("page_content", content.get(selectedPageType).get(request));
-        pageVariables.put("link_name", Gongule.getFullName());
+        pageVariables.put("link_name", Gongule.getFullProjectName());
         pageVariables.put("website_link", Gongule.getProjectWebsite());
         pageVariables.put("deep_color", ColorSchema.getInstance().getDeepColor());
         pageVariables.put("process_status", GongExecutor.processIsPaused() ? "pause" : "run");

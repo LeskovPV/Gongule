@@ -1,8 +1,5 @@
 package local.gongule.tools.data;
 
-import local.gongule.Gongule;
-import local.gongule.tools.process.GongSound;
-import local.gongule.utils.Sound;
 import local.gongule.utils.logging.Loggible;
 
 import java.io.Serializable;

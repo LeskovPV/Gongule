@@ -2,6 +2,7 @@ package local.gongule.tools.relays;
 
 import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.RaspiPin;
+import local.gongule.tools.ConfigFile;
 import local.gongule.utils.system.SystemUtils;
 
 /**
@@ -22,11 +23,21 @@ public class CoolingRelay extends Relay {
 
     private int measureDelay = 30;
 
-    private double maxTemperature;
+    private Double maxTemperature = null;
 
-    private double minTemperature;
+    public double getMinTemperature() {
+        return minTemperature;
+    }
+
+    private Double minTemperature = null;
+
+    public double getMaxTemperature() {
+        return maxTemperature;
+    }
 
     public void setTemperatures(Double min, Double max) {
+        Double oldMin = minTemperature;
+        Double oldMax = maxTemperature;
         if (min != null)
             minTemperature = min;
         if (max != null)
@@ -35,6 +46,16 @@ public class CoolingRelay extends Relay {
             double temperature = maxTemperature;
             maxTemperature = minTemperature;
             minTemperature = temperature;
+        }
+        if (!minTemperature.equals(oldMin)) {
+            ConfigFile.getInstance().set("minTemperature", String.valueOf(minTemperature));
+            if (oldMin != null)
+                logger.info("Fan relay turn-off temperature is changed from {} to {}", oldMin, minTemperature);
+        }
+        if (!maxTemperature.equals(oldMax)) {
+            ConfigFile.getInstance().set("maxTemperature", String.valueOf(maxTemperature));
+            if (oldMin != null)
+                logger.info("Fan relay turn-on temperature is changed from {} to {}", oldMax, maxTemperature);
         }
     }
 
@@ -48,11 +69,11 @@ public class CoolingRelay extends Relay {
             double temperature = SystemUtils.getCPUTemperature((maxTemperature + minTemperature)/2);
             if ((temperature > maxTemperature) && (value)){
                 set(false);
-                logger.trace("Temperature = {}; relay = {}", temperature, value);
+                logger.trace("Cooling relay turn-on. T = {}", temperature);
             }
             if ((temperature < minTemperature) && (!value)) {
                 set(true);
-                logger.trace("Temperature = {}; relay = {}", temperature, value);
+                logger.trace("Cooling relay turn-off. T = {}", temperature);
             }
             //logger.trace("Temperature = {}", relayTemperature);
         }
@@ -63,6 +84,8 @@ public class CoolingRelay extends Relay {
      */
     private CoolingRelay(Pin pin, double minTemperature, double maxTemperature) {
         super("Cooling relay", pin, true);
+        minTemperature = Double.parseDouble(ConfigFile.getInstance().get("minTemperature", String.valueOf(minTemperature)));
+        maxTemperature = Double.parseDouble(ConfigFile.getInstance().get("maxTemperature", String.valueOf(maxTemperature)));
         setTemperatures(minTemperature, maxTemperature);
         if (SystemUtils.isRaspbian)
             coolingThread.start();

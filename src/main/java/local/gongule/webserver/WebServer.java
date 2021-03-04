@@ -1,6 +1,6 @@
 package local.gongule.webserver;
 
-import local.gongule.tools.RuntimeConfiguration;
+import local.gongule.tools.ConfigFile;
 import local.gongule.webserver.servlets.LogServlet;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.FontFamily;
@@ -79,7 +79,7 @@ public class WebServer implements Loggible {
     //private static ColorSchema сolorSchema = new ColorSchema(RuntimeConfiguration.getInstance().get("BaseColor"));
 
     public static void setBaseColor(String baseColor) {
-        RuntimeConfiguration.getInstance().set("BaseColor", baseColor);
+        ConfigFile.getInstance().set("BaseColor", baseColor);
         ColorSchema.getInstance().setBaseColor(baseColor);
     }
 
@@ -92,7 +92,7 @@ public class WebServer implements Loggible {
 
     public static int getFontIndex() {
         try {
-            fontIndex = Integer.valueOf(RuntimeConfiguration.getInstance().get("FontIndex"));
+            fontIndex = Integer.valueOf(ConfigFile.getInstance().get("FontIndex"));
         } catch (Exception exception) {
             fontIndex = 0;
         }
@@ -104,7 +104,7 @@ public class WebServer implements Loggible {
     }
 
     public static void setFontIndex(int index) {
-        RuntimeConfiguration.getInstance().set("FontIndex", String.valueOf(index));
+        ConfigFile.getInstance().set("FontIndex", String.valueOf(index));
         fontIndex = index;
     }
 

@@ -9,6 +9,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.chrono.ChronoLocalDate;
 import java.util.*;
 import java.time.*;
 
@@ -64,9 +65,9 @@ public class Data implements Serializable, Loggible {
     public int getCurrentDayNumber(int currentNoteIndex) {
         if (currentNoteIndex < 0)
             return -1;
-        LocalDate today = LocalDate.now();
-        Note note = calendar.get(currentNoteIndex);
-        return today.compareTo(note.date);
+        ChronoLocalDate today = LocalDate.now();
+        ChronoLocalDate begin = calendar.get(currentNoteIndex).date;
+        return today.compareTo(begin);
     }
 
     public int getCurrentDayIndex() {

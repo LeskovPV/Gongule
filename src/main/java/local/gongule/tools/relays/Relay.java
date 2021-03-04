@@ -28,7 +28,7 @@ abstract public class Relay implements Loggible {
     public boolean set(boolean value) {
         if (this.value == value) return value;
         if (!SystemUtils.isRaspbian) return this.value;
-        logger.trace("{} = {}", gpioPin.getName(), value);
+        //logger.trace("{} = {}", gpioPin.getName(), value);
         if (value)
             gpioPin.high();
         else

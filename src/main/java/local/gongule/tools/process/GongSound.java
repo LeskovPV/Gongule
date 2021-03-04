@@ -2,7 +2,6 @@ package local.gongule.tools.process;
 
 import local.gongule.Gongule;
 import local.gongule.tools.data.Gong;
-import local.gongule.tools.relays.CoolingRelay;
 import local.gongule.tools.relays.PowerRelay;
 import local.gongule.utils.Sound;
 import local.gongule.utils.logging.Loggible;
@@ -14,11 +13,14 @@ public class GongSound extends Thread implements Loggible {
 
     private Gong gong;
 
+    private String eventName;
+
     private boolean useAdvanceTime;
 
-    private GongSound(Gong gong, boolean useAdvanceTime){
+    private GongSound(Gong gong, String eventName, boolean useAdvanceTime){
         this.gong = gong;
         this.useAdvanceTime = useAdvanceTime;
+        this.eventName = eventName;
         start();
     }
 
@@ -34,26 +36,21 @@ public class GongSound extends Thread implements Loggible {
 
     @Override
     public void run() {
-        logger.info("Begin of {} gong", gong.name);
-        if (useAdvanceTime) {
-            PowerRelay.getInstance().set(true);
+        PowerRelay.getInstance().set(true);
+        if (useAdvanceTime)
             try {
                 sleep(GongExecutor.getAdvanceTime() * 1000);
             } catch (InterruptedException exception) {
-                logger.info("Waked up from advance time");
+                logger.trace("Waked up from advance time");
             }
-        } else {
-            PowerRelay.getInstance().set(true);
-        }
+        logger.info("{}. {} gong is playing", eventName, gong.name);
         for (int i = 0; i < gong.amount; i++) {
-            logger.info("Paying № {} of {} gong", i, gong.name);
             sound.play(true);
             sound.join();
-            logger.info("End of paying {} gong", gong.name);
             try {
                 sleep(strikesDelay * 1000);
             } catch (InterruptedException exception) {
-                logger.info("Waked up from strikes delay");
+                logger.trace("Waked up from strikes delay");
                 break;
             }
         }
@@ -78,13 +75,13 @@ public class GongSound extends Thread implements Loggible {
 
     private static GongSound instance;
 
-    public static void play(Gong gong) {
-        play(gong, true);
+    public static void play(Gong gong, String eventName) {
+        play(gong, eventName,true);
     }
 
-    public static void play(Gong gong, boolean useAdvanceTime) {
+    public static void play(Gong gong, String eventName, boolean useAdvanceTime) {
         if (instance != null) instance.cancel();
-        if (gong != null) instance = new GongSound(gong, useAdvanceTime);
+        if (gong != null) instance = new GongSound(gong, eventName, useAdvanceTime);
     }
 
     private static File gongFile = null;

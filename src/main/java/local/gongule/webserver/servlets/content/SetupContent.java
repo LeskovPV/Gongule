@@ -2,6 +2,7 @@ package local.gongule.webserver.servlets.content;
 
 import local.gongule.tools.process.GongExecutor;
 import local.gongule.tools.process.GongSound;
+import local.gongule.tools.relays.CoolingRelay;
 import local.gongule.utils.FontFamily;
 import local.gongule.tools.data.Data;
 import local.gongule.tools.data.Gong;
@@ -29,9 +30,11 @@ public class SetupContent extends Content{
         actions.put("load_configuration", (HttpServletRequest request) -> loadConfiguration(request));
         actions.put("delete_configuration", (HttpServletRequest request) -> deleteConfiguration(request));
         actions.put("sys_shutdown", (HttpServletRequest request) -> shutdownSystem(request));
+        actions.put("set_delay", (HttpServletRequest request) -> setDelay(request));
+        actions.put("set_advance", (HttpServletRequest request) -> setAdvance(request));
         actions.put("set_time", (HttpServletRequest request) -> setTime(request));
         actions.put("set_date", (HttpServletRequest request) -> setDate(request));
-        actions.put("set_advance", (HttpServletRequest request) -> setAdvance(request));
+        actions.put("set_temperatures", (HttpServletRequest request) -> setTemperatures(request));
     }
 
     public String get(HttpServletRequest request) {
@@ -70,9 +73,12 @@ public class SetupContent extends Content{
         contentVariables.put("configuration_options", options);
         contentVariables.put("time_value", LocalTime.now().format(TimeFormatter.get(true)));
         contentVariables.put("date_value", LocalDate.now().format(DateFormatter.get()));
+        contentVariables.put("gong_delay", GongSound.getStrikesDelay());
         contentVariables.put("advance_time", GongExecutor.getAdvanceTime());
-        contentVariables.put("advance_display", SystemUtils.isRaspbian ? "table-row" : "none");
-        contentVariables.put("datetime_size", TimeFormatter.getSize(true) > DateFormatter.getSize() ? TimeFormatter.getSize(true) : DateFormatter.getSize());
+        contentVariables.put("min_temperature", CoolingRelay.getInstance().getMinTemperature());
+        contentVariables.put("max_temperature", CoolingRelay.getInstance().getMaxTemperature());
+        contentVariables.put("cpu_temperature",SystemUtils.getCPUTemperature(0));
+        contentVariables.put("raspbian_display", SystemUtils.isRaspbian ? "table-row" : "table-row");
         return super.getFromTemplate(contentVariables);
     }
 
@@ -92,7 +98,7 @@ public class SetupContent extends Content{
     private boolean playGong(HttpServletRequest request) {
         try {
             Gong gong = Data.getInstance().getGong(Integer.valueOf(request.getParameter("play_gong")));
-            GongSound.play(gong ,false);
+            GongSound.play(gong, "The testing",false);
         } catch (Exception exception) {
             return false;
         }
@@ -157,6 +163,24 @@ public class SetupContent extends Content{
         return true;
     }
 
+    private boolean setDelay(HttpServletRequest request) {
+        try {
+            GongSound.setStrikesDelay(Integer.valueOf(request.getParameter("gong_delay")));
+        } catch (Exception exception) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean setAdvance(HttpServletRequest request) {
+        try {
+            GongExecutor.setAdvanceTime(Integer.valueOf(request.getParameter("advance_time")));
+        } catch (Exception exception) {
+            return false;
+        }
+        return true;
+    }
+
     private boolean setTime(HttpServletRequest request) {
         LocalTime time;
         try {
@@ -184,9 +208,12 @@ public class SetupContent extends Content{
         return true;
     }
 
-    private boolean setAdvance(HttpServletRequest request) {
+    private boolean setTemperatures(HttpServletRequest request) {
         try {
-            GongExecutor.setAdvanceTime(Integer.valueOf(request.getParameter("advance_time")));
+            CoolingRelay.getInstance().setTemperatures(
+                    Double.valueOf(request.getParameter("min_temperature")),
+                    Double.valueOf(request.getParameter("max_temperature"))
+            );
         } catch (Exception exception) {
             return false;
         }
