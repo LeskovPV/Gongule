@@ -15,4 +15,11 @@ public class PowerRelay extends Relay {
         super("Power relay", pin, false);
     }
 
+    @Override
+    public boolean set(boolean value) {
+        if (this.value == value) return value;
+        logger.info("Audio-amplifier power turn-{}", value ? "on": "off");
+        return super.set(value);
+    }
+
 }

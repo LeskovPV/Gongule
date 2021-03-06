@@ -1,5 +1,5 @@
 # Project properties
-gongule.version = 0.92
+gongule.version = 0.93
 gongule.website = https://github.com/LeskovPV/Gongule
 
 # Enable/disable http-server (https - always on):

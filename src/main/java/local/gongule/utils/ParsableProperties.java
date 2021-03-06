@@ -92,9 +92,19 @@ public class ParsableProperties extends Properties {
         for(String value: values)
             if (!value.trim().isEmpty())
                 result.add(value.trim());
+
         return result.toArray(new String[result.size()]);
     }
 
+    public void setIntegerProperty(String key, Integer value) {
+        super.setProperty(key, (value == null) ? "" : value.toString());
+    }
 
+    public void setDoubleProperty(String key, Double value) {
+        super.setProperty(key, (value == null) ? "" : value.toString());
+    }
 
+    public void setBooleanProperty(String key, Boolean value) {
+        super.setProperty(key, (value == null) ? "" : value.toString());
+    }
 }

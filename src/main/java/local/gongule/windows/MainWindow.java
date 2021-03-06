@@ -31,7 +31,7 @@ public class MainWindow extends JFrame implements Loggible {
         if (instance != null)
             return;
         instance = new MainWindow(windowTilte);
-        logger.info("Open window");
+        logger.info("Window is opened");
     }
 
     /*

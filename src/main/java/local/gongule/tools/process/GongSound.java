@@ -1,6 +1,7 @@
 package local.gongule.tools.process;
 
 import local.gongule.Gongule;
+import local.gongule.tools.ConfigFile;
 import local.gongule.tools.data.Gong;
 import local.gongule.tools.relays.PowerRelay;
 import local.gongule.utils.Sound;
@@ -60,15 +61,17 @@ public class GongSound extends Thread implements Loggible {
     /**
      * Delay between gongs in seconds for multiple strikes
      */
-    private static int strikesDelay = 3;
+    private static int strikesDelay = ConfigFile.getInstance().get("strikesDelay", 3);
 
     public static int getStrikesDelay() {
         return strikesDelay;
     }
 
     public static void setStrikesDelay(Integer strikesDelay) {
-        if (strikesDelay != null)
-            GongSound.strikesDelay = strikesDelay;
+        if (strikesDelay == null) return;
+        logger.info("Delay between gong strikes is changed from {} to {} second(s)", GongSound.strikesDelay, strikesDelay);
+        GongSound.strikesDelay = strikesDelay;
+        ConfigFile.getInstance().set("strikesDelay", strikesDelay);
     }
 
     private static final Sound sound = new Sound(getGongFile().getPath());

@@ -48,12 +48,12 @@ public class CoolingRelay extends Relay {
             minTemperature = temperature;
         }
         if (!minTemperature.equals(oldMin)) {
-            ConfigFile.getInstance().set("minTemperature", String.valueOf(minTemperature));
+            ConfigFile.getInstance().set("minTemperature", minTemperature);
             if (oldMin != null)
                 logger.info("Fan relay turn-off temperature is changed from {} to {}", oldMin, minTemperature);
         }
         if (!maxTemperature.equals(oldMax)) {
-            ConfigFile.getInstance().set("maxTemperature", String.valueOf(maxTemperature));
+            ConfigFile.getInstance().set("maxTemperature", maxTemperature);
             if (oldMin != null)
                 logger.info("Fan relay turn-on temperature is changed from {} to {}", oldMax, maxTemperature);
         }
@@ -69,11 +69,11 @@ public class CoolingRelay extends Relay {
             double temperature = SystemUtils.getCPUTemperature((maxTemperature + minTemperature)/2);
             if ((temperature > maxTemperature) && (value)){
                 set(false);
-                logger.trace("Cooling relay turn-on. T = {}", temperature);
+                logger.info("Cooling relay turn-on. CPU temperature is {}°C", temperature);
             }
             if ((temperature < minTemperature) && (!value)) {
                 set(true);
-                logger.trace("Cooling relay turn-off. T = {}", temperature);
+                logger.trace("Cooling relay turn-off. CPU temperature is {}°C", temperature);
             }
             //logger.trace("Temperature = {}", relayTemperature);
         }
@@ -84,8 +84,8 @@ public class CoolingRelay extends Relay {
      */
     private CoolingRelay(Pin pin, double minTemperature, double maxTemperature) {
         super("Cooling relay", pin, true);
-        minTemperature = Double.parseDouble(ConfigFile.getInstance().get("minTemperature", String.valueOf(minTemperature)));
-        maxTemperature = Double.parseDouble(ConfigFile.getInstance().get("maxTemperature", String.valueOf(maxTemperature)));
+        minTemperature = ConfigFile.getInstance().get("minTemperature", minTemperature);
+        maxTemperature = ConfigFile.getInstance().get("maxTemperature", maxTemperature);
         setTemperatures(minTemperature, maxTemperature);
         if (SystemUtils.isRaspbian)
             coolingThread.start();

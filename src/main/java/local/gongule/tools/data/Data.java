@@ -2,6 +2,7 @@ package local.gongule.tools.data;
 
 import com.thoughtworks.xstream.XStream;
 import local.gongule.Gongule;
+import local.gongule.utils.formatter.DateFormatter;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.formatter.TimeFunctions;
 import local.gongule.utils.resources.Resources;
@@ -108,10 +109,15 @@ public class Data implements Serializable, Loggible {
         }
         calendar.add(newNoteIndex, newNote);
         save();
+        logger.info("Added '{}' into calendar at {}", newNote.getCourse().name, newNote.date.format(DateFormatter.get()));
         return true;
     }
 
     public boolean removeCalendarNote(int noteIndex) {
+        if (noteIndex < 0) return false;
+        if (noteIndex > calendar.size() - 1) return false;
+        Note note = calendar.get(noteIndex);
+        logger.info("Removed '{}' (at {}) from calendar", note.getCourse().name, note.date.format(DateFormatter.get()));
         calendar.remove(noteIndex);
         save();
         return true;
@@ -141,10 +147,13 @@ public class Data implements Serializable, Loggible {
                 return false;
         courses.add(new Course(name.trim()));
         save();
+        logger.info("Created course '{}'", name.trim());
         return true;
     }
 
     public boolean courseDelete(int courseIndex) {
+        if (courseIndex < 0) return false;
+        if (courseIndex > courses.size() - 1) return false;
         List<Integer> indexes = new ArrayList();
         for (Note note: calendar) {
             if (note.courseIndex == courseIndex)
@@ -155,6 +164,7 @@ public class Data implements Serializable, Loggible {
         for (int index = 0; index < calendar.size(); index++)
             if (calendar.get(index).courseIndex > courseIndex)
                 calendar.get(index).courseIndex = calendar.get(index).courseIndex - 1;
+        logger.info("Deleted course '{}'", courses.get(courseIndex).name);
         courses.remove(courseIndex);
         save();
         return true;

@@ -20,7 +20,7 @@ public class GongExecutor implements Loggible {
     static private ScheduledExecutorService service = null;
 
     static public void init() {
-        if (ConfigFile.getInstance().get("processIsPaused", "false").equalsIgnoreCase("true"))
+        if (ConfigFile.getInstance().get("processIsPaused", true))
             pause();
         else
             run();
@@ -32,6 +32,10 @@ public class GongExecutor implements Loggible {
     }
 
     static public void run() {
+        run(true);
+    }
+
+    synchronized static public void run(boolean withLog) {
         Data data = Data.getInstance();
         int todayIndex = data.getCurrentDayIndex();
         if (todayIndex < 0) service = Executors.newScheduledThreadPool(0); else {
@@ -53,23 +57,31 @@ public class GongExecutor implements Loggible {
                 service.schedule(gongTask, seconds, TimeUnit.SECONDS);
             }
         }
-        ConfigFile.getInstance().set("processIsPaused", "false");
-        logger.warn("Process ran");
+        ConfigFile.getInstance().set("processIsPaused", false);
+        if (withLog) logger.warn("Process is ran");
     }
 
     static public void pause() {
+        pause(true);
+    }
+
+    synchronized static public void pause(boolean withLog) {
         if (service == null) return;
         GongSound.play(null, null);
         service.shutdownNow();
         service = null;
-        ConfigFile.getInstance().set("processIsPaused", "true");
-        logger.warn("Process paused");
+        ConfigFile.getInstance().set("processIsPaused", true);
+        if (withLog) logger.warn("Process is paused");
+    }
+    static public void reset() {
+        reset(true);
     }
 
-    static public void reset() {
+    static public void reset(boolean withLog) {
         boolean isRun = (service != null);
-        pause();
-        if(isRun) run();
+        pause(false);
+        if(isRun) run(false);
+        if (withLog) logger.info("Gong schedule reset");
     }
 
     private static Timer midnightTimer;
@@ -82,8 +94,8 @@ public class GongExecutor implements Loggible {
         midnightTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                logger.trace("Scheduling on new day (at midnight)");
-                reset();
+                reset(false);
+                logger.info("Scheduling on new day (at midnight)");
             }
         }, delay, period);
     }
@@ -91,14 +103,16 @@ public class GongExecutor implements Loggible {
     /**
      * A power turn-on advance time in seconds (for audio-amplifier)
      */
-    private static int advanceTime = 20;
+    private static int advanceTime = ConfigFile.getInstance().get("advanceTime", 20);
 
     public static int getAdvanceTime() {
         return SystemUtils.isRaspbian ? advanceTime : 0;
     }
 
     public static void setAdvanceTime(int advanceTime) {
+        logger.info("Amplifier power turn-on advance time is changed from {} to {} second(s)", GongExecutor.advanceTime, advanceTime);
         GongExecutor.advanceTime = advanceTime;
+        ConfigFile.getInstance().set("advanceTime", advanceTime);
         if (SystemUtils.isRaspbian) reset();
     }
 

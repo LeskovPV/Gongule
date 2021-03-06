@@ -4,7 +4,7 @@
     --deep_color: ${deep_color};
     --text_color: ${text_color};
     --half_color: ${half_color};
-    --font_family: ${font_family};
+    --font_family: '${font_family}';
     --border_radius: 4px;
 }
 

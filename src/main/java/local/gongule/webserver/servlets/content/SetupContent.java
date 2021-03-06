@@ -60,7 +60,6 @@ public class SetupContent extends Content{
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
         contentVariables.put("font_options", options);
-        // logger.info(file);
         options = "";
         List<String> files = Data.getFiles();
         for(String file: files) {
@@ -71,14 +70,15 @@ public class SetupContent extends Content{
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
         contentVariables.put("configuration_options", options);
+        contentVariables.put("strikes_delay", GongSound.getStrikesDelay());
+        contentVariables.put("advance_time", GongExecutor.getAdvanceTime());
         contentVariables.put("time_value", LocalTime.now().format(TimeFormatter.get(true)));
         contentVariables.put("date_value", LocalDate.now().format(DateFormatter.get()));
-        contentVariables.put("gong_delay", GongSound.getStrikesDelay());
-        contentVariables.put("advance_time", GongExecutor.getAdvanceTime());
         contentVariables.put("min_temperature", CoolingRelay.getInstance().getMinTemperature());
         contentVariables.put("max_temperature", CoolingRelay.getInstance().getMaxTemperature());
-        contentVariables.put("cpu_temperature",SystemUtils.getCPUTemperature(0));
+        contentVariables.put("cpu_temperature",SystemUtils.getCPUTemperature(55));
         contentVariables.put("raspbian_display", SystemUtils.isRaspbian ? "table-row" : "table-row");
+        contentVariables.put("half_color", ColorSchema.getInstance().getHalfColor());
         return super.getFromTemplate(contentVariables);
     }
 
@@ -165,7 +165,7 @@ public class SetupContent extends Content{
 
     private boolean setDelay(HttpServletRequest request) {
         try {
-            GongSound.setStrikesDelay(Integer.valueOf(request.getParameter("gong_delay")));
+            GongSound.setStrikesDelay(Integer.valueOf(request.getParameter("strikes_delay")));
         } catch (Exception exception) {
             return false;
         }

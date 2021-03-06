@@ -21,7 +21,7 @@ public class Gongule implements Loggible {
         logger.warn("Gongule is started");
         applyProperties();
         WebServer.start();
-        MainWindow.open(projectName);
+        MainWindow.open(getFullProjectName());
         GongExecutor.init();
     }
 
