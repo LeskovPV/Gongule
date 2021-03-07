@@ -1,6 +1,7 @@
 package local.gongule.webserver;
 
 import local.gongule.tools.ConfigFile;
+import local.gongule.utils.servlets.UploadServlet;
 import local.gongule.webserver.servlets.LogServlet;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.FontFamily;
@@ -14,6 +15,9 @@ import local.gongule.utils.resources.Resources;
 import local.gongule.utils.colors.ColorSchema;
 import local.gongule.webserver.servlets.MainServlet;
 import local.gongule.webserver.servlets.ResourceServlet;
+
+import javax.servlet.MultipartConfigElement;
+import java.io.File;
 import java.io.IOException;
 import java.net.*;
 
@@ -84,18 +88,9 @@ public class WebServer implements Loggible {
     }
 
     ////////////////////////////////////////////////////////////////
-    private static int fontIndex = getFontIndex();
-
-    public static int getFontIndex(boolean byRuntimeConfiguration) {
-        return byRuntimeConfiguration ? getFontIndex() : fontIndex;
-    }
+    private static int fontIndex = ConfigFile.getInstance().get("FontIndex", 0);
 
     public static int getFontIndex() {
-        try {
-            fontIndex = Integer.valueOf(ConfigFile.getInstance().get("FontIndex"));
-        } catch (Exception exception) {
-            fontIndex = 0;
-        }
         return fontIndex;
     }
 
@@ -179,13 +174,30 @@ public class WebServer implements Loggible {
         server.setConnectors(getConnectors());
         //AccountService accountService = new AccountService();
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        ServletHolder MainServletHolder = new ServletHolder(new MainServlet());
-        context.addServlet(MainServletHolder,"");
-        context.addServlet(MainServletHolder,"/ui");
+        ServletHolder mainServletHolder = new ServletHolder(new MainServlet());
+        context.addServlet(mainServletHolder,"");
+        context.addServlet(mainServletHolder,"/ui");
         context.addServlet(new ServletHolder(new ResourceServlet()),"/resource");
         context.addServlet(new ServletHolder(new LogServlet()),"/log");
+
+        ServletHolder uploadServletHolder = new ServletHolder(new UploadServlet());
+        context.addServlet(uploadServletHolder,"/upload");
+
         HandlerList handlers = new HandlerList();
         handlers.addHandler(context);
+
+
+        File tmpDir = new File(System.getProperty("java.io.tmpdir"));
+        File locationDir = new File(tmpDir, "jetty-fileupload");
+        if (!locationDir.exists()) locationDir.mkdirs();
+        String location = locationDir.getAbsolutePath();
+        long maxFileSize = 1024 * 1024 * 50;
+        long maxRequestSize = -1L;
+        int fileSizeThreshold = 1024 * 1024;
+        MultipartConfigElement multipartConfig = new MultipartConfigElement(location,
+                maxFileSize, maxRequestSize, fileSizeThreshold);
+        uploadServletHolder.getRegistration().setMultipartConfig(multipartConfig);
+
         server.setHandler(handlers);
         try {
             server.start();

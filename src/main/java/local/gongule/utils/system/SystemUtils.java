@@ -87,41 +87,40 @@ public class SystemUtils implements Loggible {
         return true;
     }
 
-    public static LocalTime setTime(LocalTime time) {
-        String command = null;
-        if (isWindows()) command = "cmd /C time " + time.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        if (isLinux()) command = "date +%T -s '" + time.format(DateTimeFormatter.ofPattern("HH:mm:ss")) + "'";
-        if (command == null)
-            logger.warn("Time changing is not supported in this operation system ({})", osName);
-        try {
-            String[] cmd = {"/bin/bash","-c", command};
-            final Process timeProcess = Runtime.getRuntime().exec(cmd);
-            timeProcess.waitFor();
-            timeProcess.exitValue();
-            logger.warn("Changed time. New value is {}", time.format(TimeFormatter.get(true)));
-        } catch (Exception exception) {
-            logger.error("Impossible set time: {}", exception.getMessage());
-        }
-        return LocalTime.now();
-    }
-
-    public static LocalDate setDate(LocalDate date) {
-        LocalTime time = LocalTime.now();
+//    public static LocalTime setTime(LocalTime time) {
+//        String command = null;
+//        if (isWindows()) command = "cmd /C time " + time.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+//        if (isLinux()) command = "date +%T -s '" + time.format(DateTimeFormatter.ofPattern("HH:mm:ss")) + "'";
+//        if (command == null)
+//            logger.warn("Time changing is not supported in this operation system ({})", osName);
+//        try {
+//            String[] cmd = {"/bin/bash","-c", command};
+//            final Process timeProcess = Runtime.getRuntime().exec(cmd);
+//            timeProcess.waitFor();
+//            timeProcess.exitValue();
+//            logger.warn("Changed time. New value is {}", time.format(TimeFormatter.get(true)));
+//        } catch (Exception exception) {
+//            logger.error("Impossible set time: {}", exception.getMessage());
+//        }
+//        return LocalTime.now();
+//    }
+//
+    public static LocalDate setDateTime(LocalDate date, LocalTime time) {
         String command = null;
         if (isWindows()) command = "cmd /C date " + date.format(DateTimeFormatter.ofPattern("dd-MM-yy"));
         if (isLinux()) command = "date +%Y%m%d%T -s '" +
                 date.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + " " +
                 time.format(DateTimeFormatter.ofPattern("HH:mm:ss")) + "'";
         if (command == null)
-            logger.warn("Date changing is not supported in this operation system ({})", osName);
+            logger.warn("Datetime changing is not supported in this operation system ({})", osName);
         try {
             String[] cmd = {"/bin/bash","-c", command};
             final Process timeProcess = Runtime.getRuntime().exec(cmd);
             timeProcess.waitFor();
             timeProcess.exitValue();
-            logger.warn("Changed date. New value is {}", date.format(DateFormatter.get()));
+            logger.warn("Changed datetime. New value is {}", date.format(DateFormatter.get()));
         } catch (Exception exception) {
-            logger.error("Impossible set date: {}", exception.getMessage());
+            logger.error("Impossible set datetime: {}", exception.getMessage());
         }
         return LocalDate.now();
     }

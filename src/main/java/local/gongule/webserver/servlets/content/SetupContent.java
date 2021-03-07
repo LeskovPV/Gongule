@@ -32,8 +32,7 @@ public class SetupContent extends Content{
         actions.put("sys_shutdown", (HttpServletRequest request) -> shutdownSystem(request));
         actions.put("set_delay", (HttpServletRequest request) -> setDelay(request));
         actions.put("set_advance", (HttpServletRequest request) -> setAdvance(request));
-        actions.put("set_time", (HttpServletRequest request) -> setTime(request));
-        actions.put("set_date", (HttpServletRequest request) -> setDate(request));
+        actions.put("set_datetime", (HttpServletRequest request) -> setDateTime(request));
         actions.put("set_temperatures", (HttpServletRequest request) -> setTemperatures(request));
     }
 
@@ -55,7 +54,7 @@ public class SetupContent extends Content{
         for (int i = 0; i < FontFamily.values.size(); i++) {
             Map<String, Object> piecesVariables = new HashMap();
             piecesVariables.put("value", i);
-            piecesVariables.put("selected", (i == WebServer.getFontIndex(false)) ? "selected" : "");
+            piecesVariables.put("selected", (i == WebServer.getFontIndex()) ? "selected" : "");
             piecesVariables.put("caption", FontFamily.values.get(i));
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
@@ -72,8 +71,8 @@ public class SetupContent extends Content{
         contentVariables.put("configuration_options", options);
         contentVariables.put("strikes_delay", GongSound.getStrikesDelay());
         contentVariables.put("advance_time", GongExecutor.getAdvanceTime());
-        contentVariables.put("time_value", LocalTime.now().format(TimeFormatter.get(true)));
-        contentVariables.put("date_value", LocalDate.now().format(DateFormatter.get()));
+//        contentVariables.put("time_value", LocalTime.now().format(TimeFormatter.get(true)));
+        contentVariables.put("datetime_value", LocalDate.now().format(DateFormatter.get()) + " " + LocalTime.now().format(TimeFormatter.get(true)));
         contentVariables.put("min_temperature", CoolingRelay.getInstance().getMinTemperature());
         contentVariables.put("max_temperature", CoolingRelay.getInstance().getMaxTemperature());
         contentVariables.put("cpu_temperature",SystemUtils.getCPUTemperature(55));
@@ -181,31 +180,33 @@ public class SetupContent extends Content{
         return true;
     }
 
-    private boolean setTime(HttpServletRequest request) {
-        LocalTime time;
-        try {
-            time = LocalTime.parse(request.getParameter("time_value"), TimeFormatter.get(true));
-        } catch (Exception exception) {
-            logger.error("Impossible parse '{}' to time value", request.getParameter("time_value"));
-            return false;
-        }
-        SystemUtils.setTime(time);
-        GongExecutor.reset();
-        GongExecutor.runMidnightReset();
-        return true;
-    }
+//    private boolean setTime(HttpServletRequest request) {
+//        LocalTime time;
+//        try {
+//            time = LocalTime.parse(request.getParameter("time_value"), TimeFormatter.get(true));
+//        } catch (Exception exception) {
+//            logger.error("Impossible parse '{}' to time value", request.getParameter("time_value"));
+//            return false;
+//        }
+//        SystemUtils.setTime(time);
+//        GongExecutor.reset();
+//        GongExecutor.runMidnightReset();
+//        return true;
+//    }
 
-    private boolean setDate(HttpServletRequest request) {
-        LocalDate date;
+    private boolean setDateTime(HttpServletRequest request) {
         try {
-            date = LocalDate.parse(request.getParameter("date_value"), DateFormatter.get());
+            String[] datetimes = request.getParameter("datetime_value").trim().split(" ");
+            if (datetimes.length != 2) throw new Exception();
+            LocalDate date = LocalDate.parse(datetimes[0], DateFormatter.get());
+            LocalTime time = LocalTime.parse(datetimes[1], TimeFormatter.get(true));
+            SystemUtils.setDateTime(date, time);
+            GongExecutor.reset();
+            return true;
         } catch (Exception exception) {
-            logger.error("Impossible parse '{}' to date value", request.getParameter("date_value"));
+            logger.error("Impossible parse '{}' to datetime value", request.getParameter("datetime_value"));
             return false;
         }
-        SystemUtils.setDate(date);
-        GongExecutor.reset();
-        return true;
     }
 
     private boolean setTemperatures(HttpServletRequest request) {
