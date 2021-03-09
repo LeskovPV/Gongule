@@ -29,11 +29,12 @@ public class SetupContent extends Content{
         actions.put("save_configuration", (HttpServletRequest request) -> saveConfiguration(request));
         actions.put("load_configuration", (HttpServletRequest request) -> loadConfiguration(request));
         actions.put("delete_configuration", (HttpServletRequest request) -> deleteConfiguration(request));
-        actions.put("sys_shutdown", (HttpServletRequest request) -> shutdownSystem(request));
         actions.put("set_delay", (HttpServletRequest request) -> setDelay(request));
         actions.put("set_advance", (HttpServletRequest request) -> setAdvance(request));
         actions.put("set_datetime", (HttpServletRequest request) -> setDateTime(request));
         actions.put("set_temperatures", (HttpServletRequest request) -> setTemperatures(request));
+        actions.put("sys_reboot", (HttpServletRequest request) -> rebootSystem(request));
+        actions.put("sys_shutdown", (HttpServletRequest request) -> shutdownSystem(request));
     }
 
     public String get(HttpServletRequest request) {
@@ -71,7 +72,6 @@ public class SetupContent extends Content{
         contentVariables.put("configuration_options", options);
         contentVariables.put("strikes_delay", GongSound.getStrikesDelay());
         contentVariables.put("advance_time", GongExecutor.getAdvanceTime());
-//        contentVariables.put("time_value", LocalTime.now().format(TimeFormatter.get(true)));
         contentVariables.put("datetime_value", LocalDate.now().format(DateFormatter.get()) + " " + LocalTime.now().format(TimeFormatter.get(true)));
         contentVariables.put("min_temperature", CoolingRelay.getInstance().getMinTemperature());
         contentVariables.put("max_temperature", CoolingRelay.getInstance().getMaxTemperature());
@@ -157,11 +157,6 @@ public class SetupContent extends Content{
         return result;
     }
 
-    private boolean shutdownSystem(HttpServletRequest request) {
-        SystemUtils.shutdown();
-        return true;
-    }
-
     private boolean setDelay(HttpServletRequest request) {
         try {
             GongSound.setStrikesDelay(Integer.valueOf(request.getParameter("strikes_delay")));
@@ -179,20 +174,6 @@ public class SetupContent extends Content{
         }
         return true;
     }
-
-//    private boolean setTime(HttpServletRequest request) {
-//        LocalTime time;
-//        try {
-//            time = LocalTime.parse(request.getParameter("time_value"), TimeFormatter.get(true));
-//        } catch (Exception exception) {
-//            logger.error("Impossible parse '{}' to time value", request.getParameter("time_value"));
-//            return false;
-//        }
-//        SystemUtils.setTime(time);
-//        GongExecutor.reset();
-//        GongExecutor.runMidnightReset();
-//        return true;
-//    }
 
     private boolean setDateTime(HttpServletRequest request) {
         try {
@@ -218,6 +199,18 @@ public class SetupContent extends Content{
         } catch (Exception exception) {
             return false;
         }
+        return true;
+    }
+
+    private boolean rebootSystem(HttpServletRequest request) {
+        logger.warn("Reboot system by web-interface from remote host ({})", request.getRemoteHost());
+        SystemUtils.reboot();
+        return true;
+    }
+
+    private boolean shutdownSystem(HttpServletRequest request) {
+        logger.warn("Shutdown system by web-interface from remote host ({})", request.getRemoteHost());
+        SystemUtils.shutdown();
         return true;
     }
 

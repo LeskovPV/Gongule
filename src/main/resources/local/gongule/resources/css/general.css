@@ -30,6 +30,13 @@ body { /* Page content */
     width: 100%;
 }
 
+.table.border.system {
+    background-color: var(--deep_color);
+    padding: 0px;
+    border-spacing: 3px;
+    width: 0%;
+}
+
 .table.border.named {
     color: var(--half_color);
     background-color: var(--deep_color);
@@ -39,6 +46,7 @@ body { /* Page content */
 .table.border.named td:last-child {
     width:100%;
 }
+
 
 
 .table.data {
@@ -51,6 +59,10 @@ body { /* Page content */
 
 .table.data th{
     color: var(--half_color);
+}
+
+.table.data.pair td {
+    height: 30px;
 }
 
 .table.menu {

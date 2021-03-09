@@ -1,5 +1,5 @@
 <tr>
-    <td>
+    <td colspan='2'>
         <table class='table border named'> <!--Gongs-->
             <tr>
                 <th>
@@ -57,7 +57,6 @@
                                 </button>
                             </td>
                         </tr>
-                        <!--tr style='display:${raspbian_display}'-->
                         <tr style='display:${raspbian_display}'>
                             <td colspan='5' align='right'>
                                 <nobr>
@@ -81,44 +80,6 @@
 </tr>
 <tr>
     <td>
-        <table class='table border named'> <!--Interface-->
-            <tr>
-                <th>
-                    <img src='resource?png/interface.png' />
-                </th>
-                <th width='100%'>
-                    Interface
-                </th>
-            </tr>
-            <tr>
-                <td colspan='2'>
-                    <table class='table data'>
-                        <tr>
-                            <td>
-                                <label>Color:</label>
-                            </td>
-                            <td>
-                                <input type='color' name='selected_color' value='${color_value}' onchange='setAction("change_color"); this.form.submit()' title='Choose base interface color'>
-                            </td>
-                            <td align='right' width='35%'>
-                                <label>Font:</label>
-                            </td>
-                            <td width='65%'>
-                                <select name='selected_font' onchange='setAction("change_font"); this.form.submit()' title='Choose base interface font'>
-                                    ${font_options}
-                                </select>
-                            </td>
-                            <td>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
-<tr>
-    <td>
         <table class='table border named'> <!--Configurations-->
             <tr>
                 <th>
@@ -131,17 +92,17 @@
             <tr>
                 <td colspan='2'>
                     <script>
-                        window.onload = function() {
-                            onSelectConfiguration(document.getElementsByName('selected_configuration')[0].value)
-                        }
-                        function onSelectConfiguration(value) {
-                            document.getElementsByName('delete_configuration')[0].disabled = (value == 'default');
-                        }
-                    </script>
-                    <table class='table data'>
+                                    window.onload = function() {
+                                        onSelectConfiguration(document.getElementsByName('selected_configuration')[0].value)
+                                    }
+                                    function onSelectConfiguration(value) {
+                                        document.getElementsByName('delete_configuration')[0].disabled = (value == 'default');
+                                    }
+                                </script>
+                    <table class='table data pair'>
                         <tr>
-                            <td width='35%'>
-                                <select name='selected_configuration' width='100%' onChange='onSelectConfiguration(this.value)'>
+                            <td>
+                                <select name='selected_configuration' onChange='onSelectConfiguration(this.value)'>
                                     ${configuration_options}
                                 </select>
                             </td>
@@ -155,14 +116,12 @@
                                     <img src='resource?png/delete.png' valign='top'/>
                                 </button>
                             </td>
-                            <td width='100%'>
-                            </td>
                         </tr>
                         <tr>
                             <td>
-                                <input type='text' name='configuration_name' width='100%' placeholder='Configuration name...'/>
+                                <input type='text' name='configuration_name' size='10' placeholder='New name...'/>
                             </td>
-                            <td colspan='3'>
+                            <td colspan='2'>
                                 <button name='save_configuration' title='Save configuration' onclick='setAction(this.name)'>
                                     <img src='resource?png/save.png' valign='top'/>
                                 </button>
@@ -173,9 +132,45 @@
             </tr>
         </table>
     </td>
+    <td>
+        <table class='table border named'> <!--Interface-->
+            <tr>
+                <th>
+                    <img src='resource?png/interface.png' />
+                </th>
+                <th width='100%'>
+                    Interface
+                </th>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    <table class='table data pair'>
+                        <tr>
+                            <td>
+                                <label>Font:</label>
+                            </td>
+                            <td>
+                                <select name='selected_font' onchange='setAction("change_font"); this.form.submit()' title='Choose base interface font'>
+                                    ${font_options}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Color:</label>
+                            </td>
+                            <td>
+                                <input type='color' name='selected_color' value='${color_value}' onchange='setAction("change_color"); this.form.submit()' title='Choose base interface color'>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </td>
 </tr>
 <tr>
-    <td>
+    <td colspan='2'>
         <table class='table border named'> <!--System-->
             <tr>
                 <th>
@@ -203,10 +198,11 @@
                                 </button>
                             </td>
                         </tr>
-                        <!--tr style='display:${raspbian_display}'-->
                         <tr style='display:${raspbian_display}'>
-                            <td align='right'>
-                                <nobr>CPU temperatures:</nobr>
+                            <td width='100%' align='right'>
+                                <nobr>
+                                    CPU temperatures:
+                                </nobr>
                             </td>
                             <td>
                                 <input type='number' name='min_temperature' value='${min_temperature}' min='50' max='80' size='4' title='Fan relay turn-off temperature'/>
@@ -224,8 +220,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan='5'>
-                                <table class='table border' cellpadding='3'> <!-- Process-->
+                            <td colspan='5' align='center'>
+                                <table class='table border system'>
                                     <tr>
                                         <td>
                                             <button type='reset' title='Download system log file' onclick='location.href="log"'>
@@ -244,7 +240,7 @@
                                             </button>
                                         </td>
                                         <td>
-                                            <button type='reset' title='Update system' onclick='location.href="log"'>
+                                            <button name='sys_reboot' title='System reboot' onclick='setAction(this.name)'>
                                                 <nobr>
                                                     <img src='resource?png/reboot.png' valign='top'/>
                                                     Reboot
