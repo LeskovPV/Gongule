@@ -6,12 +6,12 @@
                     <table class='table data'>
                         <tr>
                             <td>
-                                <button name='run_process' ${run_disabled} onclick='setAction(this.name)'>
+                                <button name='run_process' ${run_disabled} onclick='setAction(name)'>
                                     <img src='resource?png/run.png'/>
                                 </button>
                             </td>
                             <td align='right'>
-                                <button name='pause_process' ${pause_disabled} title='Process pause' onclick='setAction(this.name)'>
+                                <button name='pause_process' ${pause_disabled} title='Process pause' onclick='setAction(name)'>
                                     <img src='resource?png/pause.png'/>
                                 </button>
                             </td>
@@ -109,14 +109,14 @@
                                 <input type='text' name='course_date' size='${date_size}' placeholder='${date_pattern}'/>
                             </td>
                             <td width='50%'>
-                                <select name='selected_course'>
+                                <select name='select_course'>
                                     ${course_options}
                                 </select>
                             </td>
                             <td>
                             </td>
                             <td>
-                                <button name='add_note' title='Add course' onclick='setAction(this.name)'>
+                                <button name='add_note' title='Add course' onclick='setAction(name)'>
                                     <img src='resource?png/create.png' valign='top'/>
                                 </button>
                             </td>

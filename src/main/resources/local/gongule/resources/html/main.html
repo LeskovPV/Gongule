@@ -8,8 +8,14 @@
     </head>
     <body>
         <script>
-            function setAction(actionName) {
-                document.getElementsByName('action')[0].value = actionName;
+            function setAction(actionName, actionTitle, elementName) {
+                let elementValue = '';
+                if (arguments.length == 3) {
+                    let element = document.getElementsByName(elementName)[0];
+                    let index = element.options.selectedIndex;
+                    elementValue = ' ('+ element.options[index].text + ')';
+                }
+                document.getElementsByName('action')[0].value = (arguments.length == 1) || (confirm('Are you sure to want ' + actionTitle.toLowerCase() + elementValue +'?')) ? actionName : '';
             }
         </script>
         <form action='/ui?${page_name}' method='post'>

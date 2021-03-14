@@ -14,7 +14,7 @@ public class DaysContent extends Content {
 
     public DaysContent() {
         actions.put("create_day", (HttpServletRequest request) -> createDay(request));
-        actions.put("change_day", (HttpServletRequest request) -> changeDay(request));
+        actions.put("select_day", (HttpServletRequest request) -> selectDay(request));
         actions.put("delete_day", (HttpServletRequest request) -> deleteDay(request));
         actions.put("add_event", (HttpServletRequest request) -> addEvent(request));
         actions.put("remove_event", (HttpServletRequest request) -> removeEvent(request));
@@ -22,7 +22,7 @@ public class DaysContent extends Content {
 
     public String get(HttpServletRequest request) {
         Map<String, Object> contentVariables = new HashMap();
-        int selectedDay = Integer.valueOf(getAttribute(request, "selected_day", "0"));
+        int selectedDay = Integer.valueOf(getAttribute(request, "select_day", "0"));
         String rows = "";
         Data data = Data.getInstance();
         for (int i = 0; i < data.getDayEventsAmount(selectedDay); i++) {
@@ -48,7 +48,7 @@ public class DaysContent extends Content {
         }
         contentVariables.put("day_options", options);
         options = "";
-        int gongIndex = Integer.valueOf(getAttribute(request, "selected_gong", "0"));
+        int gongIndex = Integer.valueOf(getAttribute(request, "select_gong", "0"));
         for (int i = 0; i < data.getGongsAmount(); i++) {
             Map<String, Object> piecesVariables = new HashMap();
             piecesVariables.put("value", i);
@@ -66,17 +66,17 @@ public class DaysContent extends Content {
     private boolean createDay(HttpServletRequest request) {
         try {
             Data.getInstance().dayCreate(request.getParameter("day_name"));
-            setAttribute(request, "selected_day", String.valueOf(Data.getInstance().getDaysAmount()-1));
+            setAttribute(request, "select_day", String.valueOf(Data.getInstance().getDaysAmount()-1));
             return true;
         } catch (Exception exception) {
             return false;
         }
     }
 
-    private boolean changeDay(HttpServletRequest request) {
+    private boolean selectDay(HttpServletRequest request) {
         try {
-            Integer selectedDay = Integer.valueOf(request.getParameter("selected_day"));
-            setAttribute(request, "selected_day", selectedDay.toString());
+            Integer selectedDay = Integer.valueOf(request.getParameter("select_day"));
+            setAttribute(request, "select_day", selectedDay.toString());
             return true;
         } catch (Exception exception) {
             return false;
@@ -85,8 +85,8 @@ public class DaysContent extends Content {
 
     private boolean deleteDay(HttpServletRequest request) {
         try {
-            Data.getInstance().dayDelete(Integer.valueOf(request.getParameter("selected_day")));
-            setAttribute(request, "selected_day", new Integer(0).toString());
+            Data.getInstance().dayDelete(Integer.valueOf(request.getParameter("select_day")));
+            setAttribute(request, "select_day", new Integer(0).toString());
             GongExecutor.reset();
             return true;
         } catch (Exception exception) {
@@ -96,11 +96,11 @@ public class DaysContent extends Content {
 
     private boolean addEvent(HttpServletRequest request) {
         try {
-            int dayIndex = Integer.valueOf(request.getParameter("selected_day"));
+            int dayIndex = Integer.valueOf(request.getParameter("select_day"));
             LocalTime eventTime = LocalTime.parse(request.getParameter("event_time"), TimeFormatter.get());
             String eventName = request.getParameter("event_name");
-            int gongIndex = Integer.valueOf(request.getParameter( "selected_gong"));
-            setAttribute(request, "selected_gong", String.valueOf(gongIndex));
+            int gongIndex = Integer.valueOf(request.getParameter( "select_gong"));
+            setAttribute(request, "select_gong", String.valueOf(gongIndex));
             Data.getInstance().addDayEvent(dayIndex, eventTime, eventName, gongIndex);
             GongExecutor.reset();
             return true;
@@ -111,7 +111,7 @@ public class DaysContent extends Content {
 
     private boolean removeEvent(HttpServletRequest request) {
         try {
-            int dayIndex = Integer.valueOf(request.getParameter("selected_day"));
+            int dayIndex = Integer.valueOf(request.getParameter("select_day"));
             int eventIndex = Integer.valueOf(request.getParameter("remove_event"));
             Data.getInstance().removeDayEvent(dayIndex, eventIndex);
             GongExecutor.reset();

@@ -24,8 +24,8 @@ public class SetupContent extends Content{
         actions.put("delete_gong", (HttpServletRequest request) -> deleteGong(request));
         actions.put("play_gong", (HttpServletRequest request) -> playGong(request));
         actions.put("create_gong", (HttpServletRequest request) -> createGong(request));
-        actions.put("change_color", (HttpServletRequest request) -> changeColor(request));
-        actions.put("change_font", (HttpServletRequest request) -> changeFont(request));
+        actions.put("select_color", (HttpServletRequest request) -> selectColor(request));
+        actions.put("select_font", (HttpServletRequest request) -> selectFont(request));
         actions.put("save_configuration", (HttpServletRequest request) -> saveConfiguration(request));
         actions.put("load_configuration", (HttpServletRequest request) -> loadConfiguration(request));
         actions.put("delete_configuration", (HttpServletRequest request) -> deleteConfiguration(request));
@@ -114,14 +114,14 @@ public class SetupContent extends Content{
         }
     }
 
-    private boolean changeColor(HttpServletRequest request) {
-        WebServer.setBaseColor(request.getParameter("selected_color"));
+    private boolean selectColor(HttpServletRequest request) {
+        WebServer.setBaseColor(request.getParameter("select_color"));
         return true;
     }
 
-    private boolean changeFont(HttpServletRequest request) {
+    private boolean selectFont(HttpServletRequest request) {
         try {
-            WebServer.setFontIndex(Integer.valueOf(request.getParameter("selected_font")));
+            WebServer.setFontIndex(Integer.valueOf(request.getParameter("select_font")));
         } catch (Exception exception) {
             return false;
         }
@@ -140,7 +140,7 @@ public class SetupContent extends Content{
     }
 
     private boolean loadConfiguration(HttpServletRequest request) {
-        String name = request.getParameter("selected_configuration");
+        String name = request.getParameter("select_configuration");
         boolean result = Data.setInstance(Data.load(name));
         logger.info(result ? "Configuration '{}' is loaded" : "Impossible load '{}' configuration", name);
         if (result) GongExecutor.reset();
@@ -148,7 +148,7 @@ public class SetupContent extends Content{
     }
 
     private boolean deleteConfiguration(HttpServletRequest request) {
-        String name = request.getParameter("selected_configuration");
+        String name = request.getParameter("select_configuration");
         boolean result = Data.detete(name);
         if (result)
             logger.info("Configuration '{}' is deleted", name);

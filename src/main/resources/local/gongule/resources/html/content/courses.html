@@ -6,12 +6,12 @@
                     <table class='table data'>
                         <tr style='display:${course_display}'>
                             <td width='35%'>
-                                <select name='selected_course' width='100%' title='Choose course' onchange='setAction("change_course");this.form.submit()'>
+                                <select name='select_course' width='100%' title='Choose course' onchange='setAction("change_course");this.form.submit()'>
                                     ${course_options}
                                 </select>
                             </td>
                             <td>
-                                <button name='delete_course' title='Delete course' onclick='setAction(this.name)'>
+                                <button name='delete_course' title='Delete course' onclick='setAction(name, title, "select_course")'>
                                     <img src='resource?png/delete.png' valign='top'/>
                                 </button>
                             </td>
@@ -48,12 +48,12 @@
                                                     <td>
                                                     </td>
                                                     <td width='70%'>
-                                                        <select name='selected_day'>
+                                                        <select name='select_day'>
                                                             ${day_options}
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <button name='add_day' title='Add day' onclick='setAction(this.name)'>
+                                                        <button name='add_day' title='Add day' onclick='setAction(name)'>
                                                             <img src='resource?png/create.png' valign='top'/>
                                                         </button>
                                                     </td>
@@ -69,7 +69,7 @@
                                 <input type='text' name='course_name' width='100%' placeholder='Course name...'/>
                             </td>
                             <td>
-                                <button name='create_course' title='Create course' onclick='setAction(this.name)'>
+                                <button name='create_course' title='Create course' onclick='setAction(name)'>
                                     <img src='resource?png/create.png' valign='top'/>
                                 </button>
                             </td>

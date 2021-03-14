@@ -11,7 +11,7 @@ public class CoursesContent extends Content {
 
     public CoursesContent() {
         actions.put("create_course", (HttpServletRequest request) -> createCourse(request));
-        actions.put("change_course", (HttpServletRequest request) -> changeCourse(request));
+        actions.put("change_course", (HttpServletRequest request) -> selectCourse(request));
         actions.put("delete_course", (HttpServletRequest request) -> deleteCourse(request));
         actions.put("add_day", (HttpServletRequest request) -> addDay(request));
         actions.put("remove_day", (HttpServletRequest request) -> removeDay(request));
@@ -19,7 +19,7 @@ public class CoursesContent extends Content {
 
     public String get(HttpServletRequest request) {
         Map<String, Object> contentVariables = new HashMap();
-        int selectedCourse = Integer.valueOf(getAttribute(request, "selected_course", "0"));
+        int selectedCourse = Integer.valueOf(getAttribute(request, "select_course", "0"));
         String rows = "";
         Data data = Data.getInstance();
         for (int i = 0; i < data.getCourseDaysAmount(selectedCourse); i++) {
@@ -42,7 +42,7 @@ public class CoursesContent extends Content {
         contentVariables.put("course_options", options);
 
         options = "";
-        int dayIndex = Integer.valueOf(getAttribute(request, "selected_day", "0"));
+        int dayIndex = Integer.valueOf(getAttribute(request, "select_day", "0"));
         for (int i = 0; i < data.getDaysAmount(); i++) {
             Map<String, Object> piecesVariables = new HashMap();
             piecesVariables.put("value", i);
@@ -59,17 +59,17 @@ public class CoursesContent extends Content {
         try {
             Data data = Data.getInstance();
             data.courseCreate(request.getParameter("course_name"));
-            setAttribute(request, "selected_course", String.valueOf(data.getCoursesAmount()-1));
+            setAttribute(request, "select_course", String.valueOf(data.getCoursesAmount()-1));
             return true;
         } catch (Exception exception) {
             return false;
         }
     }
 
-    private boolean changeCourse(HttpServletRequest request) {
+    private boolean selectCourse(HttpServletRequest request) {
         try {
-            Integer selectedCourse = Integer.valueOf(request.getParameter("selected_course"));
-            setAttribute(request, "selected_course", selectedCourse.toString());
+            Integer selectedCourse = Integer.valueOf(request.getParameter("select_course"));
+            setAttribute(request, "select_course", selectedCourse.toString());
             return true;
         } catch (Exception exception) {
             return false;
@@ -78,8 +78,8 @@ public class CoursesContent extends Content {
 
     private boolean deleteCourse(HttpServletRequest request) {
         try {
-            Data.getInstance().courseDelete(Integer.valueOf(request.getParameter("selected_course")));
-            setAttribute(request, "selected_course", new Integer(0).toString());
+            Data.getInstance().courseDelete(Integer.valueOf(request.getParameter("select_course")));
+            setAttribute(request, "select_course", new Integer(0).toString());
             GongExecutor.reset();
             return true;
         } catch (Exception exception) {
@@ -89,9 +89,9 @@ public class CoursesContent extends Content {
 
     private boolean addDay(HttpServletRequest request) {
         try {
-            int courseIndex = Integer.valueOf(request.getParameter("selected_course"));
-            int dayIndex = Integer.valueOf(request.getParameter("selected_day"));
-            setAttribute(request, "selected_day", String.valueOf(dayIndex));
+            int courseIndex = Integer.valueOf(request.getParameter("select_course"));
+            int dayIndex = Integer.valueOf(request.getParameter("select_day"));
+            setAttribute(request, "select_day", String.valueOf(dayIndex));
             Data.getInstance().createCourseDay(courseIndex, dayIndex);
             GongExecutor.reset();
             return true;
@@ -102,7 +102,7 @@ public class CoursesContent extends Content {
 
     private boolean removeDay(HttpServletRequest request) {
         try {
-            int courseIndex = Integer.valueOf(request.getParameter("selected_course"));
+            int courseIndex = Integer.valueOf(request.getParameter("select_course"));
             int dayIndex = Integer.valueOf(request.getParameter("remove_day"));
             Data.getInstance().removeCourseDay(courseIndex, dayIndex);
             GongExecutor.reset();

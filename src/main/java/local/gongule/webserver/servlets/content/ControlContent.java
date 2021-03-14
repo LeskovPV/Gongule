@@ -39,7 +39,7 @@ public class ControlContent extends Content {
         }
         contentVariables.put("calendar_notes", rows);
         String options = "";
-        int courseIndex = Integer.valueOf(getAttribute(request, "selected_course", "0"));
+        int courseIndex = Integer.valueOf(getAttribute(request, "select_course", "0"));
         for (int i = 0; i < data.getCoursesAmount(); i++) {
             Map<String, Object> piecesVariables = new HashMap();
             piecesVariables.put("value", i);
@@ -79,9 +79,9 @@ public class ControlContent extends Content {
 
     private boolean addNote(HttpServletRequest request) {
         try {
-            int courseIndex = Integer.valueOf(request.getParameter("selected_course"));
+            int courseIndex = Integer.valueOf(request.getParameter("select_course"));
             LocalDate courseDate = LocalDate.parse(request.getParameter("course_date"), DateFormatter.get());
-            setAttribute(request, "selected_course", String.valueOf(courseIndex));
+            setAttribute(request, "select_course", String.valueOf(courseIndex));
             Data.getInstance().addCalendarNote(courseIndex, courseDate);
             GongExecutor.reset();
             return true;

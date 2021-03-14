@@ -8,6 +8,5 @@ NEEDING
 * Change certificate store (password and so on)
 * Support setting audio canal from user interface
 * Refactoring
-* Added uploading update-file (Gongule.jar)
 * Bag with course day number in calendar today on control page
-* Added index-check on select (days and courses)
+* Add index-check on select (days and courses)

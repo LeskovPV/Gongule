@@ -1,4 +1,6 @@
-package local.gongule.utils.servlets;
+package local.gongule.webserver.servlets;
+
+import local.gongule.utils.logging.Loggible;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -8,18 +10,17 @@ import javax.servlet.http.Part;
 import java.io.*;
 import java.util.Collection;
 
-public class UploadServlet extends HttpServlet {
+public class UploadServlet extends HttpServlet implements Loggible {
 
-    //protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    //}
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        logger.info(request.getQueryString());
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().println("<!DOCTYPE html><html lang=\"en\"><head><title>File Upload</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></head><body><form method=\"POST\" action=\"upload\" enctype=\"multipart/form-data\" >File:<input type=\"file\" name=\"file\" id=\"file\" /> <br/></br><input type=\"submit\" value=\"Upload\" name=\"upload\" id=\"upload\" /></form></body></html>");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        logger.info(request.getQueryString());
         response.setContentType("text/html;charset=UTF-8");
         // Create path components to save the file
         final String path = "/home/temp/";

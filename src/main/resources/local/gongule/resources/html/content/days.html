@@ -6,12 +6,12 @@
                     <table class='table data'>
                         <tr style='display:${day_display}'>
                             <td width='35%'>
-                                <select name='selected_day' width='100%' title='Choose day' onchange='setAction("change_day");this.form.submit()'>
+                                <select name='select_day' width='100%' title='Choose day' onchange='setAction(name); this.form.submit()'>
                                     ${day_options}
                                 </select>
                             </td>
                             <td>
-                                <button name='delete_day' title='Delete day' onclick='setAction(this.name)'>
+                                <button name='delete_day' title='Delete day' onclick='setAction(name, title, "select_day")'>
                                     <img src='resource?png/delete.png' valign='top'/>
                                 </button>
                             </td>
@@ -52,7 +52,7 @@
                                                         <input type='text' name='event_time' size='${time_size}' placeholder='${time_pattern}'/>
                                                     </td>
                                                     <td width='50%'>
-                                                        <select name='selected_gong'>
+                                                        <select name='select_gong'>
                                                             ${gong_options}
                                                         </select>
                                                     </td>
@@ -60,7 +60,7 @@
                                                         <input type='text' name='event_name' placeholder='Event name...'/>
                                                     </td>
                                                     <td>
-                                                        <button name='add_event' title='Add event' onclick='setAction(this.name)'>
+                                                        <button name='add_event' title='Add event' onclick='setAction(name)'>
                                                                 <img src='resource?png/create.png' valign='top'/>
                                                         </button>
                                                     </td>
@@ -76,7 +76,7 @@
                                 <input type='text' name='day_name' width='100%' placeholder='Day name...'/>
                             </td>
                             <td>
-                                <button name='create_day' title='Create day' onclick='setAction(this.name)'>
+                                <button name='create_day' title='Create day' onclick='setAction(name)'>
                                     <img src='resource?png/create.png' valign='top'/>
                                 </button>
                             </td>

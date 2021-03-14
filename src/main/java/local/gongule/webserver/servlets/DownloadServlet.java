@@ -1,5 +1,8 @@
-package local.gongule.utils.servlets;
+package local.gongule.webserver.servlets;
 
+import local.gongule.utils.logging.LogService;
+import local.gongule.utils.logging.Loggible;
+import local.gongule.utils.resources.Resources;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,46 +12,44 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-abstract public class DownloadServlet extends HttpServlet {
+public class DownloadServlet extends HttpServlet implements Loggible {
 
-    abstract protected File getFile() throws IOException;
+    protected File getFile(HttpServletRequest request) throws IOException {
+        String queryString = request.getQueryString();
+        if ("log".equalsIgnoreCase(queryString))
+            return LogService.getAllLogFile();
+        if ("doc".equalsIgnoreCase(queryString)) {
+            return Resources.getAsFile("doc/manual.doc", "Gongule.doc", true);
+        }
+        return null;
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // reads input file from an absolute path
-        File downloadFile = getFile();
+        File downloadFile = getFile(request);
+        if (downloadFile == null) {
+            response.sendRedirect("");
+            return;
+        }
         FileInputStream inputStream = new FileInputStream(downloadFile);
 
-
-        // obtains ServletContext
         ServletContext context = getServletContext();
 
-        // gets MIME type of the file
         String mimeType = context.getMimeType(downloadFile.getPath());
-        if (mimeType == null) {
-            // set to binary type if MIME mapping not found
-            mimeType = "application/octet-stream";
-        }
-        System.out.println("MIME type: " + mimeType);
+        if (mimeType == null) mimeType = "application/octet-stream";
 
-        // modifies response
         response.setContentType(mimeType);
         response.setContentLength((int) downloadFile.length());
 
-        // forces download
         String headerKey = "Content-Disposition";
         String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
         response.setHeader(headerKey, headerValue);
 
-        // obtains response's output stream
         OutputStream outStream = response.getOutputStream();
-
         byte[] buffer = new byte[4096];
         int bytesRead = -1;
-
         while ((bytesRead = inputStream.read(buffer)) != -1) {
             outStream.write(buffer, 0, bytesRead);
         }
-
         inputStream.close();
         outStream.close();
     }

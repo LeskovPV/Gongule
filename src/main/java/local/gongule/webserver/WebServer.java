@@ -1,8 +1,8 @@
 package local.gongule.webserver;
 
 import local.gongule.tools.ConfigFile;
-import local.gongule.utils.servlets.UploadServlet;
-import local.gongule.webserver.servlets.LogServlet;
+import local.gongule.webserver.servlets.DownloadServlet;
+import local.gongule.webserver.servlets.UploadServlet;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.FontFamily;
 import org.eclipse.jetty.server.*;
@@ -178,25 +178,23 @@ public class WebServer implements Loggible {
         context.addServlet(mainServletHolder,"");
         context.addServlet(mainServletHolder,"/ui");
         context.addServlet(new ServletHolder(new ResourceServlet()),"/resource");
-        context.addServlet(new ServletHolder(new LogServlet()),"/log");
+        context.addServlet(new ServletHolder(new DownloadServlet()),"/download");
 
-        ServletHolder uploadServletHolder = new ServletHolder(new UploadServlet());
-        context.addServlet(uploadServletHolder,"/upload");
+//        ServletHolder uploadServletHolder = new ServletHolder(new UploadServlet());
+//        context.addServlet(uploadServletHolder,"/upload");
 
         HandlerList handlers = new HandlerList();
         handlers.addHandler(context);
 
-
-        File tmpDir = new File(System.getProperty("java.io.tmpdir"));
-        File locationDir = new File(tmpDir, "jetty-fileupload");
-        if (!locationDir.exists()) locationDir.mkdirs();
-        String location = locationDir.getAbsolutePath();
-        long maxFileSize = 1024 * 1024 * 50;
-        long maxRequestSize = -1L;
-        int fileSizeThreshold = 1024 * 1024;
-        MultipartConfigElement multipartConfig = new MultipartConfigElement(location,
-                maxFileSize, maxRequestSize, fileSizeThreshold);
-        uploadServletHolder.getRegistration().setMultipartConfig(multipartConfig);
+//        File tmpDir = new File(System.getProperty("java.io.tmpdir"));
+//        File locationDir = new File(tmpDir, "jetty-fileupload");
+//        if (!locationDir.exists()) locationDir.mkdirs();
+//        String location = locationDir.getAbsolutePath();
+//        long maxFileSize = 1024 * 1024 * 50;
+//        long maxRequestSize = -1L;
+//        int fileSizeThreshold = 1024 * 1024;
+//        MultipartConfigElement multipartConfig = new MultipartConfigElement(location, maxFileSize, maxRequestSize, fileSizeThreshold);
+//        uploadServletHolder.getRegistration().setMultipartConfig(multipartConfig);
 
         server.setHandler(handlers);
         try {

@@ -47,7 +47,7 @@ public class ResourceServlet extends HttpServlet implements TemplateFillable {
                 response.getOutputStream().write(Resources.getAsBytes(resourceName));
             } else {
                 String result = fillTemplate(resourceName, pageVariables);
-                response.getOutputStream().write(result.getBytes("UTF-8") );
+                response.getOutputStream().write(result.getBytes("UTF-8"));
             }
         } catch (Exception exception) {
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
