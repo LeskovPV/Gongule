@@ -10,9 +10,16 @@ public abstract class Content implements TemplateFillable {
 
     public PageType pageType;
 
-    protected Map<String, Function<HttpServletRequest, Boolean>> actions = new HashMap();
+    /**
+     * Map of actions on page for search method by name
+     */
+    public Map<String, Function<HttpServletRequest, Boolean>> actions = new HashMap();
 
-    public boolean applyAction(String actionName, HttpServletRequest request) {
+    /**
+     * Apply action by name
+     */
+    public boolean applyAction(HttpServletRequest request) {
+        String actionName = request.getParameter("action");
         return actions.containsKey(actionName) ? actions.get(actionName).apply(request) : false;
     }
 

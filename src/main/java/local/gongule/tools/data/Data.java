@@ -14,6 +14,8 @@ import java.time.chrono.ChronoLocalDate;
 import java.util.*;
 import java.time.*;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 public class Data implements Serializable, Loggible {
 
     private Data() {}
@@ -49,42 +51,33 @@ public class Data implements Serializable, Loggible {
         return -1;
     }
 
-    public String getCurrentCourseName(){
-        return getCurrentCourseName(getCurrentNoteIndex());
-    }
-
-    public String getCurrentCourseName(int currentNoteIndex) {
+    public String getCurrentCourseName() {
+        int currentNoteIndex = getCurrentNoteIndex();
         if (currentNoteIndex < 0)
             return "";
         return courses.get(calendar.get(currentNoteIndex).courseIndex).name;
     }
 
     public int getCurrentDayNumber() {
-        return getCurrentDayNumber(getCurrentNoteIndex());
-    }
-
-    public int getCurrentDayNumber(int currentNoteIndex) {
+        int currentNoteIndex = getCurrentNoteIndex();
         if (currentNoteIndex < 0)
             return -1;
         ChronoLocalDate today = LocalDate.now();
         ChronoLocalDate begin = calendar.get(currentNoteIndex).date;
-        return today.compareTo(begin);
+        return (int) DAYS.between(begin, today);
     }
 
     public int getCurrentDayIndex() {
-        return getCurrentDayIndex(getCurrentNoteIndex());
-    }
-
-    public int getCurrentDayIndex(int currentNoteIndex) {
+        int currentNoteIndex = getCurrentNoteIndex();
         if (currentNoteIndex < 0)
             return -1;
         LocalDate today = LocalDate.now();
         Note note = calendar.get(currentNoteIndex);
         int courseIndex = note.courseIndex;
-        int dayIndex = today.compareTo(note.date);
-        if (dayIndex < 0)
+        int daysBetween = (int) DAYS.between(note.date, today);
+        if ((daysBetween < 0) || (daysBetween >= courses.get(courseIndex).dayIndexes.size()))
             return -1;
-        return courses.get(courseIndex).dayIndexes.get(dayIndex);
+        return courses.get(courseIndex).dayIndexes.get(daysBetween);
     }
 
     ////////////////////////////////////////////////////////////////
@@ -208,6 +201,12 @@ public class Data implements Serializable, Loggible {
 
     public Day getDay(int index) {
         try {
+            if ((0 > index) || (index > getDaysAmount())) {
+                if (getDaysAmount() > 0)
+                    index = 0;
+                else
+                    return null;
+            }
             return days.get(index);
         } catch (Exception exception) {
             return null;
@@ -248,12 +247,15 @@ public class Data implements Serializable, Loggible {
     ////////////////////////////////////////////////////////////////
 
     public int getDayEventsAmount(int dayIndex) {
-        return (days.size() == 0) ? 0 : days.get(dayIndex).events.size();
+        Day day = getDay(dayIndex);
+        return (day == null) ? 0 : day.events.size();
     }
 
     public Day.Event getDayEvent(int dayIndex, int index) {
         try {
-            return days.get(dayIndex).events.get(index);
+            Day day = getDay(dayIndex);
+            if (day == null) return null;
+            return ((0 > index) || (index > day.events.size())) ? null : day.events.get(index);
         } catch (Exception exception) {
             return null;
         }
@@ -392,7 +394,9 @@ public class Data implements Serializable, Loggible {
     public static Data load(String fileName) {
         String fullFileName = "";
         try { // Create data directory
-            if (fileName != null) fullFileName = getFullAnyName(fileName); else {
+            if (fileName != null)
+                fullFileName = getFullAnyName(fileName);
+            else {
                 //Path path = Paths.get(Resources.getJarDirName() + Gongule.projectName + ".xml");
                 fullFileName = Files.exists(Paths.get(getFullCurrentName())) ? getFullCurrentName() : getFullDefaultName();
                 Path path = Paths.get(Data.getFullDirName());
@@ -404,7 +408,11 @@ public class Data implements Serializable, Loggible {
                     Resources.getAsFile("xml/data.xml", dirName + defaultName + ".xml", true); // Extract cfg-file from jar-package to jar-directory
                     // Load current configuration
             }
-            return (Data) new XStream().fromXML(new File(fullFileName));
+            Data result = (Data) new XStream().fromXML(new File(fullFileName));
+            if (fullFileName.equalsIgnoreCase(getFullDefaultName()))
+                if (result.calendar.size() > 0)
+                    result.calendar.get(0).date = LocalDate.now().minusDays(1);
+            return result;
         } catch(Exception exception) {
             logger.error("Impossible load '{}' configuration: {}", fullFileName, exception);
             return null;

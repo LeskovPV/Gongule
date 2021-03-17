@@ -58,15 +58,14 @@ public class MainServlet extends HttpServlet implements TemplateFillable {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        String actionName = request.getParameter("action");
         for (PageType pageType: PageType.values()) {
             // check menu button click
-            if (actionName.equals(pageType.getName() + "_menu")) {
+            if (request.getParameter("action").equals(pageType.getName() + "_menu")) {
                 response.sendRedirect("/ui?" + pageType.getName());
                 return;
             }
             // check action on page
-            if (content.get(pageType).applyAction(actionName, request)) {
+            if (content.get(pageType).applyAction(request)) {
                 response.sendRedirect("/ui?" + pageType.getName());
                 return;
             }

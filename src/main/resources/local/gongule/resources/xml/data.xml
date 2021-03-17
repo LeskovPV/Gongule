@@ -112,5 +112,11 @@
       </dayIndexes>
     </local.gongule.tools.data.Course>
   </courses>
-  <calendar/>
+  <calendar>
+    <local.gongule.tools.data.Data_-Note>
+      <date>2000-01-01</date>
+      <courseIndex>0</courseIndex>
+      <outer-class reference="../../.."/>
+    </local.gongule.tools.data.Data_-Note>
+  </calendar>
 </local.gongule.tools.data.Data>

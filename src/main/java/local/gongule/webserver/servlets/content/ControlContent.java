@@ -40,6 +40,7 @@ public class ControlContent extends Content {
         contentVariables.put("calendar_notes", rows);
         String options = "";
         int courseIndex = Integer.valueOf(getAttribute(request, "select_course", "0"));
+        if ((0 > courseIndex) || (courseIndex > data.getCoursesAmount())) courseIndex = 0;
         for (int i = 0; i < data.getCoursesAmount(); i++) {
             Map<String, Object> piecesVariables = new HashMap();
             piecesVariables.put("value", i);
@@ -83,6 +84,7 @@ public class ControlContent extends Content {
             LocalDate courseDate = LocalDate.parse(request.getParameter("course_date"), DateFormatter.get());
             setAttribute(request, "select_course", String.valueOf(courseIndex));
             Data.getInstance().addCalendarNote(courseIndex, courseDate);
+
             GongExecutor.reset();
             return true;
         } catch (Exception exception) {

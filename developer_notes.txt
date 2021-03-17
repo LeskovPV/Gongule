@@ -5,8 +5,7 @@
 ############################################
 
 NEEDING
+* To write manual *
 * Change certificate store (password and so on)
-* Support setting audio canal from user interface
 * Refactoring
-* Bag with course day number in calendar today on control page
-* Add index-check on select (days and courses)
+* Support setting audio canal from user interface

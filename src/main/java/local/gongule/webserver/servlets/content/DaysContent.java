@@ -21,13 +21,14 @@ public class DaysContent extends Content {
     }
 
     public String get(HttpServletRequest request) {
-        Map<String, Object> contentVariables = new HashMap();
-        int selectedDay = Integer.valueOf(getAttribute(request, "select_day", "0"));
-        String rows = "";
         Data data = Data.getInstance();
-        for (int i = 0; i < data.getDayEventsAmount(selectedDay); i++) {
+        Map<String, Object> contentVariables = new HashMap();
+        int dayIndex = Integer.valueOf(getAttribute(request, "select_day", "0"));
+        if ((0 > dayIndex) || (dayIndex > data.getDaysAmount())) dayIndex = 0;
+        String rows = "";
+        for (int i = 0; i < data.getDayEventsAmount(dayIndex); i++) {
             Map<String, Object> piecesVariables = new HashMap();
-            Day.Event event = data.getDayEvent(selectedDay, i);
+            Day.Event event = data.getDayEvent(dayIndex, i);
             piecesVariables.put("color", ColorSchema.getInstance().getTextColor());
             piecesVariables.put("time", event.time.format(TimeFormatter.get()));
             piecesVariables.put("gong", data.getGong(event.gongIndex).name);
@@ -37,18 +38,18 @@ public class DaysContent extends Content {
             rows += fillTemplate("html/pieces/event.html", piecesVariables) + "\n";
         }
         contentVariables.put("day_events", rows);
-
         String options = "";
         for (int i = 0; i < data.getDaysAmount(); i++) {
             Map<String, Object> piecesVariables = new HashMap();
             piecesVariables.put("value", i);
-            piecesVariables.put("selected", (i == selectedDay) ? "selected" : "");
+            piecesVariables.put("selected", (i == dayIndex) ? "selected" : "");
             piecesVariables.put("caption", data.getDay(i).name);
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
         contentVariables.put("day_options", options);
         options = "";
         int gongIndex = Integer.valueOf(getAttribute(request, "select_gong", "0"));
+        if ((0 > gongIndex) || (gongIndex > data.getGongsAmount())) gongIndex = 0;
         for (int i = 0; i < data.getGongsAmount(); i++) {
             Map<String, Object> piecesVariables = new HashMap();
             piecesVariables.put("value", i);
