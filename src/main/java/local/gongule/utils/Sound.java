@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.sound.sampled.*;
 
 public class Sound implements AutoCloseable, Loggible {
-    private boolean released = false;
+    private boolean released;
     private AudioInputStream stream = null;
     private Clip clip = null;
     private FloatControl volumeControl = null;
@@ -24,7 +24,6 @@ public class Sound implements AutoCloseable, Loggible {
         } catch (IOException | UnsupportedAudioFileException | LineUnavailableException exc) {
             exc.printStackTrace();
             released = false;
-
             close();
         }
     }

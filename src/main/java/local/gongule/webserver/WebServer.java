@@ -2,7 +2,6 @@ package local.gongule.webserver;
 
 import local.gongule.tools.ConfigFile;
 import local.gongule.webserver.servlets.DownloadServlet;
-import local.gongule.webserver.servlets.UploadServlet;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.FontFamily;
 import org.eclipse.jetty.server.*;
@@ -16,8 +15,6 @@ import local.gongule.utils.colors.ColorSchema;
 import local.gongule.webserver.servlets.MainServlet;
 import local.gongule.webserver.servlets.ResourceServlet;
 
-import javax.servlet.MultipartConfigElement;
-import java.io.File;
 import java.io.IOException;
 import java.net.*;
 
@@ -56,27 +53,27 @@ public class WebServer implements Loggible {
     }
 
     ////////////////////////////////////////////////////////////////
-    private static String keyStore = "keystore";
+    private static String keyStoreFile = "keystore";
 
-    public static void setKeyStore(String value) {
+    public static void setKeyStoreFile(String value) {
         if (value == null) return;
-        keyStore = value;
+        keyStoreFile = value;
     }
 
     ////////////////////////////////////////////////////////////////
-    private static String storePassword = "staffbots";
+    private static String keyStorePassword = "13213455";
 
-    public static void setStorePassword(String value) {
+    public static void setKeyStorePassword(String value) {
         if (value == null) return;
-        storePassword = value;
+        keyStorePassword = value;
     }
 
     ////////////////////////////////////////////////////////////////
-    private static String managerPassword = "staffbots";
+    private static String keyManagerPassword = "13213455";
 
-    public static void setManagerPassword(String value) {
+    public static void setKeyManagerPassword(String value) {
         if (value == null) return;
-        managerPassword = value;
+        keyManagerPassword = value;
     }
 
     ////////////////////////////////////////////////////////////////
@@ -125,7 +122,7 @@ public class WebServer implements Loggible {
 
     private static ServerConnector getHttpsConnector() {
         checkPort(httpsPort);
-        String keyStorePath = Resources.getAsFile(keyStore, Gongule.projectName + ".key").getPath();
+        String keyStorePath = Resources.getAsFile(keyStoreFile, Gongule.projectName + ".key", true).getPath();
         // HTTPS configuration
         HttpConfiguration https = new HttpConfiguration();
         https.addCustomizer(new SecureRequestCustomizer());            // Configuring SSL
@@ -133,8 +130,8 @@ public class WebServer implements Loggible {
         //SslContextFactory sslContextFactory = new JettySslContextFactory(configuration.getSslProviders());
         // Defining keystore path and passwords
         sslContextFactory.setKeyStorePath(keyStorePath);
-        sslContextFactory.setKeyStorePassword(storePassword);
-        sslContextFactory.setKeyManagerPassword(managerPassword);
+        sslContextFactory.setKeyStorePassword(keyStorePassword);
+        sslContextFactory.setKeyManagerPassword(keyManagerPassword);
         // Configuring the connector
         ServerConnector connector = new ServerConnector(server,
                 new SslConnectionFactory(sslContextFactory, "http/1.1"),

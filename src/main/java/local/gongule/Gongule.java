@@ -95,9 +95,9 @@ public class Gongule implements Loggible {
         WebServer.setUseHttp(properties.getBooleanProperty("http.use"));
         WebServer.setHttpPort(properties.getIntegerProperty("http.port"));
         WebServer.setHttpsPort(properties.getIntegerProperty("https.port"));
-        WebServer.setKeyStore(properties.getProperty("keystore.file"));
-        WebServer.setStorePassword(properties.getProperty("keystore.password"));
-        WebServer.setManagerPassword(properties.getProperty("keystore.manager"));
+        WebServer.setKeyStoreFile(properties.getProperty("key.storefile"));
+        WebServer.setKeyStorePassword(properties.getProperty("key.storepassword"));
+        WebServer.setKeyManagerPassword(properties.getProperty("key.managerpassword"));
 
         logger.info("Properties is appled");
     }

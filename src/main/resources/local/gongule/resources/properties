@@ -1,5 +1,5 @@
 # Project properties
-gongule.version = 0.97
+gongule.version = 0.98
 gongule.website = https://github.com/LeskovPV/Gongule
 
 # Enable/disable http-server (https - always on):
@@ -15,14 +15,11 @@ http.port = 80
 # set by default is 443
 https.port = 443
 
-# Certificate store
-# set by default is keystore
-keystore.file = keystore
+# Certificate key store file in resources
+key.storefile = keystore
 
-# Certificate store password
-# set by default is staffbots
-keystore.password = staffbots
+# Certificate key store password
+key.storepassword = 13213455
 
-# Certificate password,
-# set by default is staffbots
-keystore.manager = staffbots
+# Certificate key manager password,
+key.managerpassword = 13213455
