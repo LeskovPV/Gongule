@@ -24,4 +24,5 @@ public class TimeFunctions {
         return  time1.isAfter(time2.minusMinutes(minutes)) &&
                 time1.isBefore(time2.plusMinutes(minutes));
     }
+
 }

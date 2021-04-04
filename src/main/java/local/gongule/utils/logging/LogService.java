@@ -1,7 +1,6 @@
 package local.gongule.utils.logging;
 
 import local.gongule.Gongule;
-import local.gongule.tools.data.Data;
 import local.gongule.utils.resources.Resources;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -78,4 +77,5 @@ public class LogService {
             IOUtils.closeQuietly(input);
         }
     }
+
 }

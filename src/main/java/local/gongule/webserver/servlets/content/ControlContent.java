@@ -83,12 +83,13 @@ public class ControlContent extends Content {
             int courseIndex = Integer.valueOf(request.getParameter("select_course"));
             LocalDate courseDate = LocalDate.parse(request.getParameter("course_date"), DateFormatter.get());
             setAttribute(request, "select_course", String.valueOf(courseIndex));
-            Data.getInstance().addCalendarNote(courseIndex, courseDate);
-
+            Data data = Data.getInstance();
+            if (!data.addCalendarNote(courseIndex, courseDate)) return false;
+            logger.info("Added course '{}' to calendar on ", data.getCourse(courseIndex).name, courseDate.format(DateFormatter.get()));
             GongExecutor.reset();
             return true;
         } catch (Exception exception) {
-            logger.error(exception);
+            logger.error("Impossible add course to calendar: {}", exception);
             return false;
         }
     }
@@ -96,10 +97,15 @@ public class ControlContent extends Content {
     private boolean removeNote(HttpServletRequest request){
         try {
             int noteIndex = Integer.valueOf(request.getParameter("remove_note"));
-            Data.getInstance().removeCalendarNote(noteIndex);
+            Data data = Data.getInstance();
+            String courseName = data.calendar.get(noteIndex).getCourse().name;
+            LocalDate courseDate = data.calendar.get(noteIndex).date;
+            if (!data.removeCalendarNote(noteIndex));
+            logger.info("Removed course '{}' to calendar on ", courseName, courseDate.format(DateFormatter.get()));
             GongExecutor.reset();
             return true;
         } catch (Exception exception) {
+            logger.error("Impossible remove course from calendar: {}", exception);
             return false;
         }
     }

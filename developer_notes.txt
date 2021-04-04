@@ -5,6 +5,5 @@
 ############################################
 
 NEEDING
-* To write manual *
 * Refactoring
 * Support setting audio canal from user interface

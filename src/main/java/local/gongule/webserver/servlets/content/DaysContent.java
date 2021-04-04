@@ -66,10 +66,13 @@ public class DaysContent extends Content {
 
     private boolean createDay(HttpServletRequest request) {
         try {
-            Data.getInstance().dayCreate(request.getParameter("day_name"));
-            setAttribute(request, "select_day", String.valueOf(Data.getInstance().getDaysAmount()-1));
+            String dayName = request.getParameter("day_name");
+            if (!Data.getInstance().dayCreate(dayName)) return false;
+            logger.info("Created day '{}'", dayName);
+            setAttribute(request, "select_day", String.valueOf(Data.getInstance().getDaysAmount() - 1));
             return true;
         } catch (Exception exception) {
+            logger.error("Impossible create day: {}", exception.getMessage());
             return false;
         }
     }
@@ -86,11 +89,16 @@ public class DaysContent extends Content {
 
     private boolean deleteDay(HttpServletRequest request) {
         try {
-            Data.getInstance().dayDelete(Integer.valueOf(request.getParameter("select_day")));
-            setAttribute(request, "select_day", new Integer(0).toString());
+            Data data = Data.getInstance();
+            int dayIndex = Integer.valueOf(request.getParameter("select_day"));
+            String dayName = data.getDay(dayIndex).name;
+            data.dayDelete(dayIndex);
+            logger.info("Day '{}' is deleted", dayName);
+            setAttribute(request, "select_day", "0");
             GongExecutor.reset();
             return true;
         } catch (Exception exception) {
+            logger.error("Impossible delete day: {}", exception.getMessage());
             return false;
         }
     }
@@ -102,10 +110,12 @@ public class DaysContent extends Content {
             String eventName = request.getParameter("event_name");
             int gongIndex = Integer.valueOf(request.getParameter( "select_gong"));
             setAttribute(request, "select_gong", String.valueOf(gongIndex));
-            Data.getInstance().addDayEvent(dayIndex, eventTime, eventName, gongIndex);
+            if (!Data.getInstance().addDayEvent(dayIndex, eventTime, eventName, gongIndex)) return false;
+            logger.info("Added event '{}' to '{}'", eventName, Data.getInstance().getDay(dayIndex).name);
             GongExecutor.reset();
             return true;
         } catch (Exception exception) {
+            logger.error("Impossible add event to day: {}", exception.getMessage());
             return false;
         }
     }
@@ -114,10 +124,14 @@ public class DaysContent extends Content {
         try {
             int dayIndex = Integer.valueOf(request.getParameter("select_day"));
             int eventIndex = Integer.valueOf(request.getParameter("remove_event"));
-            Data.getInstance().removeDayEvent(dayIndex, eventIndex);
+            Data data = Data.getInstance();
+            String eventName = data.getDayEvent(dayIndex, eventIndex).name;
+            if(!data.removeDayEvent(dayIndex, eventIndex)) return false;
+            logger.info("Removed event '{}' from '{}'", eventName, data.getDay(dayIndex).name);
             GongExecutor.reset();
             return true;
         } catch (Exception exception) {
+            logger.error("Impossible remove event from day: {}", exception.getMessage());
             return false;
         }
     }

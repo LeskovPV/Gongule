@@ -18,9 +18,10 @@ public class DownloadServlet extends HttpServlet implements Loggible {
         String queryString = request.getQueryString();
         if ("log".equalsIgnoreCase(queryString))
             return LogService.getAllLogFile();
-        if ("man".equalsIgnoreCase(queryString)) {
+        if ("man".equalsIgnoreCase(queryString))
             return Resources.getAsFile("man/manual.pdf", "Gongule.pdf", true);
-        }
+        if ("jar".equalsIgnoreCase(queryString))
+            return new File(Resources.getJarDirName() + "Gongule.jar");;
         return null;
     }
 

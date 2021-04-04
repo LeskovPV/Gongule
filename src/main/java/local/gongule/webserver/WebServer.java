@@ -85,7 +85,7 @@ public class WebServer implements Loggible {
     }
 
     ////////////////////////////////////////////////////////////////
-    private static int fontIndex = ConfigFile.getInstance().get("FontIndex", 0);
+    private static int fontIndex = ConfigFile.getInstance().get("FontIndex", 2);
 
     public static int getFontIndex() {
         return fontIndex;

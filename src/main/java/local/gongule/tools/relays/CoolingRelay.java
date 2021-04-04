@@ -15,7 +15,7 @@ import local.gongule.utils.system.SystemUtils;
  **/
 public class CoolingRelay extends Relay {
 
-    static private CoolingRelay instance = new CoolingRelay(RaspiPin.GPIO_04, 50, 65);
+    static private CoolingRelay instance = new CoolingRelay(RaspiPin.GPIO_04, 55, 70);
 
     static public CoolingRelay getInstance() {
         return instance;
@@ -73,7 +73,7 @@ public class CoolingRelay extends Relay {
             }
             if ((temperature < minTemperature) && (!value)) {
                 set(true);
-                logger.trace("Cooling relay turn-off. CPU temperature is {}°C", temperature);
+                logger.info("Cooling relay turn-off. CPU temperature is {}°C", temperature);
             }
             //logger.trace("Temperature = {}", relayTemperature);
         }

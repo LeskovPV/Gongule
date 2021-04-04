@@ -20,7 +20,7 @@ public class GongExecutor implements Loggible {
     static private ScheduledExecutorService service = null;
 
     static public void init() {
-        if (ConfigFile.getInstance().get("processIsPaused", true))
+        if (ConfigFile.getInstance().get("processIsPaused", false))
             pause();
         else
             run();

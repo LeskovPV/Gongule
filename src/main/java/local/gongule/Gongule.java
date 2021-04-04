@@ -4,6 +4,7 @@ import local.gongule.tools.process.GongExecutor;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.resources.Resources;
 import local.gongule.utils.ParsableProperties;
+import local.gongule.utils.system.SystemUtils;
 import local.gongule.webserver.WebServer;
 import local.gongule.windows.MainWindow;
 import java.lang.invoke.MethodHandles;
@@ -18,7 +19,7 @@ public class Gongule implements Loggible {
      */
     public static void main(String[] args) {
         logger.warn("________________________________");
-        logger.warn("Gongule is started");
+        logger.warn("Gongule is started on {} {}", SystemUtils.osName, SystemUtils.osRelease);
         applyProperties();
         WebServer.start();
         MainWindow.open(getFullProjectName());
@@ -36,8 +37,6 @@ public class Gongule implements Loggible {
      * Real value assign from properties file in applyProperties method
      **/
     private static String projectVersion = "0.00";
-
-    private static String projectWebsite = "https://github.com/LeskovPV/Gongule";
 
     /**
      * Return project version
@@ -63,22 +62,6 @@ public class Gongule implements Loggible {
     }
 
     /**
-     * Return project version
-     **/
-    public static String getProjectWebsite() {
-        return projectWebsite;
-    }
-
-    /**
-     * Set project version
-     **/
-    public static void setProjectWebsite(String value) {
-        if (value == null) return;
-        if (value.trim().isEmpty()) return;
-        projectWebsite = value.trim();
-    }
-
-    /**
      * Apply properties from jar-package resources
      */
     private static void applyProperties() {
@@ -90,7 +73,6 @@ public class Gongule implements Loggible {
             System.exit(0);
         }
         setProjectVersion(properties.getProperty("gongule.version"));
-        setProjectWebsite(properties.getProperty("gongule.website"));
 
         WebServer.setUseHttp(properties.getBooleanProperty("http.use"));
         WebServer.setHttpPort(properties.getIntegerProperty("http.port"));

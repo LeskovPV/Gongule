@@ -76,20 +76,22 @@ public class SetupContent extends Content{
         contentVariables.put("min_temperature", CoolingRelay.getInstance().getMinTemperature());
         contentVariables.put("max_temperature", CoolingRelay.getInstance().getMaxTemperature());
         contentVariables.put("cpu_temperature",SystemUtils.getCPUTemperature(55));
-        contentVariables.put("raspbian_display", SystemUtils.isRaspbian ? "table-row" : "table-row");
+        contentVariables.put("raspbian_display", SystemUtils.isRaspbian ? "table-row" : "none");
         contentVariables.put("half_color", ColorSchema.getInstance().getHalfColor());
         return super.getFromTemplate(contentVariables);
     }
 
     private boolean deleteGong(HttpServletRequest request) {
-        String gongIndex = request.getParameter("delete_gong");
         try {
-            Data.getInstance().gongDelete(Integer.valueOf(gongIndex));
-            logger.info("Gong '" + gongIndex + "' is deleted");
+            Data data = Data.getInstance();
+            int gongIndex = Integer.valueOf(request.getParameter("delete_gong"));
+            String gongName = data.getGong(gongIndex).name;
+            if (!data.gongDelete(gongIndex)) return false;
+            logger.info("Gong '{}' is deleted", gongName);
             GongExecutor.reset();
             return true;
         } catch (Exception exception) {
-            logger.info("Impossible delete '" + gongIndex + "' configuration");
+            logger.error("Impossible delete gong: {}", exception.getMessage());
             return false;
         }
     }
@@ -97,7 +99,7 @@ public class SetupContent extends Content{
     private boolean playGong(HttpServletRequest request) {
         try {
             Gong gong = Data.getInstance().getGong(Integer.valueOf(request.getParameter("play_gong")));
-            GongSound.play(gong, "The testing",false);
+            GongSound.play(gong, "The manual control",false);
         } catch (Exception exception) {
             return false;
         }
@@ -106,10 +108,13 @@ public class SetupContent extends Content{
 
     private boolean createGong(HttpServletRequest request) {
         try {
-            return Data.getInstance().gongCreate(
-                    request.getParameter("gong_name"),
-                    Integer.valueOf(request.getParameter("gong_amount")));
+            String gongName = request.getParameter("gong_name");
+            int gongAmount = Integer.valueOf(request.getParameter("gong_amount"));
+            if (!Data.getInstance().gongCreate(gongName, gongAmount)) return false;
+            logger.info("Created gong '{}'", gongName);
+            return true;
         } catch (Exception exception) {
+            logger.error("Impossible create gong: {}", exception.getMessage());
             return false;
         }
     }
@@ -134,7 +139,7 @@ public class SetupContent extends Content{
             logger.info("Configuration save as '{}'", name);
             return true;
         } else {
-            logger.warn("Impossible save configuration as '{}'", name);
+            logger.error("Impossible save configuration as '{}'", name);
             return false;
         }
     }
@@ -142,7 +147,10 @@ public class SetupContent extends Content{
     private boolean loadConfiguration(HttpServletRequest request) {
         String name = request.getParameter("select_configuration");
         boolean result = Data.setInstance(Data.load(name));
-        logger.info(result ? "Configuration '{}' is loaded" : "Impossible load '{}' configuration", name);
+        if (result)
+            logger.info("Configuration '{}' is loaded", name);
+        else
+            logger.info("Impossible load '{}' configuration", name);
         if (result) GongExecutor.reset();
         return result;
     }
@@ -153,14 +161,17 @@ public class SetupContent extends Content{
         if (result)
             logger.info("Configuration '{}' is deleted", name);
         else
-            logger.info("Impossible delete '{}' configuration", name);
+            logger.error("Impossible delete '{}' configuration", name);
         return result;
     }
 
     private boolean setDelay(HttpServletRequest request) {
         try {
-            GongSound.setStrikesDelay(Integer.valueOf(request.getParameter("strikes_delay")));
+            int strikesDelay = Integer.valueOf(request.getParameter("strikes_delay"));
+            GongSound.setStrikesDelay(strikesDelay);
+            logger.info("Changed a delay between gong strikes. New value is {}", strikesDelay);
         } catch (Exception exception) {
+            logger.error("Impossible set delay between gong strikes: {}", exception.getMessage());
             return false;
         }
         return true;
@@ -168,8 +179,11 @@ public class SetupContent extends Content{
 
     private boolean setAdvance(HttpServletRequest request) {
         try {
-            GongExecutor.setAdvanceTime(Integer.valueOf(request.getParameter("advance_time")));
+            int advanceTime = Integer.valueOf(request.getParameter("advance_time"));
+            GongExecutor.setAdvanceTime(advanceTime);
+            logger.info("Changed a amplifier power turn-on advance time. New value is {}", advanceTime);
         } catch (Exception exception) {
+            logger.error("Impossible set amplifier power turn-on advance time: {}", exception.getMessage());
             return false;
         }
         return true;
@@ -197,6 +211,7 @@ public class SetupContent extends Content{
                     Double.valueOf(request.getParameter("max_temperature"))
             );
         } catch (Exception exception) {
+            logger.error("Impossible set temperatures: {}", exception.getMessage());
             return false;
         }
         return true;

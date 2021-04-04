@@ -3,7 +3,6 @@ package local.gongule.utils.system;
 import local.gongule.utils.formatter.DateFormatter;
 import local.gongule.utils.formatter.TimeFormatter;
 import local.gongule.utils.logging.Loggible;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,7 +26,7 @@ public class SystemUtils implements Loggible {
                 Properties properties = new Properties();
                 properties.load(fileInputStream);
                 return properties.getProperty("ID");
-            } catch (Exception exception) {}
+            } catch (Exception exception) { }
         return "";
     }
 
@@ -37,7 +36,7 @@ public class SystemUtils implements Loggible {
 
     public static boolean isLinux() {
         String os = osName.toLowerCase();
-        return os.contains("nix") || os.contains("nux") || os.contains("aix") || isRaspbian();
+        return os.contains("nix") || os.contains("nux") || os.contains("aix");
     }
 
     public static boolean isWindows() {
@@ -100,7 +99,7 @@ public class SystemUtils implements Loggible {
             final Process timeProcess = Runtime.getRuntime().exec(cmd);
             timeProcess.waitFor();
             timeProcess.exitValue();
-            logger.warn("Changed datetime. New value is {}", date.format(DateFormatter.get()));
+            logger.warn("Changed date and time. New value is {} {}", date.format(DateFormatter.get()), time.format(TimeFormatter.get(true)));
         } catch (Exception exception) {
             logger.error("Impossible set datetime: {}", exception.getMessage());
         }

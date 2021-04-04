@@ -27,6 +27,7 @@ public class ConfigFile {
     private void save() {
         save("");
     }
+
     private void save(String comments) {
         try {
             properties.store(new FileWriter(fileName), "Gongule config\n" + comments);

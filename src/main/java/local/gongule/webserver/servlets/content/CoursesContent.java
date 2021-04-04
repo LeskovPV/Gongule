@@ -40,7 +40,6 @@ public class CoursesContent extends Content {
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
         contentVariables.put("course_options", options);
-
         options = "";
         int dayIndex = Integer.valueOf(getAttribute(request, "select_day", "0"));
         for (int i = 0; i < data.getDaysAmount(); i++) {
@@ -58,10 +57,13 @@ public class CoursesContent extends Content {
     private boolean createCourse(HttpServletRequest request) {
         try {
             Data data = Data.getInstance();
-            data.courseCreate(request.getParameter("course_name"));
+            String courseName = request.getParameter("course_name");
+            if (!data.courseCreate(courseName)) return false;
+            logger.info("Course '{}' is deleted", courseName);
             setAttribute(request, "select_course", String.valueOf(data.getCoursesAmount()-1));
             return true;
         } catch (Exception exception) {
+            logger.error("Impossible create course: {}", exception.getMessage());
             return false;
         }
     }
@@ -78,11 +80,16 @@ public class CoursesContent extends Content {
 
     private boolean deleteCourse(HttpServletRequest request) {
         try {
-            Data.getInstance().courseDelete(Integer.valueOf(request.getParameter("select_course")));
-            setAttribute(request, "select_course", new Integer(0).toString());
+            Data data = Data.getInstance();
+            int courseIndex = Integer.valueOf(request.getParameter("select_course"));
+            String courseName = data.getCourse(courseIndex).name;
+            if (!data.courseDelete(courseIndex)) return false;
+            logger.info("Course '{}' is deleted", courseName);
+            setAttribute(request, "select_course", "0");
             GongExecutor.reset();
             return true;
         } catch (Exception exception) {
+            logger.error("Impossible delete course: {}", exception.getMessage());
             return false;
         }
     }
@@ -92,10 +99,13 @@ public class CoursesContent extends Content {
             int courseIndex = Integer.valueOf(request.getParameter("select_course"));
             int dayIndex = Integer.valueOf(request.getParameter("select_day"));
             setAttribute(request, "select_day", String.valueOf(dayIndex));
-            Data.getInstance().createCourseDay(courseIndex, dayIndex);
+            Data data = Data.getInstance();
+            if (!data.createCourseDay(courseIndex, dayIndex)) return false;
+            logger.info("Added day '{}' to '{}'", data.getDay(dayIndex).name, data.getCourse(courseIndex).name);
             GongExecutor.reset();
             return true;
         } catch (Exception exception) {
+            logger.error("Impossible add day to course: {}", exception.getMessage());
             return false;
         }
     }
@@ -104,10 +114,14 @@ public class CoursesContent extends Content {
         try {
             int courseIndex = Integer.valueOf(request.getParameter("select_course"));
             int dayIndex = Integer.valueOf(request.getParameter("remove_day"));
-            Data.getInstance().removeCourseDay(courseIndex, dayIndex);
+            Data data = Data.getInstance();
+            String dayName = data.getDay(dayIndex).name;
+            if (!data.removeCourseDay(courseIndex, dayIndex)) return false;
+            logger.info("Removed day '{}' from '{}'", dayName, data.getCourse(courseIndex).name);
             GongExecutor.reset();
             return true;
         } catch (Exception exception) {
+            logger.error("Impossible remove day from course: {}", exception.getMessage());
             return false;
         }
     }
