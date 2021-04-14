@@ -72,7 +72,7 @@ public class Gongule implements Loggible {
             logger.error("Unpossible apply properties", exception);
             System.exit(0);
         }
-        setProjectVersion(properties.getProperty("gongule.version"));
+        setProjectVersion(properties.getProperty("project.version"));
 
         WebServer.setUseHttp(properties.getBooleanProperty("http.use"));
         WebServer.setHttpPort(properties.getIntegerProperty("http.port"));

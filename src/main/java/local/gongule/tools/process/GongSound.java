@@ -57,6 +57,7 @@ public class GongSound extends Thread implements Loggible {
         }
         PowerRelay.getInstance().set(false);
     }
+    
 
     /**
      * Delay between gongs in seconds for multiple strikes

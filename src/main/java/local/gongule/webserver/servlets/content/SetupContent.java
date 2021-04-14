@@ -197,6 +197,7 @@ public class SetupContent extends Content{
             LocalTime time = LocalTime.parse(datetimes[1], TimeFormatter.get(true));
             SystemUtils.setDateTime(date, time);
             GongExecutor.reset();
+            GongExecutor.runMidnightReset();
             return true;
         } catch (Exception exception) {
             logger.error("Impossible parse '{}' to datetime value", request.getParameter("datetime_value"));

@@ -1,5 +1,5 @@
 # Project properties
-gongule.version = 1.00
+project.version = 1.01
 
 # Enable/disable http-server (https - always on):
 # true - disable, set by default
