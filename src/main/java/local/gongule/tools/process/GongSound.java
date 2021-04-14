@@ -42,28 +42,45 @@ public class GongSound extends Thread implements Loggible {
             try {
                 sleep(GongExecutor.getAdvanceTime() * 1000);
             } catch (InterruptedException exception) {
-                logger.trace("Waked up from advance time");
+                logger.info("Waked up from advance time");
             }
         logger.info("{}. {} gong is playing", eventName, gong.name);
+        int maxVolumeNumber = getMaxVolumeNumber();
+        int minVolumePercent = getMinVolumePercent();
+        int volumeNumber = (maxVolumeNumber > gong.amount) ? gong.amount : maxVolumeNumber;
         for (int i = 0; i < gong.amount; i++) {
+            double volume = 100.0;
+            if ((gong.amount > 1)&&(volumeNumber > 1))
+                volume = (minVolumePercent + (100.0 - minVolumePercent) * i/(volumeNumber-1))/100.0;
+            sound.setVolume(volume);
             sound.play(true);
             sound.join();
             try {
                 sleep(strikesDelay * 1000);
             } catch (InterruptedException exception) {
-                logger.trace("Waked up from strikes delay");
+                logger.info("Waked up from strikes delay");
                 break;
             }
         }
         PowerRelay.getInstance().set(false);
     }
-    
 
     /**
      * Delay between gongs in seconds for multiple strikes
      */
     private static int strikesDelay = ConfigFile.getInstance().get("strikesDelay", 3);
 
+    public static int getMinVolumePercent() {
+        return ConfigFile.getInstance().get("minVolumePercent", 30, 1, 100);
+    }
+
+    public static int getMaxVolumeNumber() {
+        return ConfigFile.getInstance().get("maxVolumeNumber", 5, 1, 100);
+    }
+
+    /**
+     * A power turn-on advance time in seconds (for audio-amplifier)
+     */
     public static int getStrikesDelay() {
         return strikesDelay;
     }

@@ -80,6 +80,22 @@ public class ConfigFile {
         return properties.containsKey(name) ? properties.getIntegerProperty(name, defaultValue) : defaultValue;
     }
 
+    public int get(String name, int defaultValue, int minValue, int maxValue) {
+        load();
+        Integer value = properties.getIntegerProperty(name);
+        int result = (value == null) ? defaultValue : value;
+        if (result < minValue) {
+            result = minValue;
+            value = null;
+        };
+        if (result > maxValue) {
+            result = maxValue;
+            value = null;
+        };
+        if (value == null) set(name, result);
+        return result;
+    }
+
     public boolean get(String name, boolean defaultValue) {
         load();
         return properties.containsKey(name) ? properties.getBooleanProperty(name, defaultValue) : defaultValue;

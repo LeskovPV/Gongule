@@ -87,12 +87,12 @@ public class Sound implements AutoCloseable, Loggible {
 	/*
 	  x долже быть в пределах от 0 до 1 (от самого тихого к самому громкому)
 	*/
-    public void setVolume(float x) {
+    public void setVolume(double x) {
         if (x<0) x = 0;
         if (x>1) x = 1;
         float min = volumeControl.getMinimum();
         float max = volumeControl.getMaximum();
-        volumeControl.setValue((max-min)*x+min);
+        volumeControl.setValue((max-min)*((float)x)+min);
     }
 
     // Возвращает текущую громкость (число от 0 до 1)

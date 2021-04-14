@@ -20,6 +20,8 @@ public class GongExecutor implements Loggible {
     static private ScheduledExecutorService service = null;
 
     static public void init() {
+        GongSound.getMinVolumePercent();
+        GongSound.getMaxVolumeNumber();
         if (ConfigFile.getInstance().get("processIsPaused", false))
             pause();
         else
@@ -73,6 +75,7 @@ public class GongExecutor implements Loggible {
         ConfigFile.getInstance().set("processIsPaused", true);
         if (withLog) logger.warn("Process is paused");
     }
+
     static public void reset() {
         reset(true);
     }
