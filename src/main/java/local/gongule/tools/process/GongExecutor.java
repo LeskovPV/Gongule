@@ -20,7 +20,7 @@ public class GongExecutor implements Loggible {
     static private ScheduledExecutorService service = null;
 
     static public void init() {
-        GongSound.getMinVolumePercent();
+        GongSound.getMinVolumeLevel();
         GongSound.getMaxVolumeNumber();
         if (ConfigFile.getInstance().get("processIsPaused", false))
             pause();
@@ -112,11 +112,13 @@ public class GongExecutor implements Loggible {
         return SystemUtils.isRaspbian ? advanceTime : 0;
     }
 
-    public static void setAdvanceTime(int advanceTime) {
-        logger.info("Amplifier power turn-on advance time is changed from {} to {} second(s)", GongExecutor.advanceTime, advanceTime);
-        GongExecutor.advanceTime = advanceTime;
+    public static boolean setAdvanceTime(int time) {
+        if (advanceTime == time) return false;
+        logger.info("Amplifier power turn-on advance time is changed from {} to {} second(s)", advanceTime, time);
+        advanceTime = time;
         ConfigFile.getInstance().set("advanceTime", advanceTime);
         if (SystemUtils.isRaspbian) reset();
+        return true;
     }
 
 }

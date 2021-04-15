@@ -30,6 +30,8 @@ public class SetupContent extends Content{
         actions.put("load_configuration", (HttpServletRequest request) -> loadConfiguration(request));
         actions.put("delete_configuration", (HttpServletRequest request) -> deleteConfiguration(request));
         actions.put("set_delay", (HttpServletRequest request) -> setDelay(request));
+        actions.put("set_level", (HttpServletRequest request) -> setLevel(request));
+        actions.put("set_number", (HttpServletRequest request) -> setNumber(request));
         actions.put("set_advance", (HttpServletRequest request) -> setAdvance(request));
         actions.put("set_datetime", (HttpServletRequest request) -> setDateTime(request));
         actions.put("set_temperatures", (HttpServletRequest request) -> setTemperatures(request));
@@ -71,6 +73,8 @@ public class SetupContent extends Content{
         }
         contentVariables.put("configuration_options", options);
         contentVariables.put("strikes_delay", GongSound.getStrikesDelay());
+        contentVariables.put("volume_level", GongSound.getMinVolumeLevel());
+        contentVariables.put("volume_number", GongSound.getMaxVolumeNumber());
         contentVariables.put("advance_time", GongExecutor.getAdvanceTime());
         contentVariables.put("datetime_value", LocalDate.now().format(DateFormatter.get()) + " " + LocalTime.now().format(TimeFormatter.get(true)));
         contentVariables.put("min_temperature", CoolingRelay.getInstance().getMinTemperature());
@@ -169,9 +173,33 @@ public class SetupContent extends Content{
         try {
             int strikesDelay = Integer.valueOf(request.getParameter("strikes_delay"));
             GongSound.setStrikesDelay(strikesDelay);
-            logger.info("Changed a delay between gong strikes. New value is {}", strikesDelay);
+            //logger.info("Changed a delay between gong strikes. New value is {}", strikesDelay);
         } catch (Exception exception) {
             logger.error("Impossible set delay between gong strikes: {}", exception.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    private boolean setLevel(HttpServletRequest request) {
+        try {
+            int volumeLevel = Integer.valueOf(request.getParameter("volume_level"));
+            GongSound.setMinVolumeLevel(volumeLevel);
+            //logger.info("Changed a volume level percent of first gong. New value is {}", volumeLevel);
+        } catch (Exception exception) {
+            logger.error("Impossible set volume level percent of first gong: {}", exception.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    private boolean setNumber(HttpServletRequest request) {
+        try {
+            int volumeNumber = Integer.valueOf(request.getParameter("volume_number"));
+            GongSound.setMaxVolumeNumber(volumeNumber);
+            //logger.info("Changed a maximum volume gong number. New value is {}", volumeNumber);
+        } catch (Exception exception) {
+            logger.error("Impossible set maximum volume gong number: {}", exception.getMessage());
             return false;
         }
         return true;
@@ -181,7 +209,7 @@ public class SetupContent extends Content{
         try {
             int advanceTime = Integer.valueOf(request.getParameter("advance_time"));
             GongExecutor.setAdvanceTime(advanceTime);
-            logger.info("Changed a amplifier power turn-on advance time. New value is {}", advanceTime);
+            //logger.info("Changed a amplifier power turn-on advance time. New value is {}", advanceTime);
         } catch (Exception exception) {
             logger.error("Impossible set amplifier power turn-on advance time: {}", exception.getMessage());
             return false;

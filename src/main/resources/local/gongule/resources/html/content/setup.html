@@ -57,6 +57,36 @@
                                 </button>
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan='5' align='right'>
+                                <nobr>
+                                    Volume level percent of first gong:
+                                </nobr>
+                            </td>
+                            <td>
+                                <input type='number' name='volume_level' value='${volume_level}' min='10' max='100' size='4' title='Volume level percent of first gong'/>
+                            </td>
+                            <td>
+                                <button name='set_level' title='Set level' onclick='setAction(name)'>
+                                    <img src='resource?png/apply.png' valign='top'/>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='5' align='right'>
+                                <nobr>
+                                    Maximum volume gong number:
+                                </nobr>
+                            </td>
+                            <td>
+                                <input type='number' name='volume_number' value='${volume_number}' min='1' max='10' size='4' title='Maximum volume gong number'/>
+                            </td>
+                            <td>
+                                <button name='set_number' title='Set number' onclick='setAction(name)'>
+                                    <img src='resource?png/apply.png' valign='top'/>
+                                </button>
+                            </td>
+                        </tr>
                         <tr style='display:${raspbian_display}'>
                             <td colspan='5' align='right'>
                                 <nobr>

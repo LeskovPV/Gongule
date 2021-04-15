@@ -46,7 +46,7 @@ public class GongSound extends Thread implements Loggible {
             }
         logger.info("{}. {} gong is playing", eventName, gong.name);
         int maxVolumeNumber = getMaxVolumeNumber();
-        int minVolumePercent = getMinVolumePercent();
+        int minVolumePercent = getMinVolumeLevel();
         int volumeNumber = (maxVolumeNumber > gong.amount) ? gong.amount : maxVolumeNumber;
         for (int i = 0; i < gong.amount; i++) {
             double volume = 100.0;
@@ -68,28 +68,49 @@ public class GongSound extends Thread implements Loggible {
     /**
      * Delay between gongs in seconds for multiple strikes
      */
-    private static int strikesDelay = ConfigFile.getInstance().get("strikesDelay", 3);
+    private static int strikesDelay = ConfigFile.getInstance().get("strikesDelay", 0);
 
-    public static int getMinVolumePercent() {
-        return ConfigFile.getInstance().get("minVolumePercent", 30, 1, 100);
-    }
-
-    public static int getMaxVolumeNumber() {
-        return ConfigFile.getInstance().get("maxVolumeNumber", 5, 1, 100);
-    }
-
-    /**
-     * A power turn-on advance time in seconds (for audio-amplifier)
-     */
     public static int getStrikesDelay() {
         return strikesDelay;
     }
 
-    public static void setStrikesDelay(Integer strikesDelay) {
-        if (strikesDelay == null) return;
-        logger.info("Delay between gong strikes is changed from {} to {} second(s)", GongSound.strikesDelay, strikesDelay);
-        GongSound.strikesDelay = strikesDelay;
+    public static boolean setStrikesDelay(Integer delay) {
+        if (delay == null) return false;
+        if (strikesDelay == delay) return false;
+        logger.info("Delay between gong strikes is changed from {} to {} second(s)", strikesDelay, delay);
+        strikesDelay = delay;
         ConfigFile.getInstance().set("strikesDelay", strikesDelay);
+        return true;
+    }
+
+    private static int minVolumeLevel = ConfigFile.getInstance().get("minVolumeLevel", 50);
+
+    public static int getMinVolumeLevel() {
+        return minVolumeLevel;
+    }
+
+    public static boolean setMinVolumeLevel(Integer volumeLevel) {
+        if (volumeLevel == null) return false;
+        if (minVolumeLevel == volumeLevel) return false;
+        logger.info("Volume level percent of first gong is changed from {} to {} second(s)", minVolumeLevel, volumeLevel);
+        minVolumeLevel = volumeLevel;
+        ConfigFile.getInstance().set("minVolumeLevel", minVolumeLevel);
+        return true;
+    }
+
+    private static int maxVolumeNumber = ConfigFile.getInstance().get("maxVolumeNumber", 7);
+
+    public static int getMaxVolumeNumber() {
+        return maxVolumeNumber;
+    }
+
+    public static boolean setMaxVolumeNumber(Integer volumeNumber) {
+        if (volumeNumber == null) return false;
+        if (maxVolumeNumber == volumeNumber) return false;
+        logger.info("Maximum volume gong number is changed from {} to {} second(s)", maxVolumeNumber, volumeNumber);
+        maxVolumeNumber = volumeNumber;
+        ConfigFile.getInstance().set("maxVolumeNumber", maxVolumeNumber);
+        return true;
     }
 
     private static final Sound sound = new Sound(getGongFile().getPath());
@@ -110,7 +131,7 @@ public class GongSound extends Thread implements Loggible {
     public static File getGongFile() {
         if (gongFile == null)
             // Extract wav-file from jar-package to jar-directory
-            return Resources.getAsFile("wav/gong.wav", Gongule.projectName + ".wav", false);
+            return Resources.getAsFile("wav/gong.wav", Gongule.projectName + ".wav", true);
         else
             return gongFile;
     }
