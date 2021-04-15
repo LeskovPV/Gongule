@@ -8,5 +8,3 @@ NEEDING
 * Refactoring
 * Support setting audio canal from user interface for desktop (for release 2.0)
 * Replace PowerRelay to USB-port for desktop (for release 2.0)
-
-* UPDATE manual for use volume parameters
