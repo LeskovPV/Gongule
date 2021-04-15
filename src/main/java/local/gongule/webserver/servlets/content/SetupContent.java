@@ -64,10 +64,12 @@ public class SetupContent extends Content{
         contentVariables.put("font_options", options);
         options = "";
         List<String> files = Data.getFiles();
+        String selectConfiguration = getAttribute(request, "select_configuration", data.defaultName);
+        if (!files.contains(selectConfiguration)) selectConfiguration = data.defaultName;
         for(String file: files) {
             Map<String, Object> piecesVariables = new HashMap();
             piecesVariables.put("value", file);
-            piecesVariables.put("selected", (file.equalsIgnoreCase(data.defaultName)) ? "selected" : "");
+            piecesVariables.put("selected", (file.equalsIgnoreCase(selectConfiguration)) ? "selected" : "");
             piecesVariables.put("caption", file);
             options += fillTemplate("html/pieces/option.html", piecesVariables) + "\n";
         }
@@ -141,6 +143,7 @@ public class SetupContent extends Content{
         String name = request.getParameter("configuration_name");
         if (Data.getInstance().save(name)) {
             logger.info("Configuration save as '{}'", name);
+            setAttribute(request, "select_configuration", name);
             return true;
         } else {
             logger.error("Impossible save configuration as '{}'", name);
@@ -151,9 +154,10 @@ public class SetupContent extends Content{
     private boolean loadConfiguration(HttpServletRequest request) {
         String name = request.getParameter("select_configuration");
         boolean result = Data.setInstance(Data.load(name));
-        if (result)
+        if (result) {
             logger.info("Configuration '{}' is loaded", name);
-        else
+            setAttribute(request, "select_configuration", name);
+        } else
             logger.info("Impossible load '{}' configuration", name);
         if (result) GongExecutor.reset();
         return result;

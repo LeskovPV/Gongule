@@ -9,6 +9,4 @@ NEEDING
 * Support setting audio canal from user interface for desktop (for release 2.0)
 * Replace PowerRelay to USB-port for desktop (for release 2.0)
 
-* BAG Максимальных звук слишком тихий (выжать максимум из приложения, и/или разобраться с Raspbian)
-+ BAG После загрузки конфигурации всегда встаёт default, а не загруженная конфаproducts/free_editions.html
 * UPDATE manual for use volume parameters
