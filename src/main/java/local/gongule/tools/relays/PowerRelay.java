@@ -2,8 +2,10 @@ package local.gongule.tools.relays;
 
 import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.RaspiPin;
+import local.gongule.utils.system.SystemUtils;
 
 public class PowerRelay extends Relay {
+
 
     static private PowerRelay instance = new PowerRelay(RaspiPin.GPIO_05);
 
@@ -17,7 +19,7 @@ public class PowerRelay extends Relay {
 
     @Override
     public boolean set(boolean value) {
-        if (this.value == value) return value;
+        if (!SystemUtils.isRaspbian) return this.value;
         logger.info("Audio-amplifier power turn-{}", value ? "on": "off");
         return super.set(value);
     }

@@ -111,12 +111,12 @@ public class ControlContent extends Content {
     }
 
     private boolean runProcess(HttpServletRequest request) {
-        GongExecutor.run();
+        GongExecutor.runProcess();
         return true;
     }
 
     private boolean pauseProcess(HttpServletRequest request) {
-        GongExecutor.pause();
+        GongExecutor.pauseProcess();
         return true;
     }
 

@@ -1,6 +1,8 @@
 package local.gongule;
 
 import local.gongule.tools.process.GongExecutor;
+import local.gongule.tools.relays.CoolingRelay;
+import local.gongule.tools.relays.PowerRelay;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.resources.Resources;
 import local.gongule.utils.ParsableProperties;
@@ -17,9 +19,11 @@ public class Gongule implements Loggible {
     /**
      *  Point of entry
      */
-    public static void main(String[] args) {
+    static public void main(String[] args) {
         logger.warn("________________________________");
         logger.warn("Gongule is started on {} {}", SystemUtils.osName, SystemUtils.osRelease);
+        logger.info("Relay init: cooling turn-{}", CoolingRelay.getInstance().get() ? "off" : "on");
+        logger.info("Relay init: audio-amplifier power turn-{}", PowerRelay.getInstance().get() ? "on": "off");
         applyProperties();
         WebServer.start();
         MainWindow.open(getFullProjectName());
@@ -29,26 +33,26 @@ public class Gongule implements Loggible {
     /**
      * Project name is current (main) class name - Gongule
      **/
-    public static final String projectName = MethodHandles.lookup().lookupClass().getSimpleName();
+    static public final String projectName = MethodHandles.lookup().lookupClass().getSimpleName();
 
     /**
      * Project version
      * Default value assign here
      * Real value assign from properties file in applyProperties method
      **/
-    private static String projectVersion = "0.00";
+    static private String projectVersion = "0.00";
 
     /**
      * Return project version
      **/
-    public static String getProjectVersion() {
+    static public String getProjectVersion() {
         return projectVersion;
     }
 
     /**
      * Set project version
      **/
-    public static void setProjectVersion(String value) {
+    static public void setProjectVersion(String value) {
         if (value == null) return;
         if (value.trim().isEmpty()) return;
         projectVersion = value.trim();
@@ -57,14 +61,14 @@ public class Gongule implements Loggible {
     /**
      * Return full project name with version
      **/
-    public static String getFullProjectName(){
+    static public String getFullProjectName(){
         return projectName + "-" + getProjectVersion();
     }
 
     /**
      * Apply properties from jar-package resources
      */
-    private static void applyProperties() {
+    static private void applyProperties() {
         ParsableProperties properties = new ParsableProperties();
         try {
             properties.load(Resources.getAsStream("properties")); // load properties from jar-package resources

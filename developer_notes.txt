@@ -8,3 +8,8 @@ NEEDING
 * Refactoring
 * Support setting audio canal from user interface for desktop (for release 2.0)
 * Replace PowerRelay to USB-port for desktop (for release 2.0)
+
+* BAG При ручном запуске не останавливается текущий поток
+* ADD Добавить кнопку остановки звучания гонга.
+* BAG Говорят, не работает AdvanceTime (нет реакции на изменение)
+* BAG Говорят, после смены суток PowerRelay остаётся включенным всё время

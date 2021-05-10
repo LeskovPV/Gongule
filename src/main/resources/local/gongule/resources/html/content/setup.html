@@ -39,7 +39,12 @@
                                     <img src='resource?png/create.png' valign='top'/>
                                 </button>
                             </td>
-                            <td colspan='4' >
+                            <td>
+                                <button name='stop_gong' title='Stop gong' onclick='setAction(name)'>
+                                    <img src='resource?png/stop.png' valign='top'/>
+                                </button>
+                            </td>
+                            <td colspan='3' >
                             </td>
                         </tr>
                         <tr>
@@ -214,6 +219,18 @@
                 <td colspan='2'>
                     <table class='table data'>
                         <tr>
+                            <td>
+                                <script src='resource?js/date.format.js'></script>
+                                <script>
+                                    function setDateTime() {
+                                        document.getElementsByName('datetime_value')[0].value = new Date().format("dd.mm.yyyy HH:MM:ss");
+                                        setAction('set_datetime');
+                                    }
+                                </script>
+                                <button name='update_datetime' title='Update date&time' onclick='setDateTime()'>
+                                    <img src='resource?png/update.png' valign='top'/>
+                                </button>
+                            </td>
                             <td width='100%' align='right'>
                                 <nobr>
                                     Date and time:
@@ -229,7 +246,7 @@
                             </td>
                         </tr>
                         <tr style='display:${raspbian_display}'>
-                            <td width='100%' align='right'>
+                            <td width='100%' align='right' colspan='2'>
                                 <nobr>
                                     CPU temperatures:
                                 </nobr>
@@ -250,7 +267,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan='5' align='center'>
+                            <td colspan='6' align='center'>
                                 <table class='table border system'>
                                     <tr>
                                         <td>

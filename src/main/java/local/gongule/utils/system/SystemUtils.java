@@ -14,13 +14,13 @@ import java.util.Properties;
 
 public class SystemUtils implements Loggible {
 
-    public static final String osName = System.getProperty("os.name");
-    public static final String osVersion = System.getProperty("os.version");
-    public static final String osArchitecture = System.getProperty("os.arch");
-    public static final String osRelease = getOSRelease();
-    public static final boolean isRaspbian = isRaspbian();
+    static public final String osName = System.getProperty("os.name");
+    static public final String osVersion = System.getProperty("os.version");
+    static public final String osArchitecture = System.getProperty("os.arch");
+    static public final String osRelease = getOSRelease();
+    static public final boolean isRaspbian = isRaspbian();
 
-    private static String getOSRelease() {
+    static private String getOSRelease() {
         if (isLinux())
             try (FileInputStream fileInputStream = new FileInputStream("/etc/os-release")) {
                 Properties properties = new Properties();
@@ -30,31 +30,31 @@ public class SystemUtils implements Loggible {
         return "";
     }
 
-    private static boolean isRaspbian() {
+    static private boolean isRaspbian() {
         return osRelease.equalsIgnoreCase("raspbian");
     }
 
-    public static boolean isLinux() {
+    static public boolean isLinux() {
         String os = osName.toLowerCase();
         return os.contains("nix") || os.contains("nux") || os.contains("aix");
     }
 
-    public static boolean isWindows() {
+    static public boolean isWindows() {
         String os = osName.toLowerCase();
         return os.contains("win");
     }
 
-    public static boolean isMacos() {
+    static public boolean isMacos() {
         String os = osName.toLowerCase();
         return os.contains("mac") || os.contains("darwin");
     }
 
-    public static boolean isSunos() {
+    static public boolean isSunos() {
         String os = osName.toLowerCase();
         return os.contains("sunos");
     }
 
-    public static double getCPUTemperature(double defaultValue){
+    static public double getCPUTemperature(double defaultValue){
         if (isRaspbian())
             try (FileInputStream fstream = new FileInputStream("/sys/class/thermal/thermal_zone0/temp")) {
                 BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
@@ -63,15 +63,15 @@ public class SystemUtils implements Loggible {
         return defaultValue;
     }
 
-    public static boolean reboot() {
+    static public boolean reboot() {
         return shutdown(true);
     }
 
-    public static boolean shutdown() {
+    static public boolean shutdown() {
         return shutdown(false);
     }
 
-    private static boolean shutdown(boolean reboot) {
+    static private boolean shutdown(boolean reboot) {
         String command = null;
         if (isWindows()) command = "shutdown -" + (reboot ? "r" : "s") + " -t 0";
         if (isLinux()) command = "shutdown -" + (reboot ? "r" : "h") + " now";
@@ -86,7 +86,7 @@ public class SystemUtils implements Loggible {
         return true;
     }
 
-    public static LocalDate setDateTime(LocalDate date, LocalTime time) {
+    static public LocalDate setDateTime(LocalDate date, LocalTime time) {
         String command = null;
         if (isWindows()) command = "cmd /C date " + date.format(DateTimeFormatter.ofPattern("dd-MM-yy"));
         if (isLinux()) command = "date +%Y%m%d%T -s '" +

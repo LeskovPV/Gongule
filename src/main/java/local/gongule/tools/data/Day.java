@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Day implements Serializable {
 
-    public static class Event implements Serializable {
+    static public class Event implements Serializable {
         public LocalTime time;
         public String name;
         public int gongIndex;

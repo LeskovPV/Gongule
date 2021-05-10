@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.sound.sampled.*;
 
 public class Sound implements AutoCloseable, Loggible {
+
     private boolean released;
     private AudioInputStream stream = null;
     private Clip clip = null;
@@ -44,7 +45,7 @@ public class Sound implements AutoCloseable, Loggible {
 	  Если breakOld==true, о звук будет прерван и запущен заново
 	  Иначе ничего не произойдёт
 	*/
-    public void play(boolean breakOld) {
+    synchronized public void play(boolean breakOld) {
         if (released) {
             if (breakOld) {
                 clip.stop();
@@ -65,7 +66,7 @@ public class Sound implements AutoCloseable, Loggible {
     }
 
     // Останавливает воспроизведение
-    public void stop() {
+    synchronized public void stop() {
         if (playing) {
             clip.stop();
         }
@@ -126,11 +127,11 @@ public class Sound implements AutoCloseable, Loggible {
     }
 
     // Статический метод, для удобства
-    public static Sound playSound(String fileName) {
+    static public Sound playSound(String fileName) {
         return playSound(fileName, 1);
     }
 
-    public static Sound playSound(String fileName, double volume) {
+    static public Sound playSound(String fileName, double volume) {
         Sound snd = new Sound(fileName);
         snd.setVolume((float) volume);
         snd.play();

@@ -17,17 +17,17 @@ abstract public class Relay implements Loggible {
 
     public Relay(String name, Pin pin, Boolean value) {
         if (SystemUtils.isRaspbian) {
-            gpioPin = gpio.provisionDigitalOutputPin(pin, name, PinState.HIGH);
+            gpioPin = gpio.provisionDigitalOutputPin(pin, name, value ? PinState.HIGH : PinState.LOW);
             gpioPin.setShutdownOptions(true, PinState.LOW);
-            this.value = !value;
-            set(value);
+            //this.value = !value;
+            //set(value);
         }
         this.value = value;
     }
 
     public boolean set(boolean value) {
         if (this.value == value) return value;
-        if (!SystemUtils.isRaspbian) return this.value;
+        //if (!SystemUtils.isRaspbian) return this.value;
         if (value)
             gpioPin.high();
         else

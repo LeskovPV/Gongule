@@ -57,6 +57,7 @@ public class MainServlet extends HttpServlet implements TemplateFillable {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
+
         for (PageType pageType: PageType.values()) {
             // check menu button click
             if (request.getParameter("action").equals(pageType.getName() + "_menu")) {

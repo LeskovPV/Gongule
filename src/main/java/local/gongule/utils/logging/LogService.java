@@ -29,28 +29,28 @@ public class LogService {
         }
         Map<String, Object> pageVariables = new HashMap(0);
         pageVariables.put("logfile", getFullName());
-        File logConfFile = Resources.getAsFile(resourceLogConfig, getDirName() + "config.xml", pageVariables, false);
+        File logConfFile = Resources.getAsFile(resourceLogConfig, getDirName() + "config.xml", pageVariables, true);
         LoggerContext context = (LoggerContext) LogManager.getContext(false);
         context.setConfigLocation(logConfFile.toURI());
     }
 
-    public static String getDirName() {
+    static public String getDirName() {
         return "log/";
     }
 
-    public static String getFullDirName() {
+    static public String getFullDirName() {
         return Resources.getJarDirName() + getDirName();
     }
 
-    public static String getName() {
+    static public String getName() {
         return Gongule.projectName + ".log";
     }
 
-    public static String getFullName() {
+    static public String getFullName() {
         return getFullDirName() + getName();
     }
 
-    public static File getAllLogFile() throws IOException{
+    static public File getAllLogFile() throws IOException{
         String allLogFileName = getFullDirName() + Gongule.projectName + "-log.txt";
         File allLogFile = new File(allLogFileName);
         if (allLogFile.exists())
@@ -68,7 +68,7 @@ public class LogService {
         return allLogFile;
     }
 
-    private static void appendFile(OutputStream output, File source) throws IOException {
+    static private void appendFile(OutputStream output, File source) throws IOException {
         InputStream input = null;
         try {
             input = new BufferedInputStream(new FileInputStream(source));

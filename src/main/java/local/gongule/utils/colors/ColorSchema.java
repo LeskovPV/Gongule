@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class ColorSchema {
 
-    private static ColorSchema instance = new ColorSchema(ConfigFile.getInstance().get("BaseColor"));
+    static private ColorSchema instance = new ColorSchema(ConfigFile.getInstance().get("BaseColor"));
 
     static public ColorSchema getInstance() {
         return instance;

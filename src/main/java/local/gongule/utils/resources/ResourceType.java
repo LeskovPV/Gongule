@@ -16,7 +16,7 @@ public enum ResourceType {
     // Resolve resourceName string as
     // "js/jquery/flot/jquery.flot.js" or "png/logo.png"
     // to JS or PNG value
-    public static ResourceType getByName(String resourceName) {
+    static public ResourceType getByName(String resourceName) {
         if (resourceName == null)
             return UNKNOWN;
         int index = resourceName.indexOf("/");

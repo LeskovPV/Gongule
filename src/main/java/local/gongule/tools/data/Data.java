@@ -355,23 +355,23 @@ public class Data implements Serializable, Loggible {
     // Static
     ////////////////////////////////////////////////////////////////
 
-    private static Data instance = load();
+    static private Data instance = load();
 
-    public static Data getInstance() {
+    static public Data getInstance() {
         return instance;
     }
 
-    public static boolean setInstance(Data data) {
+    static public boolean setInstance(Data data) {
         if (data == null) return false;
         instance = data;
         return true;
     }
 
-    public static boolean save(Data data) {
+    static public boolean save(Data data) {
         return save(data, null);
     }
 
-    public static boolean save(Data data, String fileName) {
+    static public boolean save(Data data, String fileName) {
         if (defaultName.equalsIgnoreCase(fileName)) {
             //Log.printWarn("Impossible save configuration as '" + defaultName + "'. It is reserved filename");
             return false;
@@ -387,11 +387,11 @@ public class Data implements Serializable, Loggible {
         }
     }
 
-    public static Data load() {
+    static public Data load() {
         return load(null);
     }
 
-    public static Data load(String fileName) {
+    static public Data load(String fileName) {
         String fullFileName = "";
         try { // Create data directory
             if (fileName != null)
@@ -420,34 +420,34 @@ public class Data implements Serializable, Loggible {
 
     }
 
-    public static boolean detete(String fileName) {
+    static public boolean detete(String fileName) {
         if (fileName.equalsIgnoreCase(defaultName))
             return false;
         File file = new File(getFullAnyName(fileName));
         return file.delete();
     }
 
-    public static final String defaultName = "default";
+    static public final String defaultName = "default";
 
-    private static final String dirName = "data/";
+    static private final String dirName = "data/";
 
-    private static String getFullDefaultName() {
+    static private String getFullDefaultName() {
         return getFullDirName() + defaultName + ".xml";
     }
 
-    private static String getFullCurrentName() {
+    static private String getFullCurrentName() {
         return Resources.getJarDirName() + Gongule.projectName + ".xml";
     }
 
-    private static String getFullAnyName(String anyName) {
+    static private String getFullAnyName(String anyName) {
         return getFullDirName() + anyName + ".xml";
     }
 
-    private static String getFullDirName() {
+    static private String getFullDirName() {
         return Resources.getJarDirName() + dirName;
     }
 
-    public static List<String> getFiles() {
+    static public List<String> getFiles() {
         List<String> result = new ArrayList();
         File directory = new File(getFullDirName());
         for(File file: directory.listFiles())

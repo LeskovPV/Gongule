@@ -13,18 +13,18 @@ import java.util.Map;
 // Контейнер методов для работы с ресурсами из jar-файла
 public class Resources implements TemplateFillable{
 
-    public static String getJarDirName(){
+    static public String getJarDirName(){
         // Full path to jar-package
         String jarFileName = Resources.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         // Full path to jar-package directory
         return (new File(jarFileName)).getParent() + "/";
     }
 
-    public static InputStream getAsStream(String resourceName){
+    static public InputStream getAsStream(String resourceName){
         return Resources.class.getResourceAsStream("/local/gongule/resources/" + resourceName);
     }
 
-    public static File getAsFile(String resourceName, String targetName, Map<String, Object> pageVariables, boolean replace) {
+    static public File getAsFile(String resourceName, String targetName, Map<String, Object> pageVariables, boolean replace) {
         try {
             File targetFile = new File(getJarDirName() + targetName);
             if (!targetFile.exists() || replace) {
@@ -39,7 +39,7 @@ public class Resources implements TemplateFillable{
         }
     }
 
-    public static File getAsFile(String resourceName, String targetName, boolean replace){
+    static public File getAsFile(String resourceName, String targetName, boolean replace){
         try {
             // Полный путь до внешнего файла
             File targetFile = new File(getJarDirName() + targetName);
@@ -57,22 +57,22 @@ public class Resources implements TemplateFillable{
 
     // Извлекает ресурс resourceName из jar-пакета в файл targetName в тот же каталог, где находится сам пакет
     // Взвращает полный путь до файла targetName, или null если что-то пошло не так
-    public static File getAsFile(String resourceName, String targetName) {
+    static public File getAsFile(String resourceName, String targetName) {
         return getAsFile(resourceName, targetName, false);
     }
 
 
     // Извлекает ресурс resourceName из jar-пакета в тот же каталог, где находится сам пакет
     // Взвращает полный путь до извлечённого файла, или null если что-то пошло не так
-    public static File getAsFile(String resourceName){
+    static public File getAsFile(String resourceName){
         return getAsFile(resourceName, resourceName);
     }
 
-    public static File[] getAsFiles(String resourceName){
+    static public File[] getAsFiles(String resourceName){
        return getAsFiles(resourceName, resourceName);
     }
 
-    public static File[] getAsFiles(String resourceName, String targetName){
+    static public File[] getAsFiles(String resourceName, String targetName){
         File directory = getAsFile(resourceName, targetName, true);
         ArrayList<File> result = new ArrayList();
         for(File file: directory.listFiles())
@@ -80,7 +80,7 @@ public class Resources implements TemplateFillable{
         return (File[]) result.toArray();
     }
 
-    public static byte[] getAsBytes(String resourceName){
+    static public byte[] getAsBytes(String resourceName){
         try {
             InputStream inputStream = getAsStream(resourceName);
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -96,7 +96,7 @@ public class Resources implements TemplateFillable{
         }
     }
 
-    public static Image getAsImage(String resourceName) {
+    static public Image getAsImage(String resourceName) {
         try {
             return new ImageIcon(
                     ImageIO.read(

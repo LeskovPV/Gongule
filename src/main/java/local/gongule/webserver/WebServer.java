@@ -21,87 +21,87 @@ import java.net.*;
 public class WebServer implements Loggible {
 
     ////////////////////////////////////////////////////////////////
-    private static int httpPort = 80;
+    static private int httpPort = 80;
 
-    public static int getHttpPort() {
+    static public int getHttpPort() {
         return httpPort;
     }
 
-    public static void setHttpPort(Integer value) {
+    static public void setHttpPort(Integer value) {
         if (value == null) return;
         httpPort = value;
     }
 
     ////////////////////////////////////////////////////////////////
-    private static int httpsPort = 443;
+    static private int httpsPort = 443;
 
-    public static void setHttpsPort(Integer value) {
+    static public void setHttpsPort(Integer value) {
         if (value == null) return;
         httpsPort = value;
     }
 
     ////////////////////////////////////////////////////////////////
-    private static boolean useHttp = true;
+    static private boolean useHttp = true;
 
-    public static boolean getUseHttp() {
+    static public boolean getUseHttp() {
         return useHttp;
     }
 
-    public static void setUseHttp(Boolean value) {
+    static public void setUseHttp(Boolean value) {
         if (value == null) return;
         useHttp = value;
     }
 
     ////////////////////////////////////////////////////////////////
-    private static String keyStoreFile = "keystore";
+    static private String keyStoreFile = "keystore";
 
-    public static void setKeyStoreFile(String value) {
+    static public void setKeyStoreFile(String value) {
         if (value == null) return;
         keyStoreFile = value;
     }
 
     ////////////////////////////////////////////////////////////////
-    private static String keyStorePassword = "13213455";
+    static private String keyStorePassword = "13213455";
 
-    public static void setKeyStorePassword(String value) {
+    static public void setKeyStorePassword(String value) {
         if (value == null) return;
         keyStorePassword = value;
     }
 
     ////////////////////////////////////////////////////////////////
-    private static String keyManagerPassword = "13213455";
+    static private String keyManagerPassword = "13213455";
 
-    public static void setKeyManagerPassword(String value) {
+    static public void setKeyManagerPassword(String value) {
         if (value == null) return;
         keyManagerPassword = value;
     }
 
     ////////////////////////////////////////////////////////////////
-    //private static ColorSchema сolorSchema = new ColorSchema(RuntimeConfiguration.getInstance().get("BaseColor"));
+    //static private ColorSchema сolorSchema = new ColorSchema(RuntimeConfiguration.getInstance().get("BaseColor"));
 
-    public static void setBaseColor(String baseColor) {
+    static public void setBaseColor(String baseColor) {
         ConfigFile.getInstance().set("BaseColor", baseColor);
         ColorSchema.getInstance().setBaseColor(baseColor);
     }
 
     ////////////////////////////////////////////////////////////////
-    private static int fontIndex = ConfigFile.getInstance().get("FontIndex", 2);
+    static private int fontIndex = ConfigFile.getInstance().get("FontIndex", 2);
 
-    public static int getFontIndex() {
+    static public int getFontIndex() {
         return fontIndex;
     }
 
-    public static String getFontFamily() {
+    static public String getFontFamily() {
         return FontFamily.values.get(fontIndex);
     }
 
-    public static void setFontIndex(int index) {
+    static public void setFontIndex(int index) {
         ConfigFile.getInstance().set("FontIndex", String.valueOf(index));
         fontIndex = index;
     }
 
     ////////////////////////////////////////////////////////////////
-    private static void checkPort(int port) {
+    static private void checkPort(int port) {
         try {
             Socket socket = new Socket("localhost", port);
             if (socket.isConnected()) {
@@ -113,14 +113,14 @@ public class WebServer implements Loggible {
         }
     }
 
-    private static ServerConnector getHttpConnector() {
+    static private ServerConnector getHttpConnector() {
         checkPort(httpPort);
         ServerConnector connector = new ServerConnector(server);
         connector.setPort(httpPort);
         return connector;
     }
 
-    private static ServerConnector getHttpsConnector() {
+    static private ServerConnector getHttpsConnector() {
         checkPort(httpsPort);
         String keyStorePath = Resources.getAsFile(keyStoreFile, Gongule.projectName + ".key", true).getPath();
         // HTTPS configuration
@@ -140,13 +140,13 @@ public class WebServer implements Loggible {
         return connector;
     }
 
-    private static Connector[] getConnectors() {
+    static private Connector[] getConnectors() {
         return useHttp ?
                new Connector[] {getHttpsConnector(), getHttpConnector()} :
                new Connector[] {getHttpsConnector()};
     }
 
-    public static URL getLocalURL(){
+    static public URL getLocalURL(){
         try {
             return getUseHttp() ?
                 new URL("http://localhost:" + httpPort) :
@@ -156,9 +156,9 @@ public class WebServer implements Loggible {
         }
     }
 
-    private static Server server = null;
+    static private Server server = null;
 
-    public static void start() {
+    static public void start() {
         if (server != null) { // If server already run
             try {
                 server.stop();

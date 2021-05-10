@@ -1,5 +1,5 @@
 # Project properties
-project.version = 1.05
+project.version = 1.06
 
 # Enable/disable http-server (https - always on):
 # true - disable, set by default

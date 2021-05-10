@@ -18,7 +18,7 @@ public class ResourceServlet extends HttpServlet implements TemplateFillable {
     /**
      * Private resources list
      */
-    public static final List<String> privateResources = Arrays.asList("keystore");
+    static public final List<String> privateResources = Arrays.asList("keystore");
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {

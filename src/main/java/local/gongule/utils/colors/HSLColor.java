@@ -253,7 +253,7 @@ public class HSLColor
      *
      *  @return an array containing the 3 HSL values.
      */
-    public static float[] fromRGB(Color color)
+    static public float[] fromRGB(Color color)
     {
         //  Get RGB values in the range 0 - 1
 
@@ -308,7 +308,7 @@ public class HSLColor
      *
      *  @returns the RGB Color object
      */
-    public static Color toRGB(float[] hsl)
+    static public Color toRGB(float[] hsl)
     {
         return toRGB(hsl, 1.0f);
     }
@@ -324,7 +324,7 @@ public class HSLColor
      *
      *  @returns the RGB Color object
      */
-    public static Color toRGB(float[] hsl, float alpha)
+    static public Color toRGB(float[] hsl, float alpha)
     {
         return toRGB(hsl[0], hsl[1], hsl[2], alpha);
     }
@@ -338,7 +338,7 @@ public class HSLColor
      *
      *  @returns the RGB Color object
      */
-    public static Color toRGB(float h, float s, float l)
+    static public Color toRGB(float h, float s, float l)
     {
         return toRGB(h, s, l, 1.0f);
     }
@@ -353,7 +353,7 @@ public class HSLColor
      *
      *  @returns the RGB Color object
      */
-    public static Color toRGB(float h, float s, float l, float alpha)
+    static public Color toRGB(float h, float s, float l, float alpha)
     {
         if (s <0.0f || s > 100.0f)
         {
@@ -400,7 +400,7 @@ public class HSLColor
         return new Color(r, g, b, alpha);
     }
 
-    private static float HueToRGB(float p, float q, float h)
+    static private float HueToRGB(float p, float q, float h)
     {
         if (h < 0) h += 1;
 

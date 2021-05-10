@@ -26,11 +26,11 @@ public enum PageType {
         return Character.toUpperCase(caption.charAt(0)) + caption.substring(1);
     }
 
-    public static PageType getDefault() {
+    static public PageType getDefault() {
         return CONTROL;
     }
 
-    public static PageType getValueOf(String name) {
+    static public PageType getValueOf(String name) {
         try {
             return PageType.valueOf(name.toUpperCase());
         } catch (Exception exception) {

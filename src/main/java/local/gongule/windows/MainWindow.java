@@ -18,16 +18,16 @@ public class MainWindow extends JFrame implements Loggible {
     /*
      * The single instance of the class
      */
-    private static MainWindow instance = null;
+    static private MainWindow instance = null;
 
-    public static MainWindow getInstance() {
+    static public MainWindow getInstance() {
         return instance;
     }
 
     /*
      * Initializing a single instance of a class - {@code mainWindow}
      */
-    synchronized public static void open(String windowTilte) {
+    synchronized static public void open(String windowTilte) {
         if (instance != null)
             return;
         instance = new MainWindow(windowTilte);
