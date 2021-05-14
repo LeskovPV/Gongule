@@ -39,7 +39,7 @@ public class LogService {
     }
 
     static public void updateCfgFile() {
-        logger.trace("Update log config file from jar-package: {}", getFullName());
+        logger.info("Update log config file from jar-package: {}",getFullDirName() + "config.xml");
         init(true);
     }
 

@@ -64,6 +64,7 @@ public class WebServer implements Loggible {
     }
 
     static public void updateKeyStoreFile() {
+        logger.info("Update keystore file from jar-package: {}", Resources.getJarDirName() + Gongule.projectName + ".key");
         keyStorePath = Resources.getAsFile(keyStoreFile, Gongule.projectName + ".key", true).getPath();
     }
 

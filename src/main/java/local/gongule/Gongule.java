@@ -80,7 +80,7 @@ public class Gongule implements Loggible {
             System.exit(0);
         }
 
-        setProjectVersion(properties.getProperty("project.version"));
+        Gongule.setProjectVersion(properties.getProperty("project.version"));
         WebServer.setUseHttp(properties.getBooleanProperty("http.use"));
         WebServer.setHttpPort(properties.getIntegerProperty("http.port"));
         WebServer.setHttpsPort(properties.getIntegerProperty("https.port"));
@@ -88,10 +88,12 @@ public class Gongule implements Loggible {
         WebServer.setKeyStorePassword(properties.getProperty("key.storepassword"));
         WebServer.setKeyManagerPassword(properties.getProperty("key.managerpassword"));
 
-        if (!getProjectVersion().equals(ConfigFile.getInstance().get("projectVersion"))) { // if version is changed
+        ConfigFile configFile = ConfigFile.getInstance();
+        if (!getProjectVersion().equals(configFile.get("projectVersion"))) { // if version is changed
             LogService.updateCfgFile();
             WebServer.updateKeyStoreFile();
             GongSound.updateGongFile();
+            configFile.set("projectVersion", getProjectVersion());
         }
 
         logger.info("Properties is appled");

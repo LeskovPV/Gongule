@@ -178,6 +178,7 @@ public class GongSound extends Thread implements Loggible {
     }
 
     static public void updateGongFile() {
+        logger.info("Update gong sound file from jar-package: {}", Resources.getJarDirName() + Gongule.projectName + ".wav");
         Resources.getAsFile("wav/gong.wav", Gongule.projectName + ".wav", true);
     }
 
