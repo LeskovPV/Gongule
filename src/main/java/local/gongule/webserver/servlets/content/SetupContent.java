@@ -133,7 +133,7 @@ public class SetupContent extends Content{
     }
 
     private boolean selectColor(HttpServletRequest request) {
-        WebServer.setBaseColor(request.getParameter("select_color"));
+        ColorSchema.getInstance().setBaseColor(request.getParameter("select_color"));
         return true;
     }
 

@@ -15,6 +15,7 @@ import local.gongule.utils.colors.ColorSchema;
 import local.gongule.webserver.servlets.MainServlet;
 import local.gongule.webserver.servlets.ResourceServlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.*;
 
@@ -53,11 +54,17 @@ public class WebServer implements Loggible {
     }
 
     ////////////////////////////////////////////////////////////////
-    static private String keyStoreFile = "keystore";
+    static private String keyStoreFile = "keystore"; // in jar-package
+    static private String keyStorePath = null; // full file name in work dir
+
 
     static public void setKeyStoreFile(String value) {
-        if (value == null) return;
         keyStoreFile = value;
+        keyStorePath = Resources.getAsFile(keyStoreFile, Gongule.projectName + ".key", false).getPath();
+    }
+
+    static public void updateKeyStoreFile() {
+        keyStorePath = Resources.getAsFile(keyStoreFile, Gongule.projectName + ".key", true).getPath();
     }
 
     ////////////////////////////////////////////////////////////////
@@ -74,14 +81,6 @@ public class WebServer implements Loggible {
     static public void setKeyManagerPassword(String value) {
         if (value == null) return;
         keyManagerPassword = value;
-    }
-
-    ////////////////////////////////////////////////////////////////
-    //static private ColorSchema сolorSchema = new ColorSchema(RuntimeConfiguration.getInstance().get("BaseColor"));
-
-    static public void setBaseColor(String baseColor) {
-        ConfigFile.getInstance().set("BaseColor", baseColor);
-        ColorSchema.getInstance().setBaseColor(baseColor);
     }
 
     ////////////////////////////////////////////////////////////////
@@ -122,7 +121,7 @@ public class WebServer implements Loggible {
 
     static private ServerConnector getHttpsConnector() {
         checkPort(httpsPort);
-        String keyStorePath = Resources.getAsFile(keyStoreFile, Gongule.projectName + ".key", true).getPath();
+        //String keyStorePath = Resources.getAsFile(keyStoreFile, Gongule.projectName + ".key", true).getPath();
         // HTTPS configuration
         HttpConfiguration https = new HttpConfiguration();
         https.addCustomizer(new SecureRequestCustomizer());            // Configuring SSL
@@ -169,7 +168,7 @@ public class WebServer implements Loggible {
         }
         server = new Server();
         server.setConnectors(getConnectors());
-        //AccountService accountService = new AccountService();
+
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         ServletHolder mainServletHolder = new ServletHolder(new MainServlet());
         context.addServlet(mainServletHolder,"");
@@ -177,21 +176,8 @@ public class WebServer implements Loggible {
         context.addServlet(new ServletHolder(new ResourceServlet()),"/resource");
         context.addServlet(new ServletHolder(new DownloadServlet()),"/download");
 
-//        ServletHolder uploadServletHolder = new ServletHolder(new UploadServlet());
-//        context.addServlet(uploadServletHolder,"/upload");
-
         HandlerList handlers = new HandlerList();
         handlers.addHandler(context);
-
-//        File tmpDir = new File(System.getProperty("java.io.tmpdir"));
-//        File locationDir = new File(tmpDir, "jetty-fileupload");
-//        if (!locationDir.exists()) locationDir.mkdirs();
-//        String location = locationDir.getAbsolutePath();
-//        long maxFileSize = 1024 * 1024 * 50;
-//        long maxRequestSize = -1L;
-//        int fileSizeThreshold = 1024 * 1024;
-//        MultipartConfigElement multipartConfig = new MultipartConfigElement(location, maxFileSize, maxRequestSize, fileSizeThreshold);
-//        uploadServletHolder.getRegistration().setMultipartConfig(multipartConfig);
 
         server.setHandler(handlers);
         try {

@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class ColorSchema {
 
-    static private ColorSchema instance = new ColorSchema(ConfigFile.getInstance().get("BaseColor"));
+    static private ColorSchema instance = new ColorSchema(ConfigFile.getInstance().get("baseColor"));
 
     static public ColorSchema getInstance() {
         return instance;
@@ -30,19 +30,22 @@ public class ColorSchema {
         setBaseColor(baseColor);
     }
 
-    public void setBaseColor(Color baseColor) {
-        if (baseColor == null)
-            return;
-        this.baseColor = new HSLColor(baseColor);
+    public Color setBaseColor(Color baseColor) {
+        if (baseColor != null) {
+            this.baseColor = new HSLColor(baseColor);
+            ConfigFile.getInstance().set("baseColor", this.baseColor.toHex());
+        }
+        return this.baseColor.getRGB();
     }
 
-    public void setBaseColor(String baseColor) {
-        if (baseColor == null)
-            return;
+    public String setBaseColor(String baseColor) {
+        if (baseColor != null)
         try {
             Color color = Color.decode(baseColor);
             this.baseColor = new HSLColor(color);
+            ConfigFile.getInstance().set("baseColor", this.baseColor.toHex());
         } catch (Exception e) {}
+        return this.baseColor.toHex();
     }
 
     public String getBaseColor() {

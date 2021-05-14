@@ -222,12 +222,12 @@
                             <td>
                                 <script src='resource?js/date.format.js'></script>
                                 <script>
-                                    function setDateTime() {
+                                    function syncDateTime() {
                                         document.getElementsByName('datetime_value')[0].value = new Date().format("dd.mm.yyyy HH:MM:ss");
                                         setAction('set_datetime');
                                     }
                                 </script>
-                                <button name='update_datetime' title='Update date&time' onclick='setDateTime()'>
+                                <button name='sync_datetime' title='Sync date&time' onclick='syncDateTime()'>
                                     <img src='resource?png/update.png' valign='top'/>
                                 </button>
                             </td>

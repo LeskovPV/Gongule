@@ -20,6 +20,10 @@ public class LogService {
     static final String resourceLogConfig = "xml/log4j2.xml";
 
     static {
+        init(false);
+    }
+
+    static private void init(boolean replaceCfgFile) {
         try { // Create log directory
             Path path = Paths.get(getFullDirName());
             if (!Files.exists(path))
@@ -29,9 +33,14 @@ public class LogService {
         }
         Map<String, Object> pageVariables = new HashMap(0);
         pageVariables.put("logfile", getFullName());
-        File logConfFile = Resources.getAsFile(resourceLogConfig, getDirName() + "config.xml", pageVariables, true);
+        File logConfFile = Resources.getAsFile(resourceLogConfig, getDirName() + "config.xml", pageVariables, replaceCfgFile);
         LoggerContext context = (LoggerContext) LogManager.getContext(false);
         context.setConfigLocation(logConfFile.toURI());
+    }
+
+    static public void updateCfgFile() {
+        logger.trace("Update log config file from jar-package: {}", getFullName());
+        init(true);
     }
 
     static public String getDirName() {

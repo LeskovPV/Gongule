@@ -172,9 +172,13 @@ public class GongSound extends Thread implements Loggible {
     static public File getGongFile() {
         if (gongFile == null)
             // Extract wav-file from jar-package to jar-directory
-            return Resources.getAsFile("wav/gong.wav", Gongule.projectName + ".wav", true);
+            return Resources.getAsFile("wav/gong.wav", Gongule.projectName + ".wav", false);
         else
             return gongFile;
+    }
+
+    static public void updateGongFile() {
+        Resources.getAsFile("wav/gong.wav", Gongule.projectName + ".wav", true);
     }
 
 }

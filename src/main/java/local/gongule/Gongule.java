@@ -1,8 +1,11 @@
 package local.gongule;
 
+import local.gongule.tools.ConfigFile;
 import local.gongule.tools.process.GongExecutor;
+import local.gongule.tools.process.GongSound;
 import local.gongule.tools.relays.CoolingRelay;
 import local.gongule.tools.relays.PowerRelay;
+import local.gongule.utils.logging.LogService;
 import local.gongule.utils.logging.Loggible;
 import local.gongule.utils.resources.Resources;
 import local.gongule.utils.ParsableProperties;
@@ -76,14 +79,20 @@ public class Gongule implements Loggible {
             logger.error("Unpossible apply properties", exception);
             System.exit(0);
         }
-        setProjectVersion(properties.getProperty("project.version"));
 
+        setProjectVersion(properties.getProperty("project.version"));
         WebServer.setUseHttp(properties.getBooleanProperty("http.use"));
         WebServer.setHttpPort(properties.getIntegerProperty("http.port"));
         WebServer.setHttpsPort(properties.getIntegerProperty("https.port"));
         WebServer.setKeyStoreFile(properties.getProperty("key.storefile"));
         WebServer.setKeyStorePassword(properties.getProperty("key.storepassword"));
         WebServer.setKeyManagerPassword(properties.getProperty("key.managerpassword"));
+
+        if (!getProjectVersion().equals(ConfigFile.getInstance().get("projectVersion"))) { // if version is changed
+            LogService.updateCfgFile();
+            WebServer.updateKeyStoreFile();
+            GongSound.updateGongFile();
+        }
 
         logger.info("Properties is appled");
     }
